@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { Suspense } from "react";
 import Header from "@/components/Header";
+import IndicesTicker from "@/components/IndicesTicker";
 import Footer from "@/components/Footer";
 import { SITE_URL, ADSENSE_CLIENT } from "@/lib/seo";
 
@@ -58,6 +60,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-full flex flex-col bg-slate-50">
+        <Suspense fallback={<div className="h-8 bg-slate-900" />}>
+          <IndicesTicker />
+        </Suspense>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
