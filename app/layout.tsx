@@ -24,13 +24,11 @@ export const metadata: Metadata = {
     title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description:
       "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CalculaImóvel" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description: "29 calculadoras gratuitas para decisões imobiliárias no Brasil.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
