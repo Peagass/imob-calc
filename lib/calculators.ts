@@ -1417,18 +1417,23 @@ export function calcularSeguroFianca(input: SeguroFiancaInput): SeguroFiancaResu
 export interface LeilaoImovelInput {
   valorArremate: number;
   valorAvaliacaoImovel: number;
-  aliquotaITBI: number; // %
-  percentualComissaoLeiloeiro: number; // % sobre arremate (típico 5%)
+  aliquotaITBI: number;
+  percentualComissaoLeiloeiro: number;
   dividasCondominioIptu: number;
   custoEstimadoReforma: number;
   custosCartorio: number;
+  imovelOcupado: boolean;
+  custosJuridicosDesocupacao: number;
+  mesesDesocupacao: number;
+  aluguelAlternativoMensal: number;
 }
 
 export interface LeilaoImovelResult {
   custoTotal: number;
-  descontoRealPercent: number; // desconto real vs valor de avaliação
+  descontoRealPercent: number;
   lucroEstimado: number;
   roi: number;
+  custoDesocupacaoTotal: number;
   detalhamento: { item: string; valor: number }[];
   alertas: string[];
 }
@@ -1437,12 +1442,18 @@ export function calcularLeilaoImovel(input: LeilaoImovelInput): LeilaoImovelResu
   const {
     valorArremate, valorAvaliacaoImovel, aliquotaITBI, percentualComissaoLeiloeiro,
     dividasCondominioIptu, custoEstimadoReforma, custosCartorio,
+    imovelOcupado, custosJuridicosDesocupacao, mesesDesocupacao, aluguelAlternativoMensal,
   } = input;
 
   const itbi = valorArremate * (aliquotaITBI / 100);
   const comissaoLeiloeiro = valorArremate * (percentualComissaoLeiloeiro / 100);
+  const custoDesocupacaoTotal = imovelOcupado
+    ? custosJuridicosDesocupacao + mesesDesocupacao * aluguelAlternativoMensal
+    : 0;
 
-  const custoTotal = valorArremate + itbi + comissaoLeiloeiro + dividasCondominioIptu + custoEstimadoReforma + custosCartorio;
+  const custoTotal = valorArremate + itbi + comissaoLeiloeiro + dividasCondominioIptu
+    + custoEstimadoReforma + custosCartorio + custoDesocupacaoTotal;
+
   const descontoRealPercent = valorAvaliacaoImovel > 0
     ? ((valorAvaliacaoImovel - custoTotal) / valorAvaliacaoImovel) * 100 : 0;
   const lucroEstimado = valorAvaliacaoImovel - custoTotal;
@@ -1455,16 +1466,20 @@ export function calcularLeilaoImovel(input: LeilaoImovelInput): LeilaoImovelResu
     { item: "Dívidas (condomínio/IPTU)", valor: dividasCondominioIptu },
     { item: "Reforma estimada", valor: custoEstimadoReforma },
     { item: "Cartório e transferência", valor: custosCartorio },
+    ...(imovelOcupado ? [
+      { item: "Honorários — imissão na posse", valor: custosJuridicosDesocupacao },
+      { item: `Aluguel alternativo (${mesesDesocupacao} meses)`, valor: mesesDesocupacao * aluguelAlternativoMensal },
+    ] : []),
   ];
 
   const alertas: string[] = [];
   if (descontoRealPercent < 10) alertas.push("Desconto real abaixo de 10% — verifique se vale o risco.");
   if (dividasCondominioIptu === 0) alertas.push("Informe as dívidas de condomínio e IPTU — podem ser assumidas pelo arrematante.");
   if (custoEstimadoReforma === 0) alertas.push("Considere os custos de reforma — imóveis de leilão frequentemente precisam de obras.");
-  alertas.push("Pesquise a situação jurídica do imóvel antes de arrematar (ação de despejo, ocupantes, etc.).");
-  alertas.push("O prazo para desocupação pode ser longo — preveja custo de aluguel alternativo.");
+  if (imovelOcupado) alertas.push("Imóvel ocupado: pesquise a situação do ocupante antes de arrematar — invasão, locatário e ex-proprietário têm prazos diferentes.");
+  else alertas.push("Pesquise a situação jurídica do imóvel antes de arrematar (ação de despejo, ocupantes, etc.).");
 
-  return { custoTotal, descontoRealPercent, lucroEstimado, roi, detalhamento, alertas };
+  return { custoTotal, descontoRealPercent, lucroEstimado, roi, custoDesocupacaoTotal, detalhamento, alertas };
 }
 
 // ──────────────────────────────────────────────
