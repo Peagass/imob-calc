@@ -15,6 +15,8 @@ import { calcularFinanciamento } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export default function FinanciamentoPage() {
   const [valorImovel, setValorImovel] = useState(500_000);
@@ -190,6 +192,9 @@ export default function FinanciamentoPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/financiamento" />
+      <RelatedCalculators path="/financiamento" />
     </div>
   );
 }

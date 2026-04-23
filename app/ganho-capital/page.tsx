@@ -5,6 +5,8 @@ import { calcularGanhoCapital } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, AlertTriangle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export default function GanhoCapitalPage() {
   const currentYear = new Date().getFullYear();
@@ -263,6 +265,9 @@ export default function GanhoCapitalPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/ganho-capital" />
+      <RelatedCalculators path="/ganho-capital" />
     </div>
   );
 }

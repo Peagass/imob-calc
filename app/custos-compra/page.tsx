@@ -7,6 +7,8 @@ import { cidadesITBI } from "@/lib/itbi-data";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 const COLORS = ["#3b82f6", "#6366f1", "#8b5cf6", "#f59e0b"];
 
@@ -193,6 +195,9 @@ export default function CustosCompraPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/custos-compra" />
+      <RelatedCalculators path="/custos-compra" />
     </div>
   );
 }

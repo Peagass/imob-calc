@@ -1,6 +1,8 @@
 import { buscarIndicesReajuste } from "@/lib/indices";
 import ReajusteCalc from "./ReajusteCalc";
 import { ExternalLink } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export const revalidate = 21600; // revalida a cada 6 horas
 
@@ -38,6 +40,8 @@ export default async function ReajusteAluguelPage() {
       </div>
 
       <ReajusteCalc indices={indices} />
+      <FaqSection path="/reajuste-aluguel" />
+      <RelatedCalculators path="/reajuste-aluguel" />
     </div>
   );
 }

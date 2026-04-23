@@ -1,4 +1,5 @@
 import { pages, SITE_URL } from "@/lib/seo";
+import { faqs } from "@/lib/faq";
 
 interface Props {
   path: string;
@@ -8,7 +9,7 @@ export default function JsonLd({ path }: Props) {
   const page = pages[path];
   if (!page) return null;
 
-  const data = {
+  const appData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: page.title.split("|")[0].trim(),
@@ -28,10 +29,25 @@ export default function JsonLd({ path }: Props) {
     },
   };
 
+  const faqItems = faqs[path];
+  const faqData = faqItems?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      }
+    : null;
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appData) }} />
+      {faqData && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqData) }} />
+      )}
+    </>
   );
 }

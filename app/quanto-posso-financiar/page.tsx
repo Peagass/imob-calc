@@ -5,6 +5,8 @@ import { calcularQuantoPossoFinanciar } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, AlertCircle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export default function QuantoPossoFinanciarPage() {
   const [rendaFamiliar, setRendaFamiliar] = useState(10_000);
@@ -215,6 +217,9 @@ export default function QuantoPossoFinanciarPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/quanto-posso-financiar" />
+      <RelatedCalculators path="/quanto-posso-financiar" />
     </div>
   );
 }
