@@ -1,0 +1,105 @@
+---
+title: "TIR do Imóvel: Como Calcular a Taxa Interna de Retorno e Por Que Ela Importa"
+description: "Aprenda o que é a TIR (Taxa Interna de Retorno) aplicada a imóveis, como incluir entrada, aluguéis, valorização e custos de saída no cálculo, e como interpretar o resultado."
+date: "2026-04-23"
+category: "Investimento"
+tags: ["TIR imóvel", "taxa interna de retorno", "retorno investimento imobiliário", "como calcular TIR", "análise imóvel"]
+calculadora: "/tir-imovel"
+calculadoraLabel: "Calcular TIR do imóvel →"
+readingTime: 7
+---
+
+O cap rate responde quanto o imóvel rende por ano em aluguel. Mas ele ignora o momento em que você compra, o momento em que vende, os custos de entrada e saída, e a valorização ao longo do tempo. A **TIR** (Taxa Interna de Retorno) resolve tudo isso em uma única métrica — e é o indicador mais completo para avaliar qualquer investimento imobiliário.
+
+## O que é a TIR
+
+A TIR é a **taxa de desconto que iguala o valor presente de todos os fluxos de caixa futuros ao investimento inicial**. Em linguagem prática: é a rentabilidade anualizada real do investimento, considerando todos os fluxos de dinheiro — entrada e saída — ao longo do tempo.
+
+Se a TIR de um imóvel é 11% ao ano, significa que o dinheiro investido rendeu 11% ao ano, levando em conta tudo: quanto você pagou, quanto recebeu de aluguel a cada mês, e quanto recebeu na venda.
+
+## Por que a TIR é superior ao cap rate
+
+| Métrica | O que mede | O que ignora |
+|---|---|---|
+| Cap rate bruto | Aluguel ÷ Valor do imóvel | Custos operacionais, valorização, saída |
+| Cap rate líquido | Renda operacional líquida ÷ Valor | Valorização, custos de entrada/saída |
+| TIR | Rentabilidade total anualizada | Nada — inclui tudo |
+
+Um imóvel com cap rate líquido de 4% pode ter TIR de 10% se valorizar bem. Outro imóvel com cap rate de 6% pode ter TIR de 5% se a venda for com deságio ou em um momento ruim.
+
+## O que entra no cálculo da TIR
+
+Para calcular a TIR de um imóvel, você precisa mapear todos os fluxos de caixa ao longo do período de análise:
+
+### Fluxo inicial (negativo)
+- Preço de compra do imóvel
+- ITBI (2%–4%)
+- Escritura e registro (1%–2%)
+- Eventuais reformas pré-locação
+- Corretagem da compra (se paga pelo comprador)
+
+### Fluxos intermediários (mensais/anuais)
+- (+) Aluguel recebido (líquido de vacância)
+- (−) IPTU
+- (−) Condomínio (durante vacância)
+- (−) Manutenção e reparos
+- (−) Taxa de administração imobiliária
+- (−) IR sobre aluguel (carnê-leão)
+
+### Fluxo final (positivo ou negativo)
+- (+) Valor de venda do imóvel (com valorização estimada)
+- (−) Corretagem da venda (5%–6%)
+- (−) IR sobre ganho de capital (15% do ganho, se houver)
+
+## Exemplo completo
+
+**Imóvel:** R$ 500.000 (apartamento 2 quartos, boa localização)
+**Custas de entrada:** R$ 30.000 (ITBI + registro + corretagem)
+**Aluguel mensal líquido (após todos os custos):** R$ 1.800/mês
+**Valorização esperada:** 5% ao ano
+**Horizonte:** 10 anos
+
+**Fluxo de caixa anual simplificado:**
+- Ano 0: − R$ 530.000 (compra + custas)
+- Anos 1–10: + R$ 21.600/ano (aluguel líquido, com reajuste médio de 5% a.a.)
+- Ano 10: + R$ 815.000 (venda: R$ 500.000 × 1,05^10 = R$ 814.447 − corretagem − IR)
+
+**TIR calculada: ≈ 10,5% ao ano**
+
+Para comparar: se a Selic cair para 10% nos próximos anos (expectativa de mercado), esse imóvel seria competitivo. Se a Selic ficar em 14% por 10 anos, a renda fixa ganharia.
+
+## Como calcular no Excel ou planilha
+
+1. Liste os fluxos de caixa em uma coluna: Ano 0 = −530.000, Anos 1–9 = +21.600 (ajustado), Ano 10 = +21.600 + valor de venda líquido
+2. Use a fórmula: `=TIR(A1:A11)` (onde A1:A11 são as células com os fluxos)
+3. O resultado é a TIR mensal — multiplique por 12 para a anual (ou use a TIR anualizada diretamente se os fluxos forem anuais)
+
+Na calculadora de TIR do CalculaImóvel, você insere os dados e o cálculo é feito automaticamente — incluindo a projeção de valorização e os custos de saída.
+
+## Como interpretar a TIR
+
+**TIR > custo de oportunidade:** O investimento vale a pena. Se a TIR do imóvel é 12% e a renda fixa rende 11%, o imóvel é melhor (especialmente considerando a alavancagem e a proteção patrimonial).
+
+**TIR < custo de oportunidade:** O capital está melhor aplicado em outro ativo. Se a TIR do imóvel é 8% e o Tesouro Selic rende 13%, matematicamente a renda fixa é superior.
+
+**TIR negativa:** O imóvel perdeu valor em termos reais — a soma de todos os retornos não compensou o investimento inicial.
+
+## O risco da TIR: premissas são tudo
+
+A TIR é tão boa quanto as premissas usadas. Os dois fatores mais impactantes são:
+
+**Valorização:** Uma diferença de 2% ao ano na valorização esperada pode mudar a TIR em 3–4 pontos percentuais. Use estimativas conservadoras baseadas em dados históricos do bairro.
+
+**Prazo de saída:** Vender em um momento ruim de mercado pode reduzir drasticamente a TIR. A TIR é sensível ao valor e ao momento da venda.
+
+## TIR por estratégia de investimento imobiliário
+
+| Estratégia | TIR típica esperada |
+|---|---|
+| Buy-to-rent residencial (longo prazo) | 8%–12% |
+| Airbnb / aluguel por temporada | 12%–20% (mais risco e trabalho) |
+| Imóvel comercial / sala | 10%–15% |
+| Imóvel na planta (flip) | 15%–25% (maior risco) |
+| FII (comparativo) | 10%–14% (DY + valorização das cotas) |
+
+Use a calculadora de TIR do CalculaImóvel para inserir os dados do imóvel que você está avaliando e obter a rentabilidade anualizada real — comparável diretamente com qualquer outro investimento.
