@@ -121,7 +121,7 @@ export default function Header() {
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
-            Blog
+            Guias
           </Link>
         </nav>
 
@@ -173,7 +173,7 @@ export default function Header() {
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              Blog
+              Guias
             </Link>
           </div>
         </div>

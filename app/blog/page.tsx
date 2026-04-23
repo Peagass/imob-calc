@@ -5,12 +5,12 @@ import { SITE_URL } from "@/lib/seo";
 import { BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Blog — Guias sobre Mercado Imobiliário no Brasil",
+  title: "Guias — Mercado Imobiliário no Brasil | CalculaImóvel",
   description:
     "Artigos práticos sobre compra, venda, aluguel, reforma e investimento imobiliário. Guias claros para tomar as melhores decisões com seu imóvel.",
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {
-    title: "Blog CalculaImóvel — Guias sobre Mercado Imobiliário",
+    title: "Guias CalculaImóvel — Mercado Imobiliário no Brasil",
     description: "Artigos práticos sobre compra, venda, aluguel e investimento imobiliário no Brasil.",
     url: `${SITE_URL}/blog`,
     type: "website",
@@ -27,13 +27,13 @@ export default function BlogPage() {
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-3">
           <BookOpen className="w-5 h-5 text-blue-600" />
-          <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Blog</span>
+          <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Guias</span>
         </div>
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
           Guias práticos sobre imóveis
         </h1>
         <p className="text-slate-500 max-w-xl">
-          Artigos escritos para ajudar brasileiros a entender os números por trás de cada decisão imobiliária — com links diretos para as calculadoras.
+          Guias práticos para ajudar você a entender os números por trás de cada decisão imobiliária.
         </p>
       </div>
 

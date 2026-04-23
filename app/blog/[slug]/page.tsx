@@ -69,7 +69,7 @@ export default async function PostPage({
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
-        { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+        { "@type": "ListItem", position: 2, name: "Guias", item: `${SITE_URL}/blog` },
         { "@type": "ListItem", position: 3, name: post.title, item: `${SITE_URL}/blog/${slug}` },
       ],
     },
@@ -86,7 +86,7 @@ export default async function PostPage({
       <nav className="flex items-center gap-2 text-xs text-slate-400 mb-8">
         <Link href="/" className="hover:text-slate-600 transition-colors">CalculaImóvel</Link>
         <span>›</span>
-        <Link href="/blog" className="hover:text-slate-600 transition-colors">Blog</Link>
+        <Link href="/blog" className="hover:text-slate-600 transition-colors">Guias</Link>
         <span>›</span>
         <span className="text-slate-600 truncate">{post.title}</span>
       </nav>
