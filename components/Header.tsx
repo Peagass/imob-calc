@@ -17,10 +17,12 @@ const grupos = [
       { href: "/planta-vs-pronto",       label: "Planta vs. Pronto" },
       { href: "/fgts",                   label: "Simulador de FGTS" },
       { href: "/amortizacao-extra",      label: "Amortização Extraordinária" },
-      { href: "/portabilidade",          label: "Portabilidade" },
-      { href: "/consorcio",              label: "Consórcio vs. Financiamento" },
-      { href: "/distrato",               label: "Distrato de Imóvel na Planta" },
-      { href: "/custo-mudanca",          label: "Custo de Mudança" },
+      { href: "/portabilidade",               label: "Portabilidade" },
+      { href: "/consorcio",                   label: "Consórcio vs. Financiamento" },
+      { href: "/comparador-financiamento",    label: "Comparador de Financiamentos" },
+      { href: "/renegociacao-financiamento",  label: "Renegociação de Financiamento" },
+      { href: "/distrato",                    label: "Distrato de Imóvel na Planta" },
+      { href: "/custo-mudanca",               label: "Custo de Mudança" },
     ],
   },
   {
@@ -31,6 +33,7 @@ const grupos = [
       { href: "/tributacao-aluguel",     label: "Tributação do Aluguel" },
       { href: "/rescisao-aluguel",       label: "Rescisão Antecipada" },
       { href: "/quanto-cobrar-aluguel",  label: "Quanto Cobrar?" },
+      { href: "/fluxo-caixa-imovel",     label: "Fluxo de Caixa do Proprietário" },
       { href: "/seguro-fianca",          label: "Seguro Fiança vs. Caução" },
     ],
   },
@@ -44,9 +47,10 @@ const grupos = [
   {
     label: "Venda & Herança",
     links: [
-      { href: "/ganho-capital", label: "Ganho de Capital" },
-      { href: "/lucro-venda",   label: "Lucro Líquido na Venda" },
-      { href: "/itcmd",         label: "ITCMD" },
+      { href: "/ganho-capital",   label: "Ganho de Capital" },
+      { href: "/lucro-venda",     label: "Lucro Líquido na Venda" },
+      { href: "/itcmd",           label: "ITCMD" },
+      { href: "/permuta-imovel",  label: "Permuta de Imóvel" },
     ],
   },
   {

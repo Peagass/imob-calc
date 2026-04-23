@@ -166,6 +166,26 @@ export const pages: Record<string, PageMeta> = {
     description:
       "Calcule o custo real de comprar imóvel em leilão: valor do arremate, comissão do leiloeiro, ITBI, dívidas condominiais e reforma estimada.",
   },
+  "/comparador-financiamento": {
+    title: "Comparador de Financiamentos Imobiliários | SAC vs PRICE lado a lado",
+    description:
+      "Compare dois financiamentos imobiliários — taxas, sistemas de amortização, parcela inicial e custo total real. Descubra qual banco cobra menos.",
+  },
+  "/renegociacao-financiamento": {
+    title: "Simulador de Renegociação de Financiamento | Vale a Pena Reduzir a Taxa?",
+    description:
+      "Calcule a economia real de reduzir a taxa do seu financiamento imobiliário, descontando os custos de renegociação. Inclui breakeven e gráfico de economia acumulada.",
+  },
+  "/fluxo-caixa-imovel": {
+    title: "Fluxo de Caixa do Proprietário | Yield Líquido do Imóvel Alugado",
+    description:
+      "Visão anual de receitas, despesas e IR do imóvel alugado com reajuste projetado, vacância e carnê-leão progressivo. Calcule o yield líquido real.",
+  },
+  "/permuta-imovel": {
+    title: "Calculadora de Permuta de Imóvel | Torna e Custos da Operação",
+    description:
+      "Calcule a torna, ITBI, cartório e IR na permuta de imóveis. Compare com o custo de vender e comprar separado e descubra quanto a permuta economiza.",
+  },
 };
 
 export function buildMetadata(path: string): Metadata {

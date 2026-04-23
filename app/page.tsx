@@ -3,7 +3,7 @@ import {
   Calculator, TrendingUp, ArrowLeftRight, BarChart3, Percent, Home, PiggyBank,
   Zap, RefreshCw, Palmtree, Scale, Truck, Landmark, Target, Shield, Hammer,
   Wrench, Receipt, FileText, LineChart, PieChart, Gavel, Building2, Coins, ArrowRightLeft,
-  GitMerge, TrendingDown, Undo2,
+  GitMerge, TrendingDown, Undo2, SlidersHorizontal, RefreshCcw, Wallet, Repeat,
 } from "lucide-react";
 
 const categorias = [
@@ -73,6 +73,18 @@ const categorias = [
         descricao: "Compare o custo total de cada modalidade: sem juros no consórcio vs. acesso imediato no financiamento.",
       },
       {
+        href: "/comparador-financiamento",
+        icon: SlidersHorizontal,
+        titulo: "Comparador de Financiamentos",
+        descricao: "Compare dois bancos lado a lado — taxas, sistemas SAC/PRICE e custo total real do contrato.",
+      },
+      {
+        href: "/renegociacao-financiamento",
+        icon: RefreshCcw,
+        titulo: "Renegociação de Financiamento",
+        descricao: "Calcule a economia real de reduzir sua taxa atual, descontando os custos de renegociação e breakeven.",
+      },
+      {
         href: "/distrato",
         icon: Undo2,
         titulo: "Distrato de Imóvel na Planta",
@@ -120,6 +132,12 @@ const categorias = [
         icon: Target,
         titulo: "Quanto Cobrar de Aluguel?",
         descricao: "Defina o aluguel mínimo para atingir seu retorno alvo, com benchmarks de cap rate ao vivo.",
+      },
+      {
+        href: "/fluxo-caixa-imovel",
+        icon: Wallet,
+        titulo: "Fluxo de Caixa do Proprietário",
+        descricao: "Visão anual de receitas, despesas e IR do imóvel alugado, com reajuste projetado e yield líquido.",
       },
       {
         href: "/seguro-fianca",
@@ -170,6 +188,12 @@ const categorias = [
         icon: FileText,
         titulo: "ITCMD — Herança e Doação",
         descricao: "Calcule o imposto estadual sobre transmissão de imóveis por herança ou doação em todos os estados.",
+      },
+      {
+        href: "/permuta-imovel",
+        icon: Repeat,
+        titulo: "Permuta de Imóvel",
+        descricao: "Calcule a torna, ITBI, IR e custos totais da permuta. Compare com vender e comprar separado.",
       },
     ],
   },
@@ -232,7 +256,7 @@ export default function HomePage() {
       {/* Hero */}
       <div className="text-center mb-14">
         <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
-          29 calculadoras · 100% gratuito
+          33 calculadoras · 100% gratuito
         </span>
         <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
           Calculadoras para cada<br />

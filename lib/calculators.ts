@@ -1885,27 +1885,33 @@ export function calcularTributacaoAluguel(input: TributacaoAluguelInput): Tribut
 // ──────────────────────────────────────────────
 export interface TIRImovelInput {
   valorImovel: number;
-  entradaPercentual: number;    // % do valor
+  entradaPercentual: number;
   taxaFinanciamentoAnual: number;
   prazoFinanciamentoMeses: number;
-  custosCompraPercentual: number; // ITBI + cartório, % do valor
+  sistemaAmortizacao: "PRICE" | "SAC";
+  custosCompraPercentual: number;
   aluguelMensal: number;
+  reajusteAluguelAnual: number;  // % a.a. (IGP-M / IPCA)
   despesasMensais: number;
   vacanciaPercentual: number;
-  valorizacaoAnual: number;     // % a.a.
-  horizonteAnos: number;        // quando você vende
-  percentualCorretagem: number; // % na venda
+  valorizacaoAnual: number;
+  horizonteAnos: number;
+  percentualCorretagem: number;
 }
 
 export interface TIRImovelResult {
-  tirAnual: number;             // % a.a.
+  tirAnual: number;
   entradaTotal: number;
   valorVendaFinal: number;
   totalRecebidoAluguel: number;
   totalPagoFinanciamento: number;
+  aluguelAno1: number;           // aluguel no primeiro ano
+  aluguelUltimoAno: number;      // aluguel no último ano (reajustado)
+  parcelaInicial: number;        // 1ª parcela
+  parcelaFinal: number;          // última parcela (SAC cai, PRICE constante)
   cashFlowMedioMensal: number;
   positivo: boolean;
-  evolucaoCashFlow: { ano: number; cfAcumulado: number; saldo: number }[];
+  evolucaoCashFlow: { ano: number; cfAcumulado: number; saldo: number; aluguelAnual: number; parcelaMedia: number }[];
 }
 
 // IRR bisection on ANNUAL cash flows (avoids floating-point overflow with many periods)
@@ -1937,66 +1943,114 @@ function bisectionIRR(cashFlows: number[]): number {
 export function calcularTIRImovel(input: TIRImovelInput): TIRImovelResult {
   const {
     valorImovel, entradaPercentual, taxaFinanciamentoAnual, prazoFinanciamentoMeses,
-    custosCompraPercentual, aluguelMensal, despesasMensais, vacanciaPercentual,
-    valorizacaoAnual, horizonteAnos, percentualCorretagem,
+    sistemaAmortizacao, custosCompraPercentual, aluguelMensal, reajusteAluguelAnual,
+    despesasMensais, vacanciaPercentual, valorizacaoAnual, horizonteAnos, percentualCorretagem,
   } = input;
 
   const entrada = valorImovel * entradaPercentual / 100;
   const custoCompra = valorImovel * custosCompraPercentual / 100;
   const valorFinanciado = valorImovel - entrada;
   const taxaMensal = taxaFinanciamentoAnual / 100 / 12;
-  const parcelaMensal = valorFinanciado > 0 ? pmtPrice(taxaMensal, prazoFinanciamentoMeses, valorFinanciado) : 0;
   const fatorOcupacao = 1 - vacanciaPercentual / 100;
-  const rendaMensalLiquida = aluguelMensal * fatorOcupacao - despesasMensais;
   const totalMeses = horizonteAnos * 12;
 
-  // Build monthly cash flows for accurate amortization tracking
+  // SAC: amortização constante, parcela decresce
+  // PRICE: parcela constante
+  const amortSAC = valorFinanciado > 0 && sistemaAmortizacao === "SAC"
+    ? valorFinanciado / prazoFinanciamentoMeses
+    : 0;
+  const parcelaPRICE = valorFinanciado > 0 && sistemaAmortizacao === "PRICE"
+    ? pmtPrice(taxaMensal, prazoFinanciamentoMeses, valorFinanciado)
+    : 0;
+
   let saldoDevedor = valorFinanciado;
   let totalAluguel = 0;
   let totalFinanc = 0;
+  let parcelaInicial = 0;
+  let parcelaFinal = 0;
 
-  // Annual cash flows for IRR (avoids floating-point overflow with 120+ monthly periods)
+  // Annual cash flows for IRR (avoids floating-point overflow with many monthly periods)
   const annualCashFlows: number[] = new Array(horizonteAnos + 1).fill(0);
-  annualCashFlows[0] = -(entrada + custoCompra); // t=0
+  annualCashFlows[0] = -(entrada + custoCompra);
+
+  // Chart data accumulators per year
+  const anoAluguel: number[] = new Array(horizonteAnos + 1).fill(0);
+  const anoParcelaTotal: number[] = new Array(horizonteAnos + 1).fill(0);
+  const anoParcelaCont: number[] = new Array(horizonteAnos + 1).fill(0);
 
   for (let mes = 1; mes <= totalMeses; mes++) {
-    const cfMes = rendaMensalLiquida - (saldoDevedor > 0 && mes <= prazoFinanciamentoMeses ? parcelaMensal : 0);
-    const ano = Math.ceil(mes / 12);
-    annualCashFlows[ano] += cfMes;
+    const anoIdx = Math.ceil(mes / 12);
+    const anosPassados = Math.floor((mes - 1) / 12); // reajuste anual completo
 
+    // Aluguel reajustado pelo índice anual
+    const aluguelReajustado = aluguelMensal * Math.pow(1 + reajusteAluguelAnual / 100, anosPassados);
+    const rendaMes = aluguelReajustado * fatorOcupacao - despesasMensais;
+
+    // Parcela do mês (varia no SAC)
+    let parcelaMes = 0;
     if (saldoDevedor > 0 && mes <= prazoFinanciamentoMeses) {
-      const juros = saldoDevedor * taxaMensal;
-      const amort = Math.min(parcelaMensal - juros, saldoDevedor);
-      saldoDevedor = Math.max(0, saldoDevedor - amort);
-      totalFinanc += parcelaMensal;
+      if (sistemaAmortizacao === "SAC") {
+        parcelaMes = amortSAC + saldoDevedor * taxaMensal;
+        saldoDevedor = Math.max(0, saldoDevedor - amortSAC);
+      } else {
+        parcelaMes = parcelaPRICE;
+        const juros = saldoDevedor * taxaMensal;
+        saldoDevedor = Math.max(0, saldoDevedor - (parcelaPRICE - juros));
+      }
+      totalFinanc += parcelaMes;
+      anoParcelaTotal[anoIdx] += parcelaMes;
+      anoParcelaCont[anoIdx]++;
+      if (mes === 1) parcelaInicial = parcelaMes;
+      if (mes === Math.min(prazoFinanciamentoMeses, totalMeses)) parcelaFinal = parcelaMes;
     }
-    totalAluguel += Math.max(0, rendaMensalLiquida);
+
+    const cfMes = rendaMes - parcelaMes;
+    annualCashFlows[anoIdx] += cfMes;
+    totalAluguel += Math.max(0, rendaMes);
+    anoAluguel[anoIdx] += aluguelReajustado;
   }
 
   const valorVendaFinal = valorImovel * Math.pow(1 + valorizacaoAnual / 100, horizonteAnos);
-  // Add sale proceeds net of brokerage and remaining loan balance to final year
   annualCashFlows[horizonteAnos] += valorVendaFinal * (1 - percentualCorretagem / 100) - saldoDevedor;
 
   const tirAnualDecimal = bisectionIRR(annualCashFlows);
   const tirAnual = isNaN(tirAnualDecimal) ? 0 : tirAnualDecimal * 100;
 
-  // Evolução para chart
+  // Chart: acumular CF e patrimônio por ano
   let cfAcumulado = -(entrada + custoCompra);
+  let saldoDevChart = valorFinanciado;
   const evolucaoCashFlow: TIRImovelResult["evolucaoCashFlow"] = [];
-  let saldoEvolucao = valorImovel;
-  let saldoDevEvolucao = valorFinanciado;
 
   for (let ano = 1; ano <= horizonteAnos; ano++) {
-    for (let m = 0; m < 12; m++) {
-      cfAcumulado += Math.max(0, rendaMensalLiquida) - (saldoDevEvolucao > 0 ? parcelaMensal : 0);
-      if (saldoDevEvolucao > 0) {
-        const j = saldoDevEvolucao * taxaMensal;
-        saldoDevEvolucao = Math.max(0, saldoDevEvolucao - (parcelaMensal - j));
-      }
-    }
-    saldoEvolucao = valorImovel * Math.pow(1 + valorizacaoAnual / 100, ano);
-    evolucaoCashFlow.push({ ano, cfAcumulado, saldo: Math.max(0, saldoEvolucao - saldoDevEvolucao) + cfAcumulado });
+    cfAcumulado += annualCashFlows[ano] - (ano === horizonteAnos
+      ? valorVendaFinal * (1 - percentualCorretagem / 100) - saldoDevedor
+      : 0);
+    // Approx saldo devedor at end of year for chart (use already-computed saldoDevedor at end of loop)
+    const saldoImovel = valorImovel * Math.pow(1 + valorizacaoAnual / 100, ano);
+    // Estimate saldo devedor at this year end from annualCashFlows contributions
+    // (saldoDevedor is already the final balance after totalMeses — approximate mid-point for chart)
+    const fracaoDecorrida = Math.min(ano * 12, prazoFinanciamentoMeses) / prazoFinanciamentoMeses;
+    const saldoDevEstimado = valorFinanciado > 0
+      ? saldoDevedor + (valorFinanciado - saldoDevedor) * (1 - fracaoDecorrida)
+      : 0;
+    const patrimonio = Math.max(0, saldoImovel - saldoDevEstimado);
+    const parcelaMedia = anoParcelaCont[ano] > 0
+      ? anoParcelaTotal[ano] / anoParcelaCont[ano]
+      : 0;
+    evolucaoCashFlow.push({
+      ano,
+      cfAcumulado,
+      saldo: patrimonio + cfAcumulado,
+      aluguelAnual: anoAluguel[ano],
+      parcelaMedia,
+    });
   }
+
+  const aluguelAno1 = aluguelMensal * 12;
+  const aluguelUltimoAno = aluguelMensal * Math.pow(1 + reajusteAluguelAnual / 100, horizonteAnos - 1) * 12;
+
+  // cashFlowMedioMensal: média dos primeiros 12 meses
+  const cfMedio = annualCashFlows[1] / 12;
 
   return {
     tirAnual,
@@ -2004,7 +2058,11 @@ export function calcularTIRImovel(input: TIRImovelInput): TIRImovelResult {
     valorVendaFinal,
     totalRecebidoAluguel: totalAluguel,
     totalPagoFinanciamento: totalFinanc,
-    cashFlowMedioMensal: rendaMensalLiquida - parcelaMensal,
+    aluguelAno1,
+    aluguelUltimoAno,
+    parcelaInicial,
+    parcelaFinal,
+    cashFlowMedioMensal: cfMedio,
     positivo: tirAnual > 0,
     evolucaoCashFlow,
   };
@@ -2174,5 +2232,310 @@ export function calcularDistrato(input: DistratoInput): DistratoResult {
   return {
     percentualMulta, valorMulta, corretagemRetida, satiRetido,
     totalRetido, valorAReceber, valorCorrigido, prazoRecebimento, observacoes,
+  };
+}
+
+// ──────────────────────────────────────────────
+// 30. COMPARADOR DE FINANCIAMENTOS
+// ──────────────────────────────────────────────
+export interface OpcaoFinanciamento {
+  nome: string;
+  taxaAnual: number;
+  prazoMeses: number;
+  sistema: "SAC" | "PRICE";
+}
+
+export interface ComparadorFinanciamentoInput {
+  valorImovel: number;
+  entradaPercentual: number;
+  opcaoA: OpcaoFinanciamento;
+  opcaoB: OpcaoFinanciamento;
+}
+
+export interface ResumoOpcao {
+  parcelaInicial: number;
+  parcelaFinal: number;
+  totalJuros: number;
+  totalPago: number;
+  evolucaoAnual: { ano: number; saldo: number; parcelaMedia: number }[];
+}
+
+export interface ComparadorFinanciamentoResult {
+  valorFinanciado: number;
+  a: ResumoOpcao;
+  b: ResumoOpcao;
+  economiaTotal: number;   // positivo = A mais barata
+  vantagem: "A" | "B" | "igual";
+}
+
+function resumoOpcao(valorFinanciado: number, opcao: OpcaoFinanciamento): ResumoOpcao {
+  const taxaMensal = opcao.taxaAnual / 100 / 12;
+  const amortSAC = opcao.sistema === "SAC" ? valorFinanciado / opcao.prazoMeses : 0;
+  const parcelaPRICE = opcao.sistema === "PRICE" ? pmtPrice(taxaMensal, opcao.prazoMeses, valorFinanciado) : 0;
+
+  let saldo = valorFinanciado;
+  let totalPago = 0;
+  let parcelaInicial = 0;
+  let parcelaFinal = 0;
+  const evolucaoAnual: ResumoOpcao["evolucaoAnual"] = [];
+  let somaParcelaAno = 0;
+
+  for (let mes = 1; mes <= opcao.prazoMeses; mes++) {
+    let parcela: number;
+    if (opcao.sistema === "SAC") {
+      parcela = amortSAC + saldo * taxaMensal;
+      saldo = Math.max(0, saldo - amortSAC);
+    } else {
+      parcela = parcelaPRICE;
+      saldo = Math.max(0, saldo - (parcelaPRICE - saldo * taxaMensal));
+    }
+    if (mes === 1) parcelaInicial = parcela;
+    if (mes === opcao.prazoMeses) parcelaFinal = parcela;
+    totalPago += parcela;
+    somaParcelaAno += parcela;
+    if (mes % 12 === 0) {
+      evolucaoAnual.push({ ano: mes / 12, saldo, parcelaMedia: somaParcelaAno / 12 });
+      somaParcelaAno = 0;
+    }
+  }
+
+  return { parcelaInicial, parcelaFinal, totalJuros: totalPago - valorFinanciado, totalPago, evolucaoAnual };
+}
+
+export function calcularComparadorFinanciamento(input: ComparadorFinanciamentoInput): ComparadorFinanciamentoResult {
+  const { valorImovel, entradaPercentual, opcaoA, opcaoB } = input;
+  const valorFinanciado = valorImovel * (1 - entradaPercentual / 100);
+  const a = resumoOpcao(valorFinanciado, opcaoA);
+  const b = resumoOpcao(valorFinanciado, opcaoB);
+  const economiaTotal = b.totalPago - a.totalPago;
+  const diff = Math.abs(economiaTotal);
+  const limiar = valorFinanciado * 0.01;
+  return {
+    valorFinanciado, a, b,
+    economiaTotal,
+    vantagem: diff < limiar ? "igual" : economiaTotal > 0 ? "A" : "B",
+  };
+}
+
+// ──────────────────────────────────────────────
+// 31. RENEGOCIAÇÃO DE FINANCIAMENTO
+// ──────────────────────────────────────────────
+export interface RenegociacaoInput {
+  saldoDevedor: number;
+  taxaAtualAnual: number;
+  taxaNovaAnual: number;
+  prazoRestanteMeses: number;
+  sistema: "SAC" | "PRICE";
+  custosRenegociacao: number;
+}
+
+export interface RenegociacaoResult {
+  parcelaAtualInicial: number;
+  parcelaNovaInicial: number;
+  economiaMensalInicial: number;
+  economiaTotal: number;
+  economiaLiquida: number;
+  mesesBreakeven: number;
+  compensaRenegociar: boolean;
+  evolucaoAnual: { ano: number; economiaAcumulada: number }[];
+}
+
+export function calcularRenegociacao(input: RenegociacaoInput): RenegociacaoResult {
+  const { saldoDevedor, taxaAtualAnual, taxaNovaAnual, prazoRestanteMeses, sistema, custosRenegociacao } = input;
+
+  const calcParcela = (taxa: number) => {
+    const tm = taxa / 100 / 12;
+    if (sistema === "SAC") return (saldoDevedor / prazoRestanteMeses) + saldoDevedor * tm;
+    return pmtPrice(tm, prazoRestanteMeses, saldoDevedor);
+  };
+
+  const calcTotal = (taxa: number) => {
+    const tm = taxa / 100 / 12;
+    let saldo = saldoDevedor;
+    let total = 0;
+    const amort = sistema === "SAC" ? saldoDevedor / prazoRestanteMeses : 0;
+    const price = sistema === "PRICE" ? pmtPrice(tm, prazoRestanteMeses, saldoDevedor) : 0;
+    for (let m = 1; m <= prazoRestanteMeses; m++) {
+      const parcela = sistema === "SAC" ? amort + saldo * tm : price;
+      if (sistema === "SAC") saldo = Math.max(0, saldo - amort);
+      else saldo = Math.max(0, saldo - (price - saldo * tm));
+      total += parcela;
+    }
+    return total;
+  };
+
+  const parcelaAtualInicial = calcParcela(taxaAtualAnual);
+  const parcelaNovaInicial = calcParcela(taxaNovaAnual);
+  const totalAtual = calcTotal(taxaAtualAnual);
+  const totalNova = calcTotal(taxaNovaAnual);
+
+  const economiaTotal = totalAtual - totalNova;
+  const economiaLiquida = economiaTotal - custosRenegociacao;
+  const economiaMensalInicial = parcelaAtualInicial - parcelaNovaInicial;
+  const mesesBreakeven = economiaMensalInicial > 0 ? Math.ceil(custosRenegociacao / economiaMensalInicial) : 9999;
+
+  const evolucaoAnual: RenegociacaoResult["evolucaoAnual"] = [];
+  for (let ano = 1; ano <= Math.ceil(prazoRestanteMeses / 12); ano++) {
+    const economiaAcumulada = Math.min(economiaMensalInicial * ano * 12, economiaTotal) - custosRenegociacao;
+    evolucaoAnual.push({ ano, economiaAcumulada });
+  }
+
+  return {
+    parcelaAtualInicial, parcelaNovaInicial,
+    economiaMensalInicial, economiaTotal, economiaLiquida,
+    mesesBreakeven, compensaRenegociar: economiaLiquida > 0,
+    evolucaoAnual,
+  };
+}
+
+// ──────────────────────────────────────────────
+// 32. FLUXO DE CAIXA DO PROPRIETÁRIO
+// ──────────────────────────────────────────────
+export interface FluxoCaixaProprietarioInput {
+  aluguelMensal: number;
+  reajusteAnual: number;
+  vacanciaPercentual: number;
+  iptuAnual: number;
+  condominioMensal: number;
+  manutencaoMensal: number;
+  valorImovel: number;
+  horizonteAnos: number;
+}
+
+export interface FluxoCaixaAno {
+  ano: number;
+  aluguelBruto: number;
+  perdaVacancia: number;
+  aluguelLiquido: number;
+  despesas: number;
+  ir: number;
+  resultadoLiquido: number;
+  yieldAnual: number;
+}
+
+export interface FluxoCaixaProprietarioResult {
+  anos: FluxoCaixaAno[];
+  totalAluguelBruto: number;
+  totalDespesas: number;
+  totalIR: number;
+  totalLiquido: number;
+  yieldMedioAnual: number;
+}
+
+function calcularIRAluguel(rendaBruta: number): number {
+  // Tabela progressiva mensal 2025 (carnê-leão)
+  if (rendaBruta <= 2259.20) return 0;
+  if (rendaBruta <= 2826.65) return rendaBruta * 0.075 - 169.44;
+  if (rendaBruta <= 3751.05) return rendaBruta * 0.15 - 381.44;
+  if (rendaBruta <= 4664.68) return rendaBruta * 0.225 - 662.77;
+  return rendaBruta * 0.275 - 896.00;
+}
+
+export function calcularFluxoCaixaProprietario(input: FluxoCaixaProprietarioInput): FluxoCaixaProprietarioResult {
+  const { aluguelMensal, reajusteAnual, vacanciaPercentual, iptuAnual, condominioMensal, manutencaoMensal, valorImovel, horizonteAnos } = input;
+  const fatorOcupacao = 1 - vacanciaPercentual / 100;
+
+  const anos: FluxoCaixaAno[] = [];
+  let totalAluguelBruto = 0, totalDespesas = 0, totalIR = 0, totalLiquido = 0;
+
+  for (let ano = 1; ano <= horizonteAnos; ano++) {
+    const aluguelAno = aluguelMensal * Math.pow(1 + reajusteAnual / 100, ano - 1);
+    const aluguelBruto = aluguelAno * 12;
+    const perdaVacancia = aluguelBruto * (vacanciaPercentual / 100);
+    const aluguelLiquido = aluguelBruto * fatorOcupacao;
+
+    const despesasAnuais = iptuAnual + condominioMensal * 12 + manutencaoMensal * 12;
+    // IR: calculado sobre cada mês de aluguel efetivo (simplificado: assume meses de ocupação)
+    const mesesOcupados = 12 * fatorOcupacao;
+    const irMensal = calcularIRAluguel(aluguelAno);
+    const ir = Math.max(0, irMensal * mesesOcupados);
+
+    const resultadoLiquido = aluguelLiquido - despesasAnuais - ir;
+    const yieldAnual = valorImovel > 0 ? (resultadoLiquido / valorImovel) * 100 : 0;
+
+    anos.push({ ano, aluguelBruto, perdaVacancia, aluguelLiquido, despesas: despesasAnuais, ir, resultadoLiquido, yieldAnual });
+    totalAluguelBruto += aluguelBruto;
+    totalDespesas += despesasAnuais;
+    totalIR += ir;
+    totalLiquido += resultadoLiquido;
+  }
+
+  return {
+    anos, totalAluguelBruto, totalDespesas, totalIR, totalLiquido,
+    yieldMedioAnual: valorImovel > 0 ? (totalLiquido / horizonteAnos / valorImovel) * 100 : 0,
+  };
+}
+
+// ──────────────────────────────────────────────
+// 33. PERMUTA DE IMÓVEL
+// ──────────────────────────────────────────────
+export interface PermutaInput {
+  valorImovelA: number;
+  dividaImovelA: number;
+  valorImovelB: number;
+  dividaImovelB: number;
+  itbiPercentual: number;
+  cartorioPercentual: number;
+  custoCorretagem: number;
+  ganhoCapitalA: number;
+  isencaoIR: boolean;
+}
+
+export interface PermutaResult {
+  patrimonioLiquidoA: number;
+  patrimonioLiquidoB: number;
+  torna: number;
+  quemPagaTorna: "A paga torna para B" | "B paga torna para A" | "Sem torna";
+  custoITBI: number;
+  custoCartorio: number;
+  custoCorretagem: number;
+  custoTotalTransacao: number;
+  irGanhoCapital: number;
+  custoEquivalenteVendaCompra: number;
+  economiaVsVendaCompra: number;
+  observacoes: string[];
+}
+
+export function calcularPermuta(input: PermutaInput): PermutaResult {
+  const { valorImovelA, dividaImovelA, valorImovelB, dividaImovelB, itbiPercentual, cartorioPercentual, custoCorretagem, ganhoCapitalA, isencaoIR } = input;
+
+  const patrimonioLiquidoA = valorImovelA - dividaImovelA;
+  const patrimonioLiquidoB = valorImovelB - dividaImovelB;
+  const torna = Math.abs(patrimonioLiquidoA - patrimonioLiquidoB);
+  const quemPagaTorna =
+    Math.abs(patrimonioLiquidoA - patrimonioLiquidoB) < 1
+      ? "Sem torna"
+      : patrimonioLiquidoA > patrimonioLiquidoB
+      ? "B paga torna para A"
+      : "A paga torna para B";
+
+  // Na permuta, ITBI incide sobre o imóvel de menor valor (em SP e muitos municípios)
+  const baseITBI = Math.min(valorImovelA, valorImovelB);
+  const custoITBI = baseITBI * itbiPercentual / 100;
+  const custoCartorio = (valorImovelA + valorImovelB) * cartorioPercentual / 100;
+  const custoTotalTransacao = custoITBI + custoCartorio + custoCorretagem;
+
+  // IR sobre ganho de capital na permuta é igual ao da venda (mesmas regras)
+  const irGanhoCapital = isencaoIR ? 0 : Math.max(0, ganhoCapitalA * 0.15);
+
+  // Custo equivalente se vendesse e comprasse separado
+  const custoEquivalenteVendaCompra =
+    valorImovelA * (itbiPercentual / 100 + cartorioPercentual / 100 + 0.06) + // 6% corretagem na venda
+    valorImovelB * (itbiPercentual / 100 + cartorioPercentual / 100);
+
+  const economiaVsVendaCompra = custoEquivalenteVendaCompra - custoTotalTransacao;
+
+  const observacoes: string[] = [
+    "Na permuta, o ITBI geralmente incide sobre o imóvel de menor valor — confirme as regras do seu município.",
+    isencaoIR ? "Isenção de IR aplicada: verifique se você se enquadra (único imóvel, valor até R$ 440.000, sem venda nos últimos 5 anos)." : `IR sobre ganho de capital calculado à alíquota de 15% sobre o ganho declarado em A.`,
+    torna > 0 ? `A ${quemPagaTorna === "A paga torna para B" ? "parte A" : "parte B"} deve o valor da torna em dinheiro para equilibrar a troca.` : "Imóveis de patrimônio líquido equivalente — sem torna necessária.",
+    "Formalize a permuta por escritura pública com descrição clara dos dois imóveis, dívidas assumidas e torna acordada.",
+  ];
+
+  return {
+    patrimonioLiquidoA, patrimonioLiquidoB, torna, quemPagaTorna,
+    custoITBI, custoCartorio, custoCorretagem, custoTotalTransacao,
+    irGanhoCapital, custoEquivalenteVendaCompra, economiaVsVendaCompra,
+    observacoes,
   };
 }
