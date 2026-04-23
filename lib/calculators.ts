@@ -1908,15 +1908,28 @@ export interface TIRImovelResult {
   evolucaoCashFlow: { ano: number; cfAcumulado: number; saldo: number }[];
 }
 
+// IRR bisection on ANNUAL cash flows (avoids floating-point overflow with many periods)
 function bisectionIRR(cashFlows: number[]): number {
   const npv = (r: number) => cashFlows.reduce((s, cf, t) => s + cf / Math.pow(1 + r, t), 0);
-  let lo = -0.9999, hi = 5.0;
-  if (npv(lo) * npv(hi) > 0) { hi = 0.5; }
-  if (npv(lo) * npv(hi) > 0) return NaN;
-  for (let i = 0; i < 300; i++) {
+  let lo = -0.99, hi = 1.0; // -99% to 100% annual — covers all realistic real estate scenarios
+
+  // If root is not bracketed, search for a better hi
+  if (!isFinite(npv(lo)) || !isFinite(npv(hi)) || npv(lo) * npv(hi) > 0) {
+    for (const candidate of [0.5, 0.25, 0.1, 0.05, 0.0, -0.1, -0.5]) {
+      if (isFinite(npv(candidate)) && isFinite(npv(lo)) && npv(lo) * npv(candidate) <= 0) {
+        hi = candidate;
+        break;
+      }
+    }
+  }
+
+  if (!isFinite(npv(lo)) || !isFinite(npv(hi)) || npv(lo) * npv(hi) > 0) return NaN;
+
+  for (let i = 0; i < 200; i++) {
     const mid = (lo + hi) / 2;
-    if (Math.abs(npv(mid)) < 1e-8 || (hi - lo) < 1e-12) return mid;
-    if (npv(lo) * npv(mid) < 0) hi = mid; else lo = mid;
+    const nmid = npv(mid);
+    if (Math.abs(nmid) < 0.01 || (hi - lo) < 1e-10) return mid;
+    if (npv(lo) * nmid < 0) hi = mid; else lo = mid;
   }
   return (lo + hi) / 2;
 }
@@ -1937,34 +1950,35 @@ export function calcularTIRImovel(input: TIRImovelInput): TIRImovelResult {
   const rendaMensalLiquida = aluguelMensal * fatorOcupacao - despesasMensais;
   const totalMeses = horizonteAnos * 12;
 
-  // Build monthly cash flows
-  const cashFlows: number[] = [];
-  cashFlows.push(-(entrada + custoCompra)); // t=0
-
+  // Build monthly cash flows for accurate amortization tracking
   let saldoDevedor = valorFinanciado;
   let totalAluguel = 0;
   let totalFinanc = 0;
 
+  // Annual cash flows for IRR (avoids floating-point overflow with 120+ monthly periods)
+  const annualCashFlows: number[] = new Array(horizonteAnos + 1).fill(0);
+  annualCashFlows[0] = -(entrada + custoCompra); // t=0
+
   for (let mes = 1; mes <= totalMeses; mes++) {
-    if (saldoDevedor > 0) {
+    const cfMes = rendaMensalLiquida - (saldoDevedor > 0 && mes <= prazoFinanciamentoMeses ? parcelaMensal : 0);
+    const ano = Math.ceil(mes / 12);
+    annualCashFlows[ano] += cfMes;
+
+    if (saldoDevedor > 0 && mes <= prazoFinanciamentoMeses) {
       const juros = saldoDevedor * taxaMensal;
       const amort = Math.min(parcelaMensal - juros, saldoDevedor);
       saldoDevedor = Math.max(0, saldoDevedor - amort);
       totalFinanc += parcelaMensal;
     }
     totalAluguel += Math.max(0, rendaMensalLiquida);
-
-    let cf = Math.max(0, rendaMensalLiquida) - (mes <= prazoFinanciamentoMeses ? parcelaMensal : 0);
-    if (mes === totalMeses) {
-      const valorVenda = valorImovel * Math.pow(1 + valorizacaoAnual / 100, horizonteAnos);
-      cf += valorVenda * (1 - percentualCorretagem / 100) - saldoDevedor;
-    }
-    cashFlows.push(cf);
   }
 
   const valorVendaFinal = valorImovel * Math.pow(1 + valorizacaoAnual / 100, horizonteAnos);
-  const tirMensal = bisectionIRR(cashFlows);
-  const tirAnual = isNaN(tirMensal) ? 0 : (Math.pow(1 + tirMensal, 12) - 1) * 100;
+  // Add sale proceeds net of brokerage and remaining loan balance to final year
+  annualCashFlows[horizonteAnos] += valorVendaFinal * (1 - percentualCorretagem / 100) - saldoDevedor;
+
+  const tirAnualDecimal = bisectionIRR(annualCashFlows);
+  const tirAnual = isNaN(tirAnualDecimal) ? 0 : tirAnualDecimal * 100;
 
   // Evolução para chart
   let cfAcumulado = -(entrada + custoCompra);
