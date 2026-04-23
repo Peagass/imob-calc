@@ -22,7 +22,7 @@ export default function JsonLd({ path }: Props) {
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "CalcImóvel", item: SITE_URL },
+        { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
         { "@type": "ListItem", position: 2, name: page.title.split("|")[0].trim(), item: `${SITE_URL}${path}` },
       ],
     },

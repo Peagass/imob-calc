@@ -62,13 +62,13 @@ export default async function PostPage({
     description: post.description,
     datePublished: post.date,
     inLanguage: "pt-BR",
-    author: { "@type": "Organization", name: "CalcImóvel", url: SITE_URL },
-    publisher: { "@type": "Organization", name: "CalcImóvel", url: SITE_URL },
+    author: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
+    publisher: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
     url: `${SITE_URL}/blog/${slug}`,
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "CalcImóvel", item: SITE_URL },
+        { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
         { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
         { "@type": "ListItem", position: 3, name: post.title, item: `${SITE_URL}/blog/${slug}` },
       ],
@@ -84,7 +84,7 @@ export default async function PostPage({
 
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-slate-400 mb-8">
-        <Link href="/" className="hover:text-slate-600 transition-colors">CalcImóvel</Link>
+        <Link href="/" className="hover:text-slate-600 transition-colors">CalculaImóvel</Link>
         <span>›</span>
         <Link href="/blog" className="hover:text-slate-600 transition-colors">Blog</Link>
         <span>›</span>

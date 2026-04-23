@@ -10,26 +10,26 @@ import { SITE_URL, ADSENSE_CLIENT } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "CalcImóvel — Calculadoras Imobiliárias para Brasileiros",
-    template: "%s | CalcImóvel",
+    default: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
+    template: "%s | CalculaImóvel",
   },
   description:
     "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil. Dados atualizados do Banco Central.",
-  authors: [{ name: "CalcImóvel", url: SITE_URL }],
-  creator: "CalcImóvel",
-  publisher: "CalcImóvel",
+  authors: [{ name: "CalculaImóvel", url: SITE_URL }],
+  creator: "CalculaImóvel",
+  publisher: "CalculaImóvel",
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    siteName: "CalcImóvel",
-    title: "CalcImóvel — Calculadoras Imobiliárias para Brasileiros",
+    siteName: "CalculaImóvel",
+    title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description:
       "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CalcImóvel" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "CalculaImóvel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CalcImóvel — Calculadoras Imobiliárias para Brasileiros",
+    title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description: "29 calculadoras gratuitas para decisões imobiliárias no Brasil.",
     images: ["/og-image.png"],
   },
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "CalcImóvel",
+  name: "CalculaImóvel",
   url: SITE_URL,
   description: "Calculadoras imobiliárias gratuitas para brasileiros",
   inLanguage: "pt-BR",

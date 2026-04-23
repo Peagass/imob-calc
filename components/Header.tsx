@@ -75,7 +75,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg text-blue-700 shrink-0 mr-2">
           <Home size={20} />
-          <span>CalcImóvel</span>
+          <span>CalculaImóvel</span>
         </Link>
 
         {/* Desktop nav */}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://calcimobel.com.br";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://calculaimovel.com.br";
 
 // Your AdSense publisher ID — set via env var after approval
 // https://www.google.com/adsense → Account → Account information → Publisher ID
@@ -17,7 +17,7 @@ export interface PageMeta {
 
 export const pages: Record<string, PageMeta> = {
   "/": {
-    title: "CalcImóvel — Calculadoras Imobiliárias para Brasileiros",
+    title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description:
       "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil. Dados atualizados do Banco Central.",
   },
@@ -202,7 +202,7 @@ export function buildMetadata(path: string): Metadata {
       url: `${SITE_URL}${path}`,
       type: "website",
       locale: "pt_BR",
-      siteName: "CalcImóvel",
+      siteName: "CalculaImóvel",
     },
     twitter: {
       card: "summary_large_image",

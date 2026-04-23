@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Artigos práticos sobre compra, venda, aluguel, reforma e investimento imobiliário. Guias claros para tomar as melhores decisões com seu imóvel.",
   alternates: { canonical: `${SITE_URL}/blog` },
   openGraph: {
-    title: "Blog CalcImóvel — Guias sobre Mercado Imobiliário",
+    title: "Blog CalculaImóvel — Guias sobre Mercado Imobiliário",
     description: "Artigos práticos sobre compra, venda, aluguel e investimento imobiliário no Brasil.",
     url: `${SITE_URL}/blog`,
     type: "website",
