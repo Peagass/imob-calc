@@ -1,6 +1,8 @@
 import { buscarSelic } from "@/lib/indices";
 import CapRateCalc from "./CapRateCalc";
 import { ExternalLink } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export const revalidate = 21600; // revalida a cada 6 horas
 
@@ -33,6 +35,8 @@ export default async function CapRatePage() {
       </div>
 
       <CapRateCalc selic={selic} />
+      <FaqSection path="/cap-rate" />
+      <RelatedCalculators path="/cap-rate" />
     </div>
   );
 }

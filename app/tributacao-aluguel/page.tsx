@@ -5,6 +5,9 @@ import { calcularTributacaoAluguel } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, AlertTriangle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function TributacaoAluguelPage() {
   const [aluguelMensal, setAluguelMensal] = useState(3_000);
@@ -140,6 +143,9 @@ export default function TributacaoAluguelPage() {
           Cálculo baseado na tabela progressiva do IRPF 2024 para carnê-leão (Instrução Normativa RFB). Confirme sempre os valores vigentes no site da Receita Federal antes de emitir o DARF.
         </p>
       </div>
+
+      <FaqSection path="/tributacao-aluguel" />
+      <RelatedCalculators path="/tributacao-aluguel" />
     </div>
   );
 }

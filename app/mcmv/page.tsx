@@ -6,6 +6,9 @@ import type { MCMVMunicipio } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, XCircle, Home } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 const MUNICIPIOS: { value: MCMVMunicipio; label: string; desc: string }[] = [
   { value: "capital", label: "Capital ou região metropolitana", desc: "São Paulo, Rio, BH, Fortaleza, Manaus…" },
@@ -220,6 +223,9 @@ export default function MCMVPage() {
           <strong>Simulação educacional.</strong> O subsídio real e as condições exatas são definidos pela Caixa Econômica Federal ou Banco do Brasil após análise de crédito. As regras podem mudar — consulte sempre uma agência ou correspondente credenciado antes de tomar decisões.
         </p>
       </div>
+
+      <FaqSection path="/mcmv" />
+      <RelatedCalculators path="/mcmv" />
     </div>
   );
 }

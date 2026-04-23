@@ -6,6 +6,9 @@ import { calcularAirbnb } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function AirbnbPage() {
   const [diaria, setDiaria] = useState(350);
@@ -202,6 +205,9 @@ export default function AirbnbPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/airbnb-vs-aluguel" />
+      <RelatedCalculators path="/airbnb-vs-aluguel" />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { calcularEstimativaReforma } from "@/lib/calculators";
 import type { PadraoReforma, TipoReforma } from "@/lib/calculators";
 import { formatCurrency } from "@/lib/format";
 import { Info, Hammer } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 const TIPOS: { value: TipoReforma; label: string; desc: string }[] = [
   { value: "pintura", label: "Pintura", desc: "Apenas paredes e teto" },
@@ -215,6 +218,9 @@ export default function EstimativaReformaPage() {
           <strong>Estimativa educacional.</strong> Os valores são médias nacionais de 2024/2025 e podem variar significativamente por região, disponibilidade de mão de obra e flutuação de materiais. Sempre obtenha orçamentos de profissionais locais.
         </p>
       </div>
+
+      <FaqSection path="/estimativa-reforma" />
+      <RelatedCalculators path="/estimativa-reforma" />
     </div>
   );
 }

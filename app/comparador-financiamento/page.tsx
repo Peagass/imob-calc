@@ -6,6 +6,9 @@ import { calcularComparadorFinanciamento } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, Trophy } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 function SliderField({ label, value, display, min, max, step, onChange }: {
   label: string; value: number; display: string; min: number; max: number; step: number; onChange: (v: number) => void;
@@ -206,6 +209,9 @@ export default function ComparadorFinanciamentoPage() {
           No SAC a parcela começa maior mas cai mês a mês, resultando em menos juros totais. No PRICE a parcela é fixa e previsível, mas o saldo devedor cai mais devagar no início. Além da taxa e do sistema, negocie também seguros (MIP e DFI) que podem adicionar 0,3–0,8% ao custo efetivo.
         </p>
       </div>
+
+      <FaqSection path="/comparador-financiamento" />
+      <RelatedCalculators path="/comparador-financiamento" />
     </div>
   );
 }

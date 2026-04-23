@@ -6,6 +6,9 @@ import { calcularRenegociacao } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, XCircle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function RenegociacaoFinanciamentoPage() {
   const [saldoDevedor, setSaldoDevedor] = useState(350_000);
@@ -153,6 +156,9 @@ export default function RenegociacaoFinanciamentoPage() {
           Use a proposta do banco concorrente como argumento de negociação com o seu banco atual — muitas vezes ele reduz a taxa sem necessidade de portabilidade formal. A renegociação interna tende a ter menos burocracia e custo menor que a portabilidade para outro banco.
         </p>
       </div>
+
+      <FaqSection path="/renegociacao-financiamento" />
+      <RelatedCalculators path="/renegociacao-financiamento" />
     </div>
   );
 }

@@ -9,6 +9,9 @@ import {
 import { formatCurrency } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { CheckCircle2, Circle, ChevronDown, ChevronUp, TrendingDown, Scale, AlertTriangle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 // ─── helpers ───────────────────────────────────────────────────────────────
 
@@ -372,6 +375,9 @@ export default function DoacaoVsInventarioPage() {
           Consulte um advogado especializado em direito de família e sucessões para uma estimativa precisa.
         </p>
       </div>
+
+      <FaqSection path="/doacao-vs-inventario" />
+      <RelatedCalculators path="/doacao-vs-inventario" />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { calcularITCMD, ITCMD_UFS } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, Scale } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function ITCMDPage() {
   const [valorBem, setValorBem] = useState(500_000);
@@ -166,6 +169,9 @@ export default function ITCMDPage() {
           <strong>Valores aproximados.</strong> As alíquotas e faixas são baseadas na legislação de 2024/2025 e podem ter sido atualizadas. Consulte a Secretaria da Fazenda do seu estado ou um advogado especializado antes de recolher o imposto.
         </p>
       </div>
+
+      <FaqSection path="/itcmd" />
+      <RelatedCalculators path="/itcmd" />
     </div>
   );
 }

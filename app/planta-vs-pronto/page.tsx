@@ -5,6 +5,9 @@ import { calcularPlantaVsPronto } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, AlertTriangle, CheckCircle, Clock } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function PlantaVsProntoPage() {
   const [valorNaPlanta, setValorNaPlanta] = useState(600_000);
@@ -278,6 +281,9 @@ export default function PlantaVsProntoPage() {
           Ambas as opções usam a mesma taxa de juros e prazo de financiamento, tornando a comparação justa. A diferença de preço entre o imóvel na planta e o pronto equivalente é o ponto de partida — o INCC e o aluguel durante a obra determinam se o desconto inicial se sustenta.
         </p>
       </div>
+
+      <FaqSection path="/planta-vs-pronto" />
+      <RelatedCalculators path="/planta-vs-pronto" />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { calcularConsorcio } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function ConsorcioPage() {
   const [valorCredito, setValorCredito] = useState(400_000);
@@ -189,6 +192,9 @@ export default function ConsorcioPage() {
           A contemplação estimada é uma aproximação baseada no lance ofertado. O resultado real depende das ofertas dos demais cotistas em cada assembleia. Consulte o regulamento do grupo antes de assinar.
         </p>
       </div>
+
+      <FaqSection path="/consorcio" />
+      <RelatedCalculators path="/consorcio" />
     </div>
   );
 }

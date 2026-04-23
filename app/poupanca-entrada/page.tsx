@@ -6,6 +6,9 @@ import { calcularPoupancaEntrada } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, PiggyBank } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 const OPCOES_RENDIMENTO = [
   { label: "Poupança (~6% a.a.)", valor: 6.0 },
@@ -187,6 +190,9 @@ export default function PoupancaEntradaPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/poupanca-entrada" />
+      <RelatedCalculators path="/poupanca-entrada" />
     </div>
   );
 }

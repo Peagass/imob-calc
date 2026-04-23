@@ -5,6 +5,9 @@ import { calcularLeilaoImovel } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, AlertTriangle, Gavel, Scale, Clock } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 const ITBI_OPCOES = [1.5, 2.0, 2.5, 3.0, 3.5, 4.0];
 
@@ -295,6 +298,9 @@ export default function LeilaoImovelPage() {
           <strong>Cálculo educacional.</strong> O lucro estimado assume que o imóvel será vendido pelo valor de avaliação, sem desconto. Prazos de desocupação são estimativas — consulte um advogado especializado em direito imobiliário antes de arrematar.
         </p>
       </div>
+
+      <FaqSection path="/leilao-imovel" />
+      <RelatedCalculators path="/leilao-imovel" />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { calcularDistrato } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, AlertTriangle, Scale } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function DistratoPage() {
   const [totalPago, setTotalPago] = useState(120_000);
@@ -171,6 +174,9 @@ export default function DistratoPage() {
           Cálculo baseado na Lei 13.786/2018 (Lei do Distrato). Os valores são estimativas — o contrato de compra e venda e o regulamento específico da incorporadora prevalecem. Consulte um advogado especializado em direito imobiliário.
         </p>
       </div>
+
+      <FaqSection path="/distrato" />
+      <RelatedCalculators path="/distrato" />
     </div>
   );
 }

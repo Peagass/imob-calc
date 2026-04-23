@@ -5,6 +5,9 @@ import { calcularSeguroFianca } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, Shield } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function SeguroFiancaPage() {
   const [aluguelMensal, setAluguelMensal] = useState(2_500);
@@ -179,6 +182,9 @@ export default function SeguroFiancaPage() {
           O custo de oportunidade da caução é o rendimento perdido pelo inquilino ao imobilizar o depósito. Se o proprietário devolver o depósito corrigido pelo mesmo índice, o custo real é menor — verifique o contrato.
         </p>
       </div>
+
+      <FaqSection path="/seguro-fianca" />
+      <RelatedCalculators path="/seguro-fianca" />
     </div>
   );
 }

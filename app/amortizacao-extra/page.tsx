@@ -6,6 +6,9 @@ import { calcularAmortizacaoExtra } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, Zap } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function AmortizacaoExtraPage() {
   const [saldoDevedor, setSaldoDevedor] = useState(400_000);
@@ -225,6 +228,9 @@ export default function AmortizacaoExtraPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/amortizacao-extra" />
+      <RelatedCalculators path="/amortizacao-extra" />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { calcularPortabilidade } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, XCircle } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function PortabilidadePage() {
   const [saldoDevedor, setSaldoDevedor] = useState(350_000);
@@ -211,6 +214,9 @@ export default function PortabilidadePage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/portabilidade" />
+      <RelatedCalculators path="/portabilidade" />
     </div>
   );
 }

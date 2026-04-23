@@ -5,6 +5,9 @@ import { calcularFGTS } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, XCircle, PiggyBank } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function FGTSPage() {
   const [salarioBruto, setSalarioBruto] = useState(6_000);
@@ -158,6 +161,9 @@ export default function FGTSPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/fgts" />
+      <RelatedCalculators path="/fgts" />
     </div>
   );
 }

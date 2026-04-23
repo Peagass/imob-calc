@@ -5,6 +5,9 @@ import { calcularRetornoReforma } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, XCircle, Wrench } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function RetornoReformaPage() {
   const [valorAtualImovel, setValorAtualImovel] = useState(500_000);
@@ -164,6 +167,9 @@ export default function RetornoReformaPage() {
           <strong>Importante:</strong> a valorização estimada após a reforma é subjetiva. Consulte um corretor para uma avaliação realista do mercado local. Este cálculo não inclui o IR sobre o Ganho de Capital.
         </p>
       </div>
+
+      <FaqSection path="/retorno-reforma" />
+      <RelatedCalculators path="/retorno-reforma" />
     </div>
   );
 }

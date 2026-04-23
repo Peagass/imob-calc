@@ -5,6 +5,9 @@ import { calcularRescisao } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, CheckCircle, Scale } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function RescisaoPage() {
   const [aluguelMensal, setAluguelMensal] = useState(2_500);
@@ -203,6 +206,9 @@ export default function RescisaoPage() {
           <strong>Importante:</strong> este cálculo é educacional. Situações específicas (contratos atípicos, cláusulas especiais, imóveis comerciais) podem ter regras diferentes. Consulte um advogado em caso de disputa.
         </p>
       </div>
+
+      <FaqSection path="/rescisao-aluguel" />
+      <RelatedCalculators path="/rescisao-aluguel" />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { buscarSelic } from "@/lib/indices";
 import FiiVsImovelCalc from "./FiiVsImovelCalc";
 import { ExternalLink } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export const revalidate = 21600;
 
@@ -29,6 +31,8 @@ export default async function FiiVsImovelPage() {
       </div>
 
       <FiiVsImovelCalc selic={selic} />
+      <FaqSection path="/fii-vs-imovel" />
+      <RelatedCalculators path="/fii-vs-imovel" />
     </div>
   );
 }

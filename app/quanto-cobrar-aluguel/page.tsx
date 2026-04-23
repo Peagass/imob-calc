@@ -1,6 +1,8 @@
 import { buscarSelic } from "@/lib/indices";
 import QuantoCobrarCalc from "./QuantoCobrarCalc";
 import { ExternalLink } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export const revalidate = 21600;
 
@@ -29,6 +31,8 @@ export default async function QuantoCobrarAluguelPage() {
       </div>
 
       <QuantoCobrarCalc selic={selic} />
+      <FaqSection path="/quanto-cobrar-aluguel" />
+      <RelatedCalculators path="/quanto-cobrar-aluguel" />
     </div>
   );
 }

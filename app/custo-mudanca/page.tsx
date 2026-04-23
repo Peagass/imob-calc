@@ -5,6 +5,9 @@ import { calcularCustoMudanca } from "@/lib/calculators";
 import type { TipoServico } from "@/lib/calculators";
 import { formatCurrency } from "@/lib/format";
 import { Info, Truck } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 const SERVICOS: { value: TipoServico; label: string; desc: string }[] = [
   { value: "somente_caminhao", label: "Só o caminhão", desc: "Você mesmo carrega — motorista incluso" },
@@ -189,6 +192,9 @@ export default function CustoMudancaPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/custo-mudanca" />
+      <RelatedCalculators path="/custo-mudanca" />
     </div>
   );
 }

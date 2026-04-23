@@ -6,6 +6,9 @@ import { calcularFluxoCaixaProprietario } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function FluxoCaixaImovelPage() {
   const [aluguelMensal, setAluguelMensal] = useState(3_000);
@@ -173,6 +176,9 @@ export default function FluxoCaixaImovelPage() {
           IR calculado pela tabela progressiva do carnê-leão (2025). Se você optar pelo desconto simplificado de 20% na declaração anual, o imposto pode ser menor. Para imóveis com condomínio alto pago pelo inquilino, o proprietário pode deduzir esse valor da base de cálculo do carnê-leão.
         </p>
       </div>
+
+      <FaqSection path="/fluxo-caixa-imovel" />
+      <RelatedCalculators path="/fluxo-caixa-imovel" />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { buscarSelic } from "@/lib/indices";
 import ImovelRendaFixaCalc from "./ImovelRendaFixaCalc";
 import { ExternalLink } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
 
 export const revalidate = 21600;
 
@@ -29,6 +31,8 @@ export default async function ImovelVsRendaFixaPage() {
       </div>
 
       <ImovelRendaFixaCalc selic={selic} />
+      <FaqSection path="/imovel-vs-renda-fixa" />
+      <RelatedCalculators path="/imovel-vs-renda-fixa" />
     </div>
   );
 }

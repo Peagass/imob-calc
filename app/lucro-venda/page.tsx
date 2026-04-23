@@ -5,6 +5,9 @@ import { calcularLucroVenda } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, TrendingUp, TrendingDown } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function LucroVendaPage() {
   const [valorCompra, setValorCompra] = useState(400_000);
@@ -137,6 +140,9 @@ export default function LucroVendaPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/lucro-venda" />
+      <RelatedCalculators path="/lucro-venda" />
     </div>
   );
 }

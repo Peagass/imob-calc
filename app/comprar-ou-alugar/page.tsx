@@ -16,6 +16,9 @@ import { calcularComprarOuAlugar } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, TrendingUp, Home, DollarSign } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function ComprarOuAlugarPage() {
   const [valorImovel, setValorImovel] = useState(500_000);
@@ -182,6 +185,9 @@ export default function ComprarOuAlugarPage() {
           </div>
         </div>
       </div>
+
+      <FaqSection path="/comprar-ou-alugar" />
+      <RelatedCalculators path="/comprar-ou-alugar" />
     </div>
   );
 }

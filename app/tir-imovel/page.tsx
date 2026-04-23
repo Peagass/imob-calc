@@ -6,6 +6,9 @@ import { calcularTIRImovel } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, TrendingUp, TrendingDown } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 function Slider({ label, value, display, min, max, step, onChange, accent = "accent-teal-600" }: {
   label: string; value: number; display: string;
@@ -229,6 +232,9 @@ export default function TIRImovelPage() {
           TIR calculada sobre fluxos de caixa anuais reais: saída inicial (ano 0), diferença entre aluguel reajustado e parcela {sistemaAmortizacao} a cada ano, e receita líquida da venda no ano {horizonteAnos}. Não inclui IR sobre ganho de capital nem tributação do aluguel.
         </p>
       </div>
+
+      <FaqSection path="/tir-imovel" />
+      <RelatedCalculators path="/tir-imovel" />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import { calcularPermuta } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
 import { Info, AlertTriangle, ArrowLeftRight } from "lucide-react";
+import FaqSection from "@/components/FaqSection";
+import RelatedCalculators from "@/components/RelatedCalculators";
+
 
 export default function PermutaImovelPage() {
   const [valorA, setValorA] = useState(500_000);
@@ -158,6 +161,9 @@ export default function PermutaImovelPage() {
           A permuta é vantajosa principalmente quando ambas as partes querem o imóvel da outra. Reduz o custo de transação por evitar duas operações de venda independentes. Consulte um advogado imobiliário para redigir a escritura de permuta e verificar as regras de ITBI do seu município.
         </p>
       </div>
+
+      <FaqSection path="/permuta-imovel" />
+      <RelatedCalculators path="/permuta-imovel" />
     </div>
   );
 }
