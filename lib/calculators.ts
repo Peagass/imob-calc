@@ -1576,6 +1576,104 @@ export function calcularITCMD(input: ITCMDInput): ITCMDResult {
 export const ITCMD_UFS = Object.entries(ITCMD_ESTADOS).map(([uf, c]) => ({ uf, nome: c.nome })).sort((a, b) => a.nome.localeCompare(b.nome));
 
 // ──────────────────────────────────────────────
+// 22b. DOAÇÃO EM VIDA vs INVENTÁRIO
+// ──────────────────────────────────────────────
+export interface DoacaoVsInventarioInput {
+  valorPatrimonio: number;
+  uf: string;
+  modalidadeInventario: "judicial" | "extrajudicial";
+  percEmolumentosDoacao: number;
+  percHonorariosDoacao: number;
+  percCustasInventario: number;
+  percHonorariosInventario: number;
+  percRegistroImoveis: number;
+}
+
+export interface DoacaoVsInventarioCusto {
+  label: string;
+  valor: number;
+  obrigatorio: boolean;
+  nota: string;
+}
+
+export interface DoacaoVsInventarioResult {
+  doacao: { total: number; itens: DoacaoVsInventarioCusto[] };
+  inventario: { total: number; itens: DoacaoVsInventarioCusto[] };
+  economiaComDoacao: number;
+  percentualEconomia: number;
+  itcmd: number;
+  aliquotaEfetivaITCMD: number;
+}
+
+export function calcularDoacaoVsInventario(input: DoacaoVsInventarioInput): DoacaoVsInventarioResult {
+  const {
+    valorPatrimonio,
+    uf,
+    modalidadeInventario,
+    percEmolumentosDoacao,
+    percHonorariosDoacao,
+    percCustasInventario,
+    percHonorariosInventario,
+    percRegistroImoveis,
+  } = input;
+
+  const itcmdResult = calcularITCMD({ valorBem: valorPatrimonio, uf, tipoTransmissao: "doacao" });
+  const itcmd = itcmdResult.impostoDevido;
+  const aliq = itcmdResult.aliquotaEfetiva;
+
+  const pct = (p: number) => valorPatrimonio * (p / 100);
+
+  // Doação em vida
+  const emolDoacao = pct(percEmolumentosDoacao);
+  const honDoacao = pct(percHonorariosDoacao);
+  const regDoacao = pct(percRegistroImoveis);
+  const totalDoacao = itcmd + emolDoacao + honDoacao + regDoacao;
+
+  // Inventário
+  const custasInv = pct(percCustasInventario);
+  const honInv = pct(percHonorariosInventario);
+  const regInv = pct(percRegistroImoveis);
+  const totalInv = itcmd + custasInv + honInv + regInv;
+
+  const itcmdNota = `${aliq.toFixed(2)}% alíquota efetiva em ${uf}`;
+
+  return {
+    doacao: {
+      total: totalDoacao,
+      itens: [
+        { label: "ITCMD (doação)", valor: itcmd, obrigatorio: true, nota: itcmdNota },
+        { label: "Emolumentos (escritura de doação)", valor: emolDoacao, obrigatorio: true, nota: `${percEmolumentosDoacao}% — tabela estadual do cartório` },
+        { label: "Honorários advocatícios", valor: honDoacao, obrigatorio: false, nota: `${percHonorariosDoacao}% — recomendado, não obrigatório` },
+        { label: "Registro de Imóveis", valor: regDoacao, obrigatorio: true, nota: `${percRegistroImoveis}% — emolumentos de transferência` },
+      ],
+    },
+    inventario: {
+      total: totalInv,
+      itens: [
+        { label: "ITCMD (herança)", valor: itcmd, obrigatorio: true, nota: itcmdNota },
+        {
+          label: modalidadeInventario === "judicial" ? "Custas processuais (judicial)" : "Emolumentos de inventário (extrajudicial)",
+          valor: custasInv,
+          obrigatorio: true,
+          nota: `${percCustasInventario}% — ${modalidadeInventario === "judicial" ? "tabela do TJ estadual" : "tabela de emolumentos do cartório"}`,
+        },
+        {
+          label: "Honorários advocatícios",
+          valor: honInv,
+          obrigatorio: true,
+          nota: `${percHonorariosInventario}% — ${modalidadeInventario === "judicial" ? "tabela OAB: 6–10% judicial" : "tabela OAB: ~3% extrajudicial"}`,
+        },
+        { label: "Registro de Imóveis", valor: regInv, obrigatorio: true, nota: `${percRegistroImoveis}% — emolumentos de transferência` },
+      ],
+    },
+    economiaComDoacao: totalInv - totalDoacao,
+    percentualEconomia: totalInv > 0 ? ((totalInv - totalDoacao) / totalInv) * 100 : 0,
+    itcmd,
+    aliquotaEfetivaITCMD: aliq,
+  };
+}
+
+// ──────────────────────────────────────────────
 // 23. MINHA CASA MINHA VIDA
 // ──────────────────────────────────────────────
 export type MCMVFaixa = 1 | 2 | 3;

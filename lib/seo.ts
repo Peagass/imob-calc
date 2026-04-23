@@ -136,6 +136,11 @@ export const pages: Record<string, PageMeta> = {
     description:
       "Calcule o ITCMD sobre imóveis herdados ou doados em todos os 27 estados brasileiros. Alíquotas estaduais atualizadas e progressividade automática.",
   },
+  "/doacao-vs-inventario": {
+    title: "Doação em Vida vs Inventário | Compare Custos Totais de Transmissão de Bens",
+    description:
+      "Compare o custo total de transmitir seu patrimônio por doação agora ou via inventário: ITCMD, honorários advocatícios, custas processuais e emolumentos de cartório.",
+  },
   "/imovel-vs-renda-fixa": {
     title: "Imóvel vs Renda Fixa | CDI e Selic vs Aluguel | Comparativo de Retorno",
     description:

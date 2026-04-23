@@ -190,6 +190,12 @@ const categorias = [
         descricao: "Calcule o imposto estadual sobre transmissão de imóveis por herança ou doação em todos os estados.",
       },
       {
+        href: "/doacao-vs-inventario",
+        icon: Scale,
+        titulo: "Doação em Vida vs. Inventário",
+        descricao: "Compare o custo total de transmitir o patrimônio por doação agora ou via inventário: ITCMD, honorários, custas e emolumentos.",
+      },
+      {
         href: "/permuta-imovel",
         icon: Repeat,
         titulo: "Permuta de Imóvel",

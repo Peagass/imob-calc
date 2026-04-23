@@ -49,8 +49,9 @@ const grupos = [
     links: [
       { href: "/ganho-capital",   label: "Ganho de Capital" },
       { href: "/lucro-venda",     label: "Lucro Líquido na Venda" },
-      { href: "/itcmd",           label: "ITCMD" },
-      { href: "/permuta-imovel",  label: "Permuta de Imóvel" },
+      { href: "/itcmd",                  label: "ITCMD" },
+      { href: "/doacao-vs-inventario",   label: "Doação em Vida vs. Inventário" },
+      { href: "/permuta-imovel",         label: "Permuta de Imóvel" },
     ],
   },
   {
