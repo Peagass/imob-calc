@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { SITE_URL } from "@/lib/seo";
@@ -116,7 +117,7 @@ export default async function PostPage({
 
       {/* Content */}
       <article className="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-800 prose-li:text-slate-600 prose-h2:text-2xl prose-h3:text-xl prose-h2:mt-10 prose-h3:mt-6">
-        <MDXRemote source={post.content} />
+        <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
       </article>
 
       {/* CTA calculadora */}
