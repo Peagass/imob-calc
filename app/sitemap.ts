@@ -1,14 +1,29 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, pages } from "@/lib/seo";
+import { getAllPosts } from "@/lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = Object.keys(pages);
   const now = new Date();
 
-  return routes.map((route) => ({
+  const calculadoras: MetadataRoute.Sitemap = routes.map((route) => ({
     url: `${SITE_URL}${route === "/" ? "" : route}`,
     lastModified: now,
     changeFrequency: route === "/" ? "weekly" : "monthly",
     priority: route === "/" ? 1 : 0.8,
   }));
+
+  const blogIndex: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+  ];
+
+  const posts = getAllPosts();
+  const blogPosts: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...calculadoras, ...blogIndex, ...blogPosts];
 }
