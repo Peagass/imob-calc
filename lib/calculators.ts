@@ -856,21 +856,22 @@ export interface EstimativaReformaResult {
   detalhamento: { item: string; custo: number }[];
 }
 
+// Valores atualizados para 2025/2026 — referência: Lar Pontual Engenharia, SINAPI jan/2026
 const REFORMA_AREA: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
-  pintura:    { simples: [20, 35],   medio: [40, 60],    alto: [65, 100] },
-  acabamento: { simples: [350, 550], medio: [600, 900],  alto: [1000, 2000] },
-  completa:   { simples: [1000, 1600], medio: [1700, 2800], alto: [3000, 5500] },
+  pintura:    { simples: [30, 55],    medio: [55, 90],     alto: [100, 180]   },
+  acabamento: { simples: [550, 900],  medio: [950, 1600],  alto: [1800, 3500] },
+  completa:   { simples: [1500, 2500], medio: [2600, 4000], alto: [4500, 9000] },
 };
 // Custos por cômodo variam conforme o TIPO de reforma (pintura é só as paredes)
 const REFORMA_BANHEIRO: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
-  pintura:    { simples: [200, 400],    medio: [350, 650],    alto: [600, 1100] },
-  acabamento: { simples: [4000, 7000],  medio: [8000, 15000], alto: [18000, 40000] },
-  completa:   { simples: [9000, 16000], medio: [16000, 32000], alto: [35000, 80000] },
+  pintura:    { simples: [300, 600],     medio: [500, 900],     alto: [850, 1500]    },
+  acabamento: { simples: [5500, 10000],  medio: [11000, 22000], alto: [25000, 55000] },
+  completa:   { simples: [12000, 22000], medio: [22000, 45000], alto: [50000, 120000] },
 };
 const REFORMA_COZINHA: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
-  pintura:    { simples: [300, 600],    medio: [500, 950],    alto: [800, 1600] },
-  acabamento: { simples: [6000, 10000], medio: [12000, 22000], alto: [25000, 60000] },
-  completa:   { simples: [15000, 26000], medio: [26000, 52000], alto: [60000, 150000] },
+  pintura:    { simples: [400, 750],     medio: [700, 1200],    alto: [1000, 2000]    },
+  acabamento: { simples: [9000, 16000],  medio: [18000, 35000], alto: [45000, 100000] },
+  completa:   { simples: [22000, 40000], medio: [42000, 80000], alto: [100000, 250000] },
 };
 
 export function calcularEstimativaReforma(input: EstimativaReformaInput): EstimativaReformaResult {

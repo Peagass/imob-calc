@@ -41,7 +41,7 @@ export default function EstimativaReformaPage() {
         <span className="text-xs font-semibold text-orange-600 uppercase tracking-wide">Reforma</span>
         <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Estimativa de Reforma</h1>
         <p className="text-slate-500">
-          Estime o custo da sua reforma por m², tipo e padrão. Valores baseados em médias nacionais de 2024/2025.
+          Estime o custo da sua reforma por m², tipo e padrão. Valores baseados em médias nacionais de 2025/2026.
         </p>
       </div>
 
@@ -181,15 +181,15 @@ export default function EstimativaReformaPage() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-500">Pintura simples</span>
-                <span className="text-slate-700">R$ 20–35/m²</span>
+                <span className="text-slate-700">R$ 30–55/m²</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Acabamento médio</span>
-                <span className="text-slate-700">R$ 600–900/m²</span>
+                <span className="text-slate-700">R$ 950–1.600/m²</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Reforma completa alto padrão</span>
-                <span className="text-slate-700">R$ 3.000–5.500/m²</span>
+                <span className="text-slate-700">R$ 4.500–9.000/m²</span>
               </div>
             </div>
           </div>
@@ -215,7 +215,7 @@ export default function EstimativaReformaPage() {
       <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
         <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
         <p className="text-xs text-blue-800">
-          <strong>Estimativa educacional.</strong> Os valores são médias nacionais de 2024/2025 e podem variar significativamente por região, disponibilidade de mão de obra e flutuação de materiais. Sempre obtenha orçamentos de profissionais locais.
+          <strong>Estimativa educacional.</strong> Os valores são médias nacionais de 2025/2026 (referência: SINAPI/jan.2026 e Lar Pontual Engenharia) e podem variar significativamente por região, disponibilidade de mão de obra e flutuação de materiais. Sempre obtenha orçamentos de profissionais locais.
         </p>
       </div>
 
