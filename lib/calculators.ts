@@ -1206,69 +1206,106 @@ export function calcularQuantoCobrarAluguel(input: QuantoCobrarAluguelInput): Qu
 // ──────────────────────────────────────────────
 export interface FiiVsImovelInput {
   valorInvestimento: number;
-  dividendYieldFII: number; // % a.a. (dividend yield bruto)
-  valorizacaoFII: number; // % a.a. (valorização das cotas)
-  aluguelMensal: number; // aluguel esperado do imóvel
+  dividendYieldFII: number;         // % a.a. bruto
+  valorizacaoFII: number;           // % a.a.
+  reinvestirDividendosFII: boolean; // reinvestir DY em novas cotas?
+  aluguelMensal: number;
+  reajusteAluguelAnual: number;     // % a.a. (ex: IPCA ~5%)
   despesasAnuaisImovel: number;
   vacanciaPercentual: number;
-  valorizacaoImovel: number; // % a.a.
-  horizonte: number; // anos
-  irFII: number; // % de IR sobre dividendos FII (atualmente isento para PF, mas pode mudar)
+  valorizacaoImovel: number;        // % a.a.
+  horizonte: number;                // anos
+  irFII: number;                    // % IR sobre dividendos FII
+  reinvestirRendaImovel: boolean;   // reinvestir renda do aluguel?
+  taxaReinvestimento: number;       // % a.a. se reinvestir renda
 }
 
 export interface FiiVsImovelResult {
-  // FII
   patrimonioFinalFII: number;
   dividendosTotaisFII: number;
   valorizacaoCotasFII: number;
   retornoFIIAA: number;
-  // Imóvel físico
   patrimonioFinalImovel: number;
-  rendaAluguelTotal: number;
+  rendaAluguelLiquidaTotal: number;
+  irAluguelTotal: number;
   valorizacaoImovelTotal: number;
   retornoImovelAA: number;
-  // Comparação
   melhor: "fii" | "imovel" | "empate";
   diferenca: number;
   evolucao: { ano: number; fii: number; imovel: number }[];
 }
 
+function irCarneLeaoMensal(rendaBruta: number): number {
+  if (rendaBruta <= 2259.20) return 0;
+  if (rendaBruta <= 2826.65) return rendaBruta * 0.075 - 169.44;
+  if (rendaBruta <= 3751.05) return rendaBruta * 0.15 - 381.44;
+  if (rendaBruta <= 4664.68) return rendaBruta * 0.225 - 662.77;
+  return rendaBruta * 0.275 - 896.00;
+}
+
 export function calcularFiiVsImovel(input: FiiVsImovelInput): FiiVsImovelResult {
   const {
-    valorInvestimento, dividendYieldFII, valorizacaoFII,
-    aluguelMensal, despesasAnuaisImovel, vacanciaPercentual,
-    valorizacaoImovel, horizonte, irFII,
+    valorInvestimento, dividendYieldFII, valorizacaoFII, reinvestirDividendosFII,
+    aluguelMensal, reajusteAluguelAnual, despesasAnuaisImovel, vacanciaPercentual,
+    valorizacaoImovel, horizonte, irFII, reinvestirRendaImovel, taxaReinvestimento,
   } = input;
 
   const fatorOcupacao = 1 - vacanciaPercentual / 100;
   const dyMensal = dividendYieldFII / 100 / 12;
   const valorizacaoFIIMensal = valorizacaoFII / 100 / 12;
   const valorizacaoImovelMensal = valorizacaoImovel / 100 / 12;
+  const reinvestMensal = taxaReinvestimento / 100 / 12;
 
   let cotasFII = valorInvestimento;
-  let dividendosAcumulados = 0;
+  let dividendosAcumulados = 0;  // caixa se não reinveste
   let valorImovelAtual = valorInvestimento;
-  let rendaAluguelAcumulada = 0;
+  let rendaAcumulada = 0;
+  let irAluguelTotal = 0;
   const evolucao: FiiVsImovelResult["evolucao"] = [];
 
   for (let mes = 1; mes <= horizonte * 12; mes++) {
-    // FII: cotas valorizam + recebem dividendos (reinvestidos)
+    const anosPassados = Math.floor((mes - 1) / 12);
+
+    // ── FII ──
     const dividendoMes = cotasFII * dyMensal * (1 - irFII / 100);
     dividendosAcumulados += dividendoMes;
-    cotasFII = cotasFII * (1 + valorizacaoFIIMensal) + dividendoMes;
+    if (reinvestirDividendosFII) {
+      // Dividendos compram novas cotas → efeito de juros compostos
+      cotasFII = cotasFII * (1 + valorizacaoFIIMensal) + dividendoMes;
+    } else {
+      // Dividendos viram renda (saem como caixa)
+      cotasFII = cotasFII * (1 + valorizacaoFIIMensal);
+    }
 
-    // Imóvel: valoriza + renda de aluguel
+    // ── Imóvel: valoriza ──
     valorImovelAtual *= 1 + valorizacaoImovelMensal;
-    const rendaLiquidaMes = aluguelMensal * fatorOcupacao - despesasAnuaisImovel / 12;
-    rendaAluguelAcumulada += Math.max(0, rendaLiquidaMes);
+
+    // Aluguel com reajuste anual acumulado
+    const aluguelReajustado = aluguelMensal * Math.pow(1 + reajusteAluguelAnual / 100, anosPassados);
+    const aluguelComVacancia = aluguelReajustado * fatorOcupacao;
+    const baseIR = Math.max(0, aluguelComVacancia - despesasAnuaisImovel / 12);
+    const irMes = Math.max(0, irCarneLeaoMensal(baseIR));
+    irAluguelTotal += irMes;
+    const rendaLiquidaMes = Math.max(0, baseIR - irMes);
+
+    // Renda: acumular com ou sem juros de reinvestimento
+    rendaAcumulada = reinvestirRendaImovel
+      ? rendaAcumulada * (1 + reinvestMensal) + rendaLiquidaMes
+      : rendaAcumulada + rendaLiquidaMes;
 
     if (mes % 12 === 0) {
-      evolucao.push({ ano: mes / 12, fii: cotasFII, imovel: valorImovelAtual + rendaAluguelAcumulada });
+      const patrimonioFIIAno = reinvestirDividendosFII
+        ? cotasFII
+        : cotasFII + dividendosAcumulados;
+      evolucao.push({ ano: mes / 12, fii: patrimonioFIIAno, imovel: valorImovelAtual + rendaAcumulada });
     }
   }
 
-  const patrimonioFinalFII = cotasFII;
-  const patrimonioFinalImovel = valorImovelAtual + rendaAluguelAcumulada;
+  // Se não reinvestiu, o caixa de dividendos soma ao patrimônio final
+  const patrimonioFinalFII = reinvestirDividendosFII
+    ? cotasFII
+    : cotasFII + dividendosAcumulados;
+  const patrimonioFinalImovel = valorImovelAtual + rendaAcumulada;
 
   const retornoFIIAA = valorInvestimento > 0
     ? (Math.pow(patrimonioFinalFII / valorInvestimento, 1 / horizonte) - 1) * 100 : 0;
@@ -1278,10 +1315,11 @@ export function calcularFiiVsImovel(input: FiiVsImovelInput): FiiVsImovelResult 
   return {
     patrimonioFinalFII,
     dividendosTotaisFII: dividendosAcumulados,
-    valorizacaoCotasFII: cotasFII - valorInvestimento - dividendosAcumulados,
+    valorizacaoCotasFII: cotasFII - valorInvestimento - (reinvestirDividendosFII ? dividendosAcumulados : 0),
     retornoFIIAA,
     patrimonioFinalImovel,
-    rendaAluguelTotal: rendaAluguelAcumulada,
+    rendaAluguelLiquidaTotal: rendaAcumulada,
+    irAluguelTotal,
     valorizacaoImovelTotal: valorImovelAtual - valorInvestimento,
     retornoImovelAA,
     melhor: Math.abs(patrimonioFinalFII - patrimonioFinalImovel) < valorInvestimento * 0.05
