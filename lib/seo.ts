@@ -191,6 +191,11 @@ export const pages: Record<string, PageMeta> = {
     description:
       "Calcule a torna, ITBI, cartório e IR na permuta de imóveis. Compare com o custo de vender e comprar separado e descubra quanto a permuta economiza.",
   },
+  "/noticias": {
+    title: "Notícias do Mercado Imobiliário | CalculaImóvel",
+    description:
+      "Acompanhe as últimas notícias do mercado imobiliário brasileiro: preços, financiamento, Selic, MCMV, aluguel e tendências. Atualizado regularmente.",
+  },
 };
 
 export function buildMetadata(path: string): Metadata {

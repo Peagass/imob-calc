@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, pages } from "@/lib/seo";
 import { getAllPosts } from "@/lib/blog";
+import { getAllNews } from "@/lib/news";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = Object.keys(pages);
@@ -25,5 +26,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...calculadoras, ...blogIndex, ...blogPosts];
+  const noticiasIndex: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/noticias`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+  ];
+
+  const noticias = getAllNews();
+  const noticiasArticles: MetadataRoute.Sitemap = noticias.map((n) => ({
+    url: `${SITE_URL}/noticias/${n.slug}`,
+    lastModified: new Date(n.date),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...calculadoras, ...blogIndex, ...blogPosts, ...noticiasIndex, ...noticiasArticles];
 }

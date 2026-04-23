@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ChevronDown, Menu, X, BookOpen } from "lucide-react";
+import { Home, ChevronDown, Menu, X, BookOpen, Newspaper } from "lucide-react";
 import { useState } from "react";
 
 const grupos = [
@@ -123,6 +123,15 @@ export default function Header() {
             <BookOpen className="w-3.5 h-3.5" />
             Guias
           </Link>
+          <Link
+            href="/noticias"
+            className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+              pathname.startsWith("/noticias") ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            }`}
+          >
+            <Newspaper className="w-3.5 h-3.5" />
+            Notícias
+          </Link>
         </nav>
 
         {/* Mobile toggle */}
@@ -174,6 +183,18 @@ export default function Header() {
             >
               <BookOpen className="w-4 h-4" />
               Guias
+            </Link>
+            <Link
+              href="/noticias"
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm transition-colors ${
+                pathname.startsWith("/noticias")
+                  ? "bg-blue-50 text-blue-700 font-semibold"
+                  : "text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              <Newspaper className="w-4 h-4" />
+              Notícias
             </Link>
           </div>
         </div>
