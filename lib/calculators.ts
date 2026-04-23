@@ -2001,33 +2001,43 @@ export function calcularTIRImovel(input: TIRImovelInput): TIRImovelResult {
 // ──────────────────────────────────────────────
 export interface PlantaVsProntoInput {
   valorNaPlanta: number;
-  valorPronto: number;           // preço do imóvel equivalente pronto
-  percentualSinal: number;       // % pago ao assinar (t=0)
-  percentualParcelas: number;    // % pago em parcelas mensais durante a obra
-  prazoObrasMeses: number;       // duração da obra
-  inccAnual: number;             // % a.a. de correção pelo INCC
+  valorPronto: number;
+  percentualSinal: number;
+  percentualParcelas: number;
+  prazoObrasMeses: number;
+  inccAnual: number;
   taxaFinanciamentoAnual: number;
   prazoFinanciamentoMeses: number;
-  atrasoMeses: number;           // cenário de atraso estimado
-  aluguelMensalAtual: number;    // aluguel pago durante a espera
-  custoCompraPercentual: number; // ITBI + cartório, % sobre o valor
+  atrasoMeses: number;
+  aluguelMensalAtual: number;
+  pagaAluguelDuranteObra: boolean; // se paga aluguel enquanto aguarda as chaves
+  custoCompraPercentual: number;
 }
 
 export interface PlantaVsProntoResult {
-  // Na planta
+  // Planta — pré-entrega
   sinalPago: number;
-  parcelasObra: number;         // total pago em parcelas durante obra
-  correcaoINCC: number;         // correção acumulada pelo INCC
-  saldoChaves: number;          // saldo a financiar na entrega
-  totalPagoNaPlanta: number;    // total nominal até as chaves
+  parcelasObra: number;
+  correcaoINCC: number;
+  saldoChaves: number;
+  custoAluguelObra: number;
+  custoAtraso: number;
+  // Planta — financiamento pós-chaves
+  parcelaPlanta: number;
+  totalFinanciamentoPlanta: number;
+  totalJurosPlanta: number;
+  custoCompraPlanta: number;
+  totalPlanta: number;           // custo total real da operação
   // Pronto
   entradaPronto: number;
-  totalPagoPronto: number;
-  // Atraso
-  custoAtraso: number;          // aluguel × meses de atraso
-  totalComAtraso: number;
+  saldoFinanciadoPronto: number;
+  parcelaPronto: number;
+  totalFinanciamentoPronto: number;
+  totalJurosPronto: number;
+  custoCompraPronto: number;
+  totalPronto: number;           // custo total real da operação
   // Comparação
-  economiaPlanta: number;       // positivo = planta mais barata
+  economiaPlanta: number;        // positivo = planta mais barata
   vantagem: "planta" | "pronto" | "semelhante";
   observacoes: string[];
 }
@@ -2036,49 +2046,67 @@ export function calcularPlantaVsPronto(input: PlantaVsProntoInput): PlantaVsPron
   const {
     valorNaPlanta, valorPronto, percentualSinal, percentualParcelas, prazoObrasMeses,
     inccAnual, taxaFinanciamentoAnual, prazoFinanciamentoMeses, atrasoMeses,
-    aluguelMensalAtual, custoCompraPercentual,
+    aluguelMensalAtual, pagaAluguelDuranteObra, custoCompraPercentual,
   } = input;
 
-  const sinalPago = valorNaPlanta * percentualSinal / 100;
-  const percentualParcelasTotal = percentualParcelas; // % do valor
-  const parcelaMensalObra = (valorNaPlanta * percentualParcelasTotal / 100) / prazoObrasMeses;
-
-  // Correção INCC sobre parcelas (simplificado: aplica sobre o saldo de parcelas)
-  const fatorINCC = Math.pow(1 + inccAnual / 100, prazoObrasMeses / 12) - 1;
-  const parcelasObra = parcelaMensalObra * prazoObrasMeses;
-  const correcaoINCC = parcelasObra * fatorINCC * 0.5; // INCC incide progressivamente sobre o saldo
-
-  const percentualChaves = 100 - percentualSinal - percentualParcelas;
-  const saldoChaves = Math.max(0, valorNaPlanta * percentualChaves / 100 + correcaoINCC);
-  const totalPagoNaPlanta = sinalPago + parcelasObra + correcaoINCC + custoCompraPercentual / 100 * valorNaPlanta;
-
-  // Pronto: entrada + financiamento
-  const entradaPercentual = percentualSinal + percentualParcelas; // same resources deployed
-  const entradaPronto = valorPronto * entradaPercentual / 100;
-  const valorFinanciadoPronto = valorPronto - entradaPronto;
   const taxaMensal = taxaFinanciamentoAnual / 100 / 12;
-  const parcelaPronto = valorFinanciadoPronto > 0 ? pmtPrice(taxaMensal, prazoFinanciamentoMeses, valorFinanciadoPronto) : 0;
-  const totalJurosPronto = parcelaPronto * prazoFinanciamentoMeses - valorFinanciadoPronto;
-  const totalPagoPronto = entradaPronto + valorFinanciadoPronto + totalJurosPronto + custoCompraPercentual / 100 * valorPronto;
 
-  // Atraso
-  const custoAtraso = aluguelMensalAtual * atrasoMeses;
-  const totalComAtraso = totalPagoNaPlanta + custoAtraso;
+  // --- PLANTA: pré-entrega ---
+  const sinalPago = valorNaPlanta * percentualSinal / 100;
+  const parcelaMensalObra = (valorNaPlanta * percentualParcelas / 100) / prazoObrasMeses;
+  const parcelasObra = parcelaMensalObra * prazoObrasMeses;
 
-  const economiaPlanta = totalPagoPronto - totalPagoNaPlanta;
+  // INCC incide progressivamente — fator médio de 0.5 sobre as parcelas
+  const fatorINCC = Math.pow(1 + inccAnual / 100, prazoObrasMeses / 12) - 1;
+  const correcaoINCC = parcelasObra * fatorINCC * 0.5;
+
+  const percentualChaves = Math.max(0, 100 - percentualSinal - percentualParcelas);
+  const saldoChaves = Math.max(0, valorNaPlanta * percentualChaves / 100 + correcaoINCC);
+
+  // Aluguel durante a espera (obra + eventual atraso)
+  const custoAluguelObra = pagaAluguelDuranteObra ? aluguelMensalAtual * prazoObrasMeses : 0;
+  const custoAtraso = pagaAluguelDuranteObra ? aluguelMensalAtual * atrasoMeses : 0;
+
+  // --- PLANTA: financiamento pós-chaves ---
+  const parcelaPlanta = saldoChaves > 0 ? pmtPrice(taxaMensal, prazoFinanciamentoMeses, saldoChaves) : 0;
+  const totalFinanciamentoPlanta = parcelaPlanta * prazoFinanciamentoMeses;
+  const totalJurosPlanta = Math.max(0, totalFinanciamentoPlanta - saldoChaves);
+  const custoCompraPlanta = custoCompraPercentual / 100 * valorNaPlanta;
+
+  // TOTAL PLANTA = pré-entrega + aluguel (obra + atraso) + financiamento pós-chaves + custos
+  const totalPlanta = sinalPago + parcelasObra + correcaoINCC
+    + custoAluguelObra + custoAtraso
+    + totalFinanciamentoPlanta + custoCompraPlanta;
+
+  // --- PRONTO ---
+  const entradaPercentual = percentualSinal + percentualParcelas;
+  const entradaPronto = valorPronto * entradaPercentual / 100;
+  const saldoFinanciadoPronto = Math.max(0, valorPronto - entradaPronto);
+  const parcelaPronto = saldoFinanciadoPronto > 0 ? pmtPrice(taxaMensal, prazoFinanciamentoMeses, saldoFinanciadoPronto) : 0;
+  const totalFinanciamentoPronto = parcelaPronto * prazoFinanciamentoMeses;
+  const totalJurosPronto = Math.max(0, totalFinanciamentoPronto - saldoFinanciadoPronto);
+  const custoCompraPronto = custoCompraPercentual / 100 * valorPronto;
+
+  // TOTAL PRONTO = entrada + financiamento + custos
+  const totalPronto = entradaPronto + totalFinanciamentoPronto + custoCompraPronto;
+
+  const economiaPlanta = totalPronto - totalPlanta;
 
   const observacoes: string[] = [
     `Prazo de obra: ${prazoObrasMeses} meses. Média nacional de atrasos: 8–12 meses.`,
-    saldoChaves > 0 ? `Saldo nas chaves a financiar: ${saldoChaves.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} — confirme as condições de crédito antes de fechar.` : "",
+    saldoChaves > 0
+      ? `Saldo a financiar nas chaves: ${saldoChaves.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} — confirme aprovação de crédito antes de assinar.`
+      : "",
     "Imóveis com patrimônio de afetação têm maior segurança jurídica em caso de falência da incorporadora.",
-    "Peça a certidão negativa de débitos da incorporadora e o registro de incorporação no cartório antes de assinar.",
     inccAnual > 7 ? "INCC elevado: anos com alta inflação da construção civil encarecem significativamente o imóvel na planta." : "",
+    !pagaAluguelDuranteObra ? "Simulação sem custo de aluguel durante a obra. Se você paga aluguel, ative a opção para comparação real." : "",
   ].filter(Boolean);
 
   return {
-    sinalPago, parcelasObra, correcaoINCC, saldoChaves, totalPagoNaPlanta,
-    entradaPronto, totalPagoPronto,
-    custoAtraso, totalComAtraso,
+    sinalPago, parcelasObra, correcaoINCC, saldoChaves,
+    custoAluguelObra, custoAtraso,
+    parcelaPlanta, totalFinanciamentoPlanta, totalJurosPlanta, custoCompraPlanta, totalPlanta,
+    entradaPronto, saldoFinanciadoPronto, parcelaPronto, totalFinanciamentoPronto, totalJurosPronto, custoCompraPronto, totalPronto,
     economiaPlanta,
     vantagem: Math.abs(economiaPlanta) < valorNaPlanta * 0.03 ? "semelhante" : economiaPlanta > 0 ? "planta" : "pronto",
     observacoes,

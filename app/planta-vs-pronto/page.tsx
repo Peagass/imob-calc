@@ -17,21 +17,29 @@ export default function PlantaVsProntoPage() {
   const [prazoFinanciamentoMeses, setPrazoFinanciamentoMeses] = useState(240);
   const [atrasoMeses, setAtrasoMeses] = useState(9);
   const [aluguelMensalAtual, setAluguelMensalAtual] = useState(2_500);
+  const [pagaAluguelDuranteObra, setPagaAluguelDuranteObra] = useState(true);
   const [custoCompraPercentual, setCustoCompraPercentual] = useState(4);
 
-  const resultado = useMemo(
+  const r = useMemo(
     () => calcularPlantaVsPronto({
       valorNaPlanta, valorPronto, percentualSinal, percentualParcelas,
       prazoObrasMeses, inccAnual, taxaFinanciamentoAnual, prazoFinanciamentoMeses,
-      atrasoMeses, aluguelMensalAtual, custoCompraPercentual,
+      atrasoMeses, aluguelMensalAtual, pagaAluguelDuranteObra, custoCompraPercentual,
     }),
     [valorNaPlanta, valorPronto, percentualSinal, percentualParcelas,
       prazoObrasMeses, inccAnual, taxaFinanciamentoAnual, prazoFinanciamentoMeses,
-      atrasoMeses, aluguelMensalAtual, custoCompraPercentual]
+      atrasoMeses, aluguelMensalAtual, pagaAluguelDuranteObra, custoCompraPercentual]
   );
 
-  const plantaMelhor = resultado.vantagem === "planta";
-  const semelhante = resultado.vantagem === "semelhante";
+  const plantaMelhor = r.vantagem === "planta";
+  const semelhante = r.vantagem === "semelhante";
+
+  const Row = ({ label, value, accent }: { label: string; value: string; accent?: string }) => (
+    <div className="flex justify-between items-baseline py-1.5 border-b border-slate-50 last:border-0">
+      <span className="text-xs text-slate-500">{label}</span>
+      <span className={`text-sm font-semibold ${accent ?? "text-slate-800"}`}>{value}</span>
+    </div>
+  );
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -39,14 +47,15 @@ export default function PlantaVsProntoPage() {
         <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Compra</span>
         <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Imóvel na Planta vs. Pronto</h1>
         <p className="text-slate-500">
-          Compare o custo total de comprar na planta (com correção pelo INCC e risco de atraso) versus um imóvel pronto equivalente.
+          Comparação do custo total real de cada opção — incluindo pré-entrega, aluguel durante a obra e o financiamento pós-chaves.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Inputs */}
         <div className="bg-white rounded-2xl border border-slate-100 p-6 space-y-5">
-          <div className="border-b border-slate-100 pb-4">
+          {/* Planta */}
+          <div className="border-b border-slate-100 pb-5">
             <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-4">Imóvel na planta</p>
             <div className="space-y-4">
               <CurrencyInput id="valorPlanta" label="Preço na planta (tabela da incorporadora)" value={valorNaPlanta} onChange={setValorNaPlanta} />
@@ -66,7 +75,7 @@ export default function PlantaVsProntoPage() {
                   onChange={(e) => setPercentualParcelas(Number(e.target.value))}
                   className="w-full accent-blue-600" />
                 <p className="text-xs text-slate-400 mt-1">
-                  Chaves: {100 - percentualSinal - percentualParcelas}% a financiar
+                  Chaves: {Math.max(0, 100 - percentualSinal - percentualParcelas)}% a financiar
                 </p>
               </div>
               <div>
@@ -88,13 +97,15 @@ export default function PlantaVsProntoPage() {
             </div>
           </div>
 
-          <div className="border-b border-slate-100 pb-4">
+          {/* Pronto */}
+          <div className="border-b border-slate-100 pb-5">
             <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-4">Imóvel pronto equivalente</p>
             <CurrencyInput id="valorPronto" label="Preço do imóvel pronto" value={valorPronto} onChange={setValorPronto} />
           </div>
 
-          <div>
-            <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-4">Financiamento e cenário de atraso</p>
+          {/* Financiamento */}
+          <div className="border-b border-slate-100 pb-5">
+            <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-4">Financiamento (ambos)</p>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-600 mb-1.5">
@@ -120,23 +131,45 @@ export default function PlantaVsProntoPage() {
                   onChange={(e) => setCustoCompraPercentual(Number(e.target.value))}
                   className="w-full accent-blue-600" />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-600 mb-1.5">
-                  Atraso estimado: {atrasoMeses} meses
-                </label>
-                <input type="range" min={0} max={24} step={1} value={atrasoMeses}
-                  onChange={(e) => setAtrasoMeses(Number(e.target.value))}
-                  className="w-full accent-blue-600" />
-                <p className="text-xs text-slate-400 mt-1">Média nacional de atrasos: 8–12 meses</p>
-              </div>
-              <CurrencyInput id="aluguel" label="Aluguel mensal pago durante a espera"
-                value={aluguelMensalAtual} onChange={setAluguelMensalAtual} />
             </div>
+          </div>
+
+          {/* Aluguel durante a espera */}
+          <div>
+            <p className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-3">Aluguel durante a espera</p>
+            <label className="flex items-center gap-3 cursor-pointer mb-4">
+              <div
+                onClick={() => setPagaAluguelDuranteObra(!pagaAluguelDuranteObra)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  pagaAluguelDuranteObra ? "bg-blue-600" : "bg-slate-200"
+                }`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  pagaAluguelDuranteObra ? "translate-x-6" : "translate-x-1"
+                }`} />
+              </div>
+              <span className="text-sm text-slate-700">Pago aluguel enquanto aguardo as chaves</span>
+            </label>
+            {pagaAluguelDuranteObra && (
+              <div className="space-y-4">
+                <CurrencyInput id="aluguel" label="Aluguel mensal atual" value={aluguelMensalAtual} onChange={setAluguelMensalAtual} />
+                <div>
+                  <label className="block text-sm font-medium text-slate-600 mb-1.5">
+                    Atraso estimado: {atrasoMeses} meses
+                  </label>
+                  <input type="range" min={0} max={24} step={1} value={atrasoMeses}
+                    onChange={(e) => setAtrasoMeses(Number(e.target.value))}
+                    className="w-full accent-blue-600" />
+                  <p className="text-xs text-slate-400 mt-1">Média nacional de atrasos: 8–12 meses</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Resultado */}
         <div className="space-y-4">
+          {/* Veredito */}
           <div className={`rounded-2xl p-6 text-white ${
             semelhante ? "bg-gradient-to-br from-slate-600 to-slate-700"
             : plantaMelhor ? "bg-gradient-to-br from-emerald-600 to-teal-700"
@@ -144,59 +177,74 @@ export default function PlantaVsProntoPage() {
           }`}>
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle className="w-5 h-5 text-white/70" />
-              <p className="text-white/70 text-sm">Menor custo total</p>
+              <p className="text-white/70 text-sm">Menor custo total da operação</p>
             </div>
             <p className="text-3xl font-bold mb-1">
               {semelhante ? "Semelhante" : plantaMelhor ? "Na planta" : "Pronto"}
             </p>
             {!semelhante && (
               <p className="text-white/80 text-sm">
-                {formatCurrency(Math.abs(resultado.economiaPlanta))} de diferença no total pago
+                {formatCurrency(Math.abs(r.economiaPlanta))} de diferença no custo total
               </p>
             )}
+            <p className="text-white/60 text-xs mt-2">Comparação inclui pré-entrega + aluguel + financiamento pós-chaves</p>
           </div>
 
+          {/* Detalhamento lado a lado */}
           <div className="grid grid-cols-2 gap-3">
+            {/* Planta */}
             <div className="bg-white rounded-2xl border border-slate-100 p-4">
-              <p className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Planta (sem atraso)</p>
-              <p className="text-xs text-slate-500 mb-0.5">Sinal + parcelas obra</p>
-              <p className="text-sm font-bold text-slate-800">{formatCurrency(resultado.sinalPago + resultado.parcelasObra)}</p>
-              <p className="text-xs text-slate-500 mt-2 mb-0.5">Correção INCC</p>
-              <p className="text-sm font-bold text-amber-600">+{formatCurrency(resultado.correcaoINCC)}</p>
-              <p className="text-xs text-slate-500 mt-2 mb-0.5">Total (até as chaves)</p>
-              <p className="text-base font-bold text-emerald-700">{formatCurrency(resultado.totalPagoNaPlanta)}</p>
+              <p className="text-xs font-semibold text-slate-500 mb-3 uppercase tracking-wide">Planta</p>
+              <Row label="Sinal" value={formatCurrency(r.sinalPago)} />
+              <Row label="Parcelas obra" value={formatCurrency(r.parcelasObra)} />
+              <Row label="Correção INCC" value={`+${formatCurrency(r.correcaoINCC)}`} accent="text-amber-600" />
+              {pagaAluguelDuranteObra && (
+                <>
+                  <Row label={`Aluguel obra (${prazoObrasMeses}m)`} value={formatCurrency(r.custoAluguelObra)} accent="text-rose-500" />
+                  {atrasoMeses > 0 && (
+                    <Row label={`Aluguel atraso (${atrasoMeses}m)`} value={formatCurrency(r.custoAtraso)} accent="text-rose-500" />
+                  )}
+                </>
+              )}
+              <Row label={`Financiamento (${prazoFinanciamentoMeses}m)`} value={formatCurrency(r.totalFinanciamentoPlanta)} />
+              <Row label="Juros totais" value={formatCurrency(r.totalJurosPlanta)} accent="text-rose-500" />
+              <Row label="ITBI + cartório" value={formatCurrency(r.custoCompraPlanta)} />
+              <div className="mt-3 pt-2 border-t border-slate-100">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs font-bold text-slate-700">Total real</span>
+                  <span className="text-base font-bold text-slate-900">{formatCurrency(r.totalPlanta)}</span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">Parcela pós-chaves: {formatCurrency(r.parcelaPlanta)}/mês</p>
+              </div>
             </div>
+
+            {/* Pronto */}
             <div className="bg-white rounded-2xl border border-slate-100 p-4">
-              <p className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Pronto</p>
-              <p className="text-xs text-slate-500 mb-0.5">Entrada</p>
-              <p className="text-sm font-bold text-slate-800">{formatCurrency(resultado.entradaPronto)}</p>
-              <p className="text-xs text-slate-500 mt-2 mb-0.5">Total com juros</p>
-              <p className="text-base font-bold text-rose-600">{formatCurrency(resultado.totalPagoPronto)}</p>
-              <div className="mt-3 flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 rounded-lg px-2 py-1.5">
-                <CheckCircle className="w-3.5 h-3.5 shrink-0" />
-                <span>Disponível imediatamente</span>
+              <p className="text-xs font-semibold text-slate-500 mb-3 uppercase tracking-wide">Pronto</p>
+              <Row label="Entrada" value={formatCurrency(r.entradaPronto)} />
+              <Row label={`Financiamento (${prazoFinanciamentoMeses}m)`} value={formatCurrency(r.totalFinanciamentoPronto)} />
+              <Row label="Juros totais" value={formatCurrency(r.totalJurosPronto)} accent="text-rose-500" />
+              <Row label="ITBI + cartório" value={formatCurrency(r.custoCompraPronto)} />
+              <div className="mt-3 pt-2 border-t border-slate-100">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs font-bold text-slate-700">Total real</span>
+                  <span className="text-base font-bold text-slate-900">{formatCurrency(r.totalPronto)}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-emerald-600 bg-emerald-50 rounded-lg px-2 py-1.5 mt-2">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>Disponível imediatamente</span>
+                </div>
+                <p className="text-xs text-slate-400 mt-2">Parcela: {formatCurrency(r.parcelaPronto)}/mês</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-4 h-4 text-amber-600" />
-              <p className="text-sm font-semibold text-amber-900">Com atraso de {atrasoMeses} meses</p>
-            </div>
-            <p className="text-xs text-amber-800 mb-2">
-              Custo do aluguel durante o atraso: {formatCurrency(resultado.custoAtraso)}
-            </p>
-            <p className="text-sm font-bold text-amber-900">
-              Total planta + atraso: {formatCurrency(resultado.totalComAtraso)}
-            </p>
-          </div>
-
-          {resultado.observacoes.length > 0 && (
+          {/* Observações */}
+          {r.observacoes.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-100 p-5">
               <h3 className="font-semibold text-slate-800 mb-3">Observações</h3>
               <ul className="space-y-2">
-                {resultado.observacoes.map((obs) => (
+                {r.observacoes.map((obs) => (
                   <li key={obs} className="flex gap-2 text-sm text-slate-600">
                     <span className="text-slate-400 shrink-0 mt-0.5">→</span>
                     {obs}
@@ -208,6 +256,7 @@ export default function PlantaVsProntoPage() {
         </div>
       </div>
 
+      {/* Riscos */}
       <div className="mt-6 bg-amber-50 border border-amber-100 rounded-2xl p-6">
         <div className="flex gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
@@ -226,7 +275,7 @@ export default function PlantaVsProntoPage() {
       <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
         <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
         <p className="text-xs text-blue-800">
-          O total pago considera o custo nominal até as chaves, sem projetar valorização futura. Para análise de retorno sobre investimento, use a calculadora de TIR do Imóvel.
+          Ambas as opções usam a mesma taxa de juros e prazo de financiamento, tornando a comparação justa. A diferença de preço entre o imóvel na planta e o pronto equivalente é o ponto de partida — o INCC e o aluguel durante a obra determinam se o desconto inicial se sustenta.
         </p>
       </div>
     </div>
