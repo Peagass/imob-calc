@@ -24,6 +24,23 @@ function Toggle({ on, onChange, label }: { on: boolean; onChange: (v: boolean) =
   );
 }
 
+function SliderField({ label, value, display, min, max, step, onChange, accent = "accent-violet-600" }: {
+  label: string; value: number; display: string; min: number; max: number; step: number;
+  onChange: (v: number) => void; accent?: string;
+}) {
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between">
+        <span className="text-xs text-slate-500">{label}</span>
+        <span className="text-xs font-bold text-slate-700">{display}</span>
+      </div>
+      <input type="range" min={min} max={max} step={step} value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className={`w-full ${accent} h-1.5 rounded-full`} />
+    </div>
+  );
+}
+
 export default function FiiVsImovelCalc({ selic }: Props) {
   const [valorInvestimento, setValorInvestimento] = useState(500_000);
   const [horizonte, setHorizonte] = useState(20);
@@ -60,21 +77,6 @@ export default function FiiVsImovelCalc({ selic }: Props) {
     r.melhor === "fii" ? "from-violet-600 to-purple-700" :
     r.melhor === "imovel" ? "from-emerald-600 to-teal-700" :
     "from-slate-600 to-slate-700";
-
-  const SliderField = ({ label, value, display, min, max, step, onChange, accent = "accent-violet-600" }: {
-    label: string; value: number; display: string; min: number; max: number; step: number;
-    onChange: (v: number) => void; accent?: string;
-  }) => (
-    <div className="space-y-1">
-      <div className="flex justify-between">
-        <span className="text-xs text-slate-500">{label}</span>
-        <span className="text-xs font-bold text-slate-700">{display}</span>
-      </div>
-      <input type="range" min={min} max={max} step={step} value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className={`w-full ${accent} h-1.5 rounded-full`} />
-    </div>
-  );
 
   return (
     <div>
