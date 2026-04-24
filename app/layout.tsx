@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import Header from "@/components/Header";
 import IndicesTicker from "@/components/IndicesTicker";
 import Footer from "@/components/Footer";
-import { SITE_URL, ADSENSE_CLIENT } from "@/lib/seo";
+import { SITE_URL, ADSENSE_CLIENT, GA_ID } from "@/lib/seo";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -50,11 +50,21 @@ const websiteSchema = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className="h-full antialiased">
-      <head>
+      <head suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`,
+              }}
+            />
+          </>
+        )}
         {ADSENSE_CLIENT && (
           <script
             async

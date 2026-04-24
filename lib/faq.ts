@@ -401,12 +401,12 @@ export const faqs: Record<string, FaqItem[]> = {
       a: "Podem ser deduzidos: IPTU pago pelo proprietário, condomínio pago pelo proprietário, prêmio de seguro contra incêndio e responsabilidade civil, e despesas de conservação e reparos (com documentação). A dedução reduz a base de cálculo do IR.",
     },
     {
-      q: "Qual a tabela progressiva do IR para renda de aluguel em 2024?",
-      a: "A tabela progressiva do carnê-leão 2024 tem 5 faixas: isento até R$ 2.259,20; 7,5% de R$ 2.259,21 a R$ 2.826,65; 15% de R$ 2.826,66 a R$ 3.751,05; 22,5% de R$ 3.751,06 a R$ 4.664,68; e 27,5% acima de R$ 4.664,68.",
+      q: "Qual a tabela progressiva do IR para renda de aluguel em 2026?",
+      a: "A tabela progressiva do carnê-leão 2026 tem 5 faixas: isento até R$ 2.428,80; 7,5% de R$ 2.428,81 a R$ 2.826,65; 15% de R$ 2.826,66 a R$ 3.751,05; 22,5% de R$ 3.751,06 a R$ 4.664,68; e 27,5% acima de R$ 4.664,68. Pela Lei 15.270/2025, base de cálculo até R$ 5.000/mês tem IR zero.",
     },
     {
       q: "O que é o carnê-leão e quando sou obrigado a pagar?",
-      a: "O carnê-leão é o recolhimento mensal de IR para quem recebe rendimentos de pessoas físicas (incluindo aluguel). É obrigatório quando o aluguel recebido no mês supera a faixa de isenção (R$ 2.259,20 em 2024). O DARF deve ser pago até o último dia útil do mês seguinte.",
+      a: "O carnê-leão é o recolhimento mensal de IR para quem recebe rendimentos de pessoas físicas (incluindo aluguel). É obrigatório quando o aluguel recebido no mês supera a faixa de isenção (R$ 2.428,80 em 2026). O DARF deve ser pago até o último dia útil do mês seguinte.",
     },
     {
       q: "Tenho aluguel em nome de pessoa jurídica — como funciona a tributação?",
@@ -751,7 +751,7 @@ export const faqs: Record<string, FaqItem[]> = {
     },
     {
       q: "Devo declarar todos os aluguéis recebidos no IR?",
-      a: "Sim. Todo aluguel recebido deve ser declarado, independente do valor. Se o aluguel mensal superar a faixa de isenção (R$ 2.259,20 em 2024), você deve também recolher o carnê-leão mensalmente — não apenas na declaração anual.",
+      a: "Sim. Todo aluguel recebido deve ser declarado, independente do valor. Se o aluguel mensal superar a faixa de isenção (R$ 2.428,80 em 2026), você deve também recolher o carnê-leão mensalmente — não apenas na declaração anual.",
     },
     {
       q: "O que é reajuste projetado e como ele melhora o fluxo de caixa?",

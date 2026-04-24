@@ -104,20 +104,22 @@ export default function TributacaoAluguelPage() {
             </div>
           </div>
 
-          {resultado.detalheFaixas.length > 0 && (
-            <div className="bg-white rounded-2xl border border-slate-100 p-5">
-              <h3 className="font-semibold text-slate-800 mb-3">Detalhamento por faixa — tabela progressiva</h3>
-              <div className="space-y-2">
-                {resultado.detalheFaixas.map((f) => (
-                  <div key={f.faixa} className="flex justify-between text-sm">
-                    <span className="text-slate-600">{f.faixa} · {f.aliquota.toFixed(1)}%</span>
-                    <span className="font-medium text-slate-800">{formatCurrency(f.imposto)}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-slate-400 mt-3">Tabela IRPF 2024 — valores mensais para carnê-leão</p>
+          <div className="bg-white rounded-2xl border border-slate-100 p-5">
+            <h3 className="font-semibold text-slate-800 mb-3">Detalhamento por faixa — tabela progressiva</h3>
+            <div className="space-y-2">
+              {resultado.detalheFaixas.map((f) => (
+                <div key={f.faixa} className="flex justify-between text-sm">
+                  <span className={`${f.imposto < 0 ? "text-emerald-600 font-medium" : "text-slate-600"}`}>
+                    {f.faixa}{f.aliquota > 0 ? ` · ${f.aliquota.toFixed(1)}%` : ""}
+                  </span>
+                  <span className={`font-medium ${f.imposto < 0 ? "text-emerald-600" : f.imposto === 0 ? "text-slate-400" : "text-slate-800"}`}>
+                    {f.imposto < 0 ? `−${formatCurrency(Math.abs(f.imposto))}` : formatCurrency(f.imposto)}
+                  </span>
+                </div>
+              ))}
             </div>
-          )}
+            <p className="text-xs text-slate-400 mt-3">Tabela IRPF 2026 — valores mensais para carnê-leão</p>
+          </div>
         </div>
       </div>
 

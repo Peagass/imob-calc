@@ -5,6 +5,7 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://calculaimov
 // Your AdSense publisher ID — set via env var after approval
 // https://www.google.com/adsense → Account → Account information → Publisher ID
 export const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "";
+export const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 
 // Ad slot IDs from your AdSense account → Ads → By ad unit
 export const ADSENSE_SLOT_HORIZONTAL = process.env.NEXT_PUBLIC_AD_SLOT_HORIZONTAL ?? "";
@@ -24,7 +25,7 @@ export const pages: Record<string, PageMeta> = {
   "/custos-compra": {
     title: "Calculadora de Custos de Compra de Imóvel | ITBI, Escritura e Registro",
     description:
-      "Calcule ITBI, escritura, registro e avaliação bancária. Descubra o custo total real da compra do imóvel — não apenas o preço anunciado. Atualizado 2024.",
+      "Calcule ITBI, escritura, registro e avaliação bancária. Descubra o custo total real da compra do imóvel — não apenas o preço anunciado. Atualizado 2026.",
   },
   "/financiamento": {
     title: "Simulador de Financiamento Imobiliário SAC e PRICE",
@@ -54,12 +55,12 @@ export const pages: Record<string, PageMeta> = {
   "/custo-mudanca": {
     title: "Calculadora de Custo de Mudança | Estimativa de Frete por Cômodos",
     description:
-      "Estime o custo do frete de mudança por número de cômodos, distância e tipo de serviço (completo, básico, carga). Preços de mercado 2024.",
+      "Estime o custo do frete de mudança por número de cômodos, distância e tipo de serviço (completo, básico, carga). Preços de mercado 2026.",
   },
   "/mcmv": {
-    title: "Simulador Minha Casa Minha Vida 2024 | Faixa, Subsídio e Parcela",
+    title: "Simulador Minha Casa Minha Vida 2026 | Faixa, Subsídio e Parcela",
     description:
-      "Descubra sua faixa de renda no MCMV, o subsídio estimado e a parcela com as taxas preferenciais do programa habitacional federal em 2024.",
+      "Descubra sua faixa de renda no MCMV, o subsídio estimado e a parcela com as taxas preferenciais do programa habitacional federal em 2026.",
   },
   "/poupanca-entrada": {
     title: "Calculadora de Poupança para Entrada de Imóvel | Quanto Guardar por Mês",
@@ -92,9 +93,9 @@ export const pages: Record<string, PageMeta> = {
       "Calcule o novo valor do aluguel pelo IGP-M, IPCA, INPC ou índice personalizado. Dados atualizados automaticamente do Banco Central do Brasil.",
   },
   "/tributacao-aluguel": {
-    title: "Calculadora de Tributação do Aluguel | Carnê-Leão IRPF 2024",
+    title: "Calculadora de Tributação do Aluguel | Carnê-Leão IRPF 2026",
     description:
-      "Calcule o IR mensal (carnê-leão) sobre renda de aluguel com deduções de IPTU, condomínio e seguro. Tabela progressiva IRPF 2024 atualizada.",
+      "Calcule o IR mensal (carnê-leão) sobre renda de aluguel com deduções de IPTU, condomínio e seguro. Tabela progressiva IRPF 2026 — inclui isenção até R$ 5.000.",
   },
   "/rescisao-aluguel": {
     title: "Calculadora de Multa por Rescisão Antecipada de Aluguel | Lei do Inquilinato",
@@ -122,7 +123,7 @@ export const pages: Record<string, PageMeta> = {
       "Vale a pena reformar antes de vender? Calcule o ROI da reforma comparado com o custo de oportunidade de manter o capital investido.",
   },
   "/ganho-capital": {
-    title: "Calculadora de Ganho de Capital na Venda de Imóvel | IR 2024",
+    title: "Calculadora de Ganho de Capital na Venda de Imóvel | IR 2026",
     description:
       "Calcule o IR sobre ganho de capital na venda do imóvel com isenções (imóvel único até R$ 440k, reinvestimento), fatores de redução e DARF.",
   },

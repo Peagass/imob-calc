@@ -154,7 +154,7 @@ export default function FGTSPage() {
               <li>Mínimo de <strong>3 anos de contribuição</strong> ao FGTS (não precisa ser no mesmo empregador).</li>
               <li>O imóvel deve ser <strong>residencial urbano</strong> e para uso próprio do comprador.</li>
               <li>O comprador não pode ter outro imóvel residencial na mesma cidade ou região metropolitana.</li>
-              <li>Limite de uso: até 80% do valor do imóvel, respeitando o teto do SFH (R$ 1,5 milhão em 2024).</li>
+              <li>Limite de uso: até 80% do valor do imóvel, respeitando o teto do SFH (R$ 1,5 milhão — verifique o valor vigente na Caixa).</li>
               <li>Pode ser usado para entrada, amortização do saldo devedor ou pagamento de até 80% das parcelas.</li>
               <li>O rendimento do FGTS (3% a.a. + TR) costuma ser abaixo da inflação — use-o o quanto antes.</li>
             </ul>

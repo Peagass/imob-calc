@@ -842,8 +842,6 @@ export interface EstimativaReformaInput {
   areaM2: number;
   tipo: TipoReforma;
   padrao: PadraoReforma;
-  numBanheiros: number;
-  numCozinhas: number;
   incluiAreaExterna: boolean;
   areaExternaM2: number;
 }
@@ -856,57 +854,37 @@ export interface EstimativaReformaResult {
   detalhamento: { item: string; custo: number }[];
 }
 
-// Valores atualizados para 2025/2026 — referência: Lar Pontual Engenharia, SINAPI jan/2026
-const REFORMA_AREA: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
-  pintura:    { simples: [30, 55],    medio: [55, 90],     alto: [100, 180]   },
-  acabamento: { simples: [550, 900],  medio: [950, 1600],  alto: [1800, 3500] },
-  completa:   { simples: [1500, 2500], medio: [2600, 4000], alto: [4500, 9000] },
-};
-// Custos por cômodo variam conforme o TIPO de reforma (pintura é só as paredes)
-const REFORMA_BANHEIRO: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
-  pintura:    { simples: [300, 600],     medio: [500, 900],     alto: [850, 1500]    },
-  acabamento: { simples: [5500, 10000],  medio: [11000, 22000], alto: [25000, 55000] },
-  completa:   { simples: [12000, 22000], medio: [22000, 45000], alto: [50000, 120000] },
-};
-const REFORMA_COZINHA: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
-  pintura:    { simples: [400, 750],     medio: [700, 1200],    alto: [1000, 2000]    },
-  acabamento: { simples: [9000, 16000],  medio: [18000, 35000], alto: [45000, 100000] },
-  completa:   { simples: [22000, 40000], medio: [42000, 80000], alto: [100000, 250000] },
+// Valores por m² já ponderados pela composição típica do imóvel (incluindo áreas molhadas).
+// Referência: Lar Pontual Engenharia + SINAPI jan/2026.
+const REFORMA_M2: Record<TipoReforma, Record<PadraoReforma, [number, number]>> = {
+  pintura:    { simples: [25, 45],    medio: [48, 78],     alto: [85, 150]    },
+  acabamento: { simples: [450, 750],  medio: [800, 1300],  alto: [1500, 2800] },
+  completa:   { simples: [1200, 2000], medio: [2100, 3400], alto: [3800, 7000] },
 };
 
 export function calcularEstimativaReforma(input: EstimativaReformaInput): EstimativaReformaResult {
-  const { areaM2, tipo, padrao, numBanheiros, numCozinhas, incluiAreaExterna, areaExternaM2 } = input;
+  const { areaM2, tipo, padrao, incluiAreaExterna, areaExternaM2 } = input;
 
-  const [minM2, maxM2] = REFORMA_AREA[tipo][padrao];
+  const [minM2, maxM2] = REFORMA_M2[tipo][padrao];
+
   const custoAreaMin = areaM2 * minM2;
   const custoAreaMax = areaM2 * maxM2;
 
-  const [minBan, maxBan] = REFORMA_BANHEIRO[tipo][padrao];
-  const custoBan = numBanheiros * (minBan + maxBan) / 2;
-  const custoBanMin = numBanheiros * minBan;
-  const custoBanMax = numBanheiros * maxBan;
-
-  const [minCoz, maxCoz] = REFORMA_COZINHA[tipo][padrao];
-  const custoCoz = numCozinhas * (minCoz + maxCoz) / 2;
-  const custoCozMin = numCozinhas * minCoz;
-  const custoCozMax = numCozinhas * maxCoz;
-
-  // Área externa: 85% do custo/m² da área interna (semelhante, mas sem infraestrutura interna)
+  // Área externa: 85% do custo/m² (sem infraestrutura interna)
   const custoExtMin = incluiAreaExterna ? areaExternaM2 * minM2 * 0.85 : 0;
   const custoExtMax = incluiAreaExterna ? areaExternaM2 * maxM2 * 0.85 : 0;
-  const custoExt = (custoExtMin + custoExtMax) / 2;
 
-  const custoMin = custoAreaMin + custoBanMin + custoCozMin + custoExtMin;
-  const custoMax = custoAreaMax + custoBanMax + custoCozMax + custoExtMax;
+  const custoMin = custoAreaMin + custoExtMin;
+  const custoMax = custoAreaMax + custoExtMax;
   const custoTotal = (custoMin + custoMax) / 2;
   const custoM2 = areaM2 > 0 ? custoTotal / areaM2 : 0;
 
   const detalhamento: EstimativaReformaResult["detalhamento"] = [
-    { item: `Área principal (${areaM2} m²)`, custo: (custoAreaMin + custoAreaMax) / 2 },
+    { item: `Área interna (${areaM2} m²)`, custo: (custoAreaMin + custoAreaMax) / 2 },
   ];
-  if (numBanheiros > 0) detalhamento.push({ item: `${numBanheiros} banheiro${numBanheiros > 1 ? "s" : ""}`, custo: custoBan });
-  if (numCozinhas > 0) detalhamento.push({ item: `${numCozinhas} cozinha${numCozinhas > 1 ? "s" : ""}`, custo: custoCoz });
-  if (incluiAreaExterna && areaExternaM2 > 0) detalhamento.push({ item: `Área externa (${areaExternaM2} m²)`, custo: custoExt });
+  if (incluiAreaExterna && areaExternaM2 > 0) {
+    detalhamento.push({ item: `Área externa (${areaExternaM2} m²)`, custo: (custoExtMin + custoExtMax) / 2 });
+  }
 
   return { custoTotal, custoMin, custoMax, custoM2, detalhamento };
 }
@@ -1716,16 +1694,16 @@ export interface MCMVResult {
   observacoes: string[];
 }
 
-// Limites de renda familiar bruta (2024/2025)
-const MCMV_RENDA_F1 = 2_640;
-const MCMV_RENDA_F2 = 4_400;
-const MCMV_RENDA_F3 = 8_000;
+// Limites de renda familiar bruta — MCMV 2026 (Portaria abril/2026)
+const MCMV_RENDA_F1 = 3_200;
+const MCMV_RENDA_F2 = 5_000;
+const MCMV_RENDA_F3 = 9_600;
 
-// Teto dos imóveis por faixa e tipo de município
+// Teto dos imóveis por faixa e tipo de município — MCMV 2026
 const MCMV_LIMITE_IMOVEL: Record<MCMVMunicipio, { f1f2: number; f3: number }> = {
-  capital:  { f1f2: 264_000, f3: 500_000 },
-  medio:    { f1f2: 235_000, f3: 350_000 },
-  interior: { f1f2: 190_000, f3: 264_000 },
+  capital:  { f1f2: 270_000, f3: 400_000 },
+  medio:    { f1f2: 260_000, f3: 400_000 },
+  interior: { f1f2: 240_000, f3: 400_000 },
 };
 
 export function calcularMCMV(input: MCMVInput): MCMVResult {
@@ -1741,7 +1719,7 @@ export function calcularMCMV(input: MCMVInput): MCMVResult {
   if (!faixa) {
     return {
       elegivel: false, faixa: null,
-      motivoInelegibilidade: `Renda familiar bruta de ${rendaFamiliarBruta.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} excede o limite do programa (R$ 8.000/mês).`,
+      motivoInelegibilidade: `Renda familiar bruta de ${rendaFamiliarBruta.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} excede o limite do programa (R$ 9.600/mês para Faixa 3).`,
       taxaJurosAnual: 0, subsidioEstimado: 0, limiteImovel: 0, dentroDoLimite: false,
       valorFinanciado: 0, entradaPropriaNecessaria: 0, parcelaMensal: 0, observacoes: [],
     };
@@ -1807,7 +1785,7 @@ export function calcularMCMV(input: MCMVInput): MCMVResult {
     "Prazo máximo: 360 meses (30 anos). Parcela não pode ultrapassar 30% da renda familiar.",
     faixa === 1 ? "Faixa 1: parcelas podem ser ainda menores com subsídio complementar municipal." : "",
     "São exigidos: primeiro imóvel residencial, não ter outro imóvel registrado no FGTS, trabalhar em município próximo ao imóvel.",
-    "Valores e regras de 2024/2025 — consulte a Caixa Econômica Federal ou correspondente credenciado.",
+    "Valores e regras de 2025/2026 — consulte a Caixa Econômica Federal ou correspondente credenciado.",
   ].filter(Boolean);
 
   return {
@@ -1969,13 +1947,13 @@ export interface TributacaoAluguelResult {
   detalheFaixas: { faixa: string; base: number; aliquota: number; imposto: number }[];
 }
 
-// Tabela IRPF 2024 — mensal (carnê-leão)
-const FAIXAS_IRPF_2024 = [
-  { limite: 2259.20, aliquota: 0,     deducao: 0 },
-  { limite: 2826.65, aliquota: 0.075, deducao: 169.44 },
-  { limite: 3751.05, aliquota: 0.15,  deducao: 381.44 },
-  { limite: 4664.68, aliquota: 0.225, deducao: 662.77 },
-  { limite: Infinity, aliquota: 0.275, deducao: 896.00 },
+// Tabela IRPF 2026 — mensal (carnê-leão) — Lei nº 15.270/2025
+const FAIXAS_IRPF_2026 = [
+  { limite: 2428.80, aliquota: 0,     deducao: 0 },
+  { limite: 2826.65, aliquota: 0.075, deducao: 182.16 },
+  { limite: 3751.05, aliquota: 0.15,  deducao: 394.16 },
+  { limite: 4664.68, aliquota: 0.225, deducao: 675.49 },
+  { limite: Infinity, aliquota: 0.275, deducao: 908.73 },
 ];
 
 function calcularIRPFProgressivo(base: number) {
@@ -1985,7 +1963,7 @@ function calcularIRPFProgressivo(base: number) {
   let imposto = 0;
   const detalhe: { faixa: string; base: number; aliquota: number; imposto: number }[] = [];
 
-  for (const faixa of FAIXAS_IRPF_2024) {
+  for (const faixa of FAIXAS_IRPF_2026) {
     if (restante <= 0) break;
     const tamanhoFaixa = faixa.limite === Infinity ? restante : Math.min(restante, faixa.limite - limiteAnterior);
     const impostoFaixa = tamanhoFaixa * faixa.aliquota;
@@ -1999,7 +1977,24 @@ function calcularIRPFProgressivo(base: number) {
     restante -= tamanhoFaixa;
     limiteAnterior = faixa.limite === Infinity ? base : faixa.limite;
   }
-  const aliquotaMarginal = FAIXAS_IRPF_2024.find(f => base <= f.limite)?.aliquota ?? 0.275;
+
+  // Redutor Lei 15.270/2025: base ≤ R$ 5.000 → imposto zero; até R$ 7.350 → redução parcial
+  if (base <= 5000) {
+    imposto = 0;
+    if (detalhe.length > 0) {
+      detalhe.push({ faixa: "Redutor Lei 15.270/2025 (base ≤ R$ 5.000)", base: 0, aliquota: 0, imposto: -detalhe.reduce((s, d) => s + d.imposto, 0) });
+    } else {
+      detalhe.push({ faixa: "Isento", base, aliquota: 0, imposto: 0 });
+    }
+  } else if (base <= 7350) {
+    const redutor = Math.max(0, 978.62 - 0.133145 * base);
+    imposto = Math.max(0, imposto - redutor);
+    if (redutor > 0) {
+      detalhe.push({ faixa: "Redutor Lei 15.270/2025", base: 0, aliquota: 0, imposto: -redutor });
+    }
+  }
+
+  const aliquotaMarginal = FAIXAS_IRPF_2026.find(f => base <= f.limite)?.aliquota ?? 0.275;
   return { imposto, aliquota: aliquotaMarginal * 100, detalhe };
 }
 
@@ -2016,7 +2011,7 @@ export function calcularTributacaoAluguel(input: TributacaoAluguelInput): Tribut
   const { imposto: irSemAluguel } = calcularIRPFProgressivo(outrasRendas);
 
   const irMensal = Math.max(0, irTotal - irSemAluguel);
-  const aliquotaMarginalFaixa = FAIXAS_IRPF_2024.find(f => baseTotal <= f.limite) ?? FAIXAS_IRPF_2024[FAIXAS_IRPF_2024.length - 1];
+  const aliquotaMarginalFaixa = FAIXAS_IRPF_2026.find(f => baseTotal <= f.limite) ?? FAIXAS_IRPF_2026[FAIXAS_IRPF_2026.length - 1];
   const faixaTabela = aliquotaMarginalFaixa.aliquota === 0 ? "Isento" : `${(aliquotaMarginalFaixa.aliquota * 100).toFixed(1)}%`;
 
   return {

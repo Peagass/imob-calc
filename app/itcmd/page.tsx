@@ -166,7 +166,7 @@ export default function ITCMDPage() {
       <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
         <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
         <p className="text-xs text-blue-800">
-          <strong>Valores aproximados.</strong> As alíquotas e faixas são baseadas na legislação de 2024/2025 e podem ter sido atualizadas. Consulte a Secretaria da Fazenda do seu estado ou um advogado especializado antes de recolher o imposto.
+          <strong>Valores aproximados.</strong> As alíquotas e faixas são baseadas na legislação de 2025/2026 e podem ter sido atualizadas. Consulte a Secretaria da Fazenda do seu estado ou um advogado especializado antes de recolher o imposto.
         </p>
       </div>
 

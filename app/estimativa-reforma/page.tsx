@@ -25,14 +25,12 @@ export default function EstimativaReformaPage() {
   const [areaM2, setAreaM2] = useState(80);
   const [tipo, setTipo] = useState<TipoReforma>("acabamento");
   const [padrao, setPadrao] = useState<PadraoReforma>("medio");
-  const [numBanheiros, setNumBanheiros] = useState(2);
-  const [numCozinhas, setNumCozinhas] = useState(1);
   const [incluiAreaExterna, setIncluiAreaExterna] = useState(false);
   const [areaExternaM2, setAreaExternaM2] = useState(20);
 
   const resultado = useMemo(
-    () => calcularEstimativaReforma({ areaM2, tipo, padrao, numBanheiros, numCozinhas, incluiAreaExterna, areaExternaM2 }),
-    [areaM2, tipo, padrao, numBanheiros, numCozinhas, incluiAreaExterna, areaExternaM2]
+    () => calcularEstimativaReforma({ areaM2, tipo, padrao, incluiAreaExterna, areaExternaM2 }),
+    [areaM2, tipo, padrao, incluiAreaExterna, areaExternaM2]
   );
 
   return (
@@ -102,24 +100,6 @@ export default function EstimativaReformaPage() {
             </div>
           </div>
 
-          {/* Banheiros e cozinhas */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1.5">Banheiros</label>
-              <input type="range" min={0} max={6} step={1} value={numBanheiros}
-                onChange={(e) => setNumBanheiros(Number(e.target.value))}
-                className="w-full accent-orange-500" />
-              <p className="text-xs text-center text-slate-500 mt-1">{numBanheiros}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1.5">Cozinhas</label>
-              <input type="range" min={0} max={2} step={1} value={numCozinhas}
-                onChange={(e) => setNumCozinhas(Number(e.target.value))}
-                className="w-full accent-orange-500" />
-              <p className="text-xs text-center text-slate-500 mt-1">{numCozinhas}</p>
-            </div>
-          </div>
-
           {/* Área externa */}
           <div className="border-t border-slate-100 pt-4">
             <div className="flex items-center gap-3 mb-3">
@@ -181,15 +161,15 @@ export default function EstimativaReformaPage() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-500">Pintura simples</span>
-                <span className="text-slate-700">R$ 30–55/m²</span>
+                <span className="text-slate-700">R$ 25–45/m²</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Acabamento médio</span>
-                <span className="text-slate-700">R$ 950–1.600/m²</span>
+                <span className="text-slate-700">R$ 800–1.300/m²</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Reforma completa alto padrão</span>
-                <span className="text-slate-700">R$ 4.500–9.000/m²</span>
+                <span className="text-slate-700">R$ 3.800–7.000/m²</span>
               </div>
             </div>
           </div>
