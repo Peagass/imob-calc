@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Suspense } from "react";
+import Script from "next/script";
 import Header from "@/components/Header";
 import IndicesTicker from "@/components/IndicesTicker";
 import Footer from "@/components/Footer";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | CalculaImóvel",
   },
   description:
-    "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil. Dados atualizados do Banco Central.",
+    "40 calculadoras gratuitas para brasileiros que querem entender os números antes de comprar, vender, alugar, reformar e morar. Dados atualizados do Banco Central.",
   authors: [{ name: "CalculaImóvel", url: SITE_URL }],
   creator: "CalculaImóvel",
   publisher: "CalculaImóvel",
@@ -23,12 +24,12 @@ export const metadata: Metadata = {
     siteName: "CalculaImóvel",
     title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description:
-      "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil.",
+      "40 calculadoras gratuitas para brasileiros que querem entender os números antes de comprar, vender, alugar, reformar e morar.",
   },
   twitter: {
     card: "summary_large_image",
     title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
-    description: "29 calculadoras gratuitas para decisões imobiliárias no Brasil.",
+    description: "40 calculadoras gratuitas para decisões imobiliárias no Brasil.",
   },
   robots: {
     index: true,
@@ -55,23 +56,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
-        {GA_ID && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`,
-              }}
-            />
-          </>
-        )}
-        {ADSENSE_CLIENT && (
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-            crossOrigin="anonymous"
-          />
-        )}
       </head>
       <body className="min-h-full flex flex-col bg-slate-50">
         <Suspense fallback={<div className="h-8 bg-slate-900" />}>
@@ -80,6 +64,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+            </Script>
+          </>
+        )}
+        {ADSENSE_CLIENT && (
+          <Script
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+          />
+        )}
       </body>
     </html>
   );
