@@ -30,6 +30,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div
             style={{
+              display: "flex",
               background: "rgba(255,255,255,0.12)",
               border: "1px solid rgba(255,255,255,0.2)",
               color: "rgba(255,255,255,0.85)",
@@ -44,6 +45,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
         <div
           style={{
+            display: "flex",
             color: "white",
             fontSize: post.title.length > 60 ? "46px" : "56px",
             fontWeight: "800",
@@ -55,7 +57,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           {post.title}
         </div>
 
-        <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "20px" }}>
+        <div style={{ display: "flex", color: "rgba(255,255,255,0.4)", fontSize: "20px" }}>
           calculaimovel.com.br/noticias
         </div>
       </div>
