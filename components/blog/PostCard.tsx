@@ -8,6 +8,7 @@ const categoryColors: Record<string, string> = {
   Reforma: "bg-orange-50 text-orange-700",
   Investimento: "bg-teal-50 text-teal-700",
   "Venda & Herança": "bg-violet-50 text-violet-700",
+  Custos: "bg-green-50 text-green-700",
 };
 
 function formatDate(dateStr: string) {

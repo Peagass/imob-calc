@@ -9,24 +9,30 @@ export default function JsonLd({ path }: Props) {
   const page = pages[path];
   if (!page) return null;
 
-  const appData = {
+  const pageName = page.title.split("|")[0].trim();
+
+  const graphData = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: page.title.split("|")[0].trim(),
-    applicationCategory: "FinanceApplication",
-    operatingSystem: "Web",
-    inLanguage: "pt-BR",
-    isAccessibleForFree: true,
-    offers: { "@type": "Offer", price: "0", priceCurrency: "BRL" },
-    description: page.description,
-    url: `${SITE_URL}${path}`,
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
-        { "@type": "ListItem", position: 2, name: page.title.split("|")[0].trim(), item: `${SITE_URL}${path}` },
-      ],
-    },
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: pageName,
+        applicationCategory: "FinanceApplication",
+        operatingSystem: "Web",
+        inLanguage: "pt-BR",
+        isAccessibleForFree: true,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "BRL" },
+        description: page.description,
+        url: `${SITE_URL}${path}`,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: pageName, item: `${SITE_URL}${path}` },
+        ],
+      },
+    ],
   };
 
   const faqItems = faqs[path];
@@ -44,7 +50,7 @@ export default function JsonLd({ path }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphData) }} />
       {faqData && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqData) }} />
       )}

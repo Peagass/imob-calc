@@ -209,4 +209,194 @@ export const related: Record<string, RelatedCalc[]> = {
     { href: "/ganho-capital", label: "Ganho de Capital", desc: "Calcule o IR na venda futura" },
     { href: "/financiamento", label: "Simulador de Financiamento", desc: "Simule o financiamento do saldo restante" },
   ],
+  "/despesas-condominio": [
+    { href: "/rateio-condominio",        label: "Rateio por Unidade",       desc: "Calcule quanto sua unidade paga" },
+    { href: "/fundo-reserva-condominio", label: "Fundo de Reserva",         desc: "Planeje o fundo para obras futuras" },
+    { href: "/estimativa-reforma",       label: "Estimativa de Reforma",    desc: "Estime o custo de obras no condomínio" },
+    { href: "/consumo-energia",          label: "Consumo de Energia",       desc: "Estime o gasto de energia da sua unidade" },
+  ],
+  "/rateio-condominio": [
+    { href: "/despesas-condominio",      label: "Despesas do Condomínio",   desc: "Estime o custo total mensal do condomínio" },
+    { href: "/fundo-reserva-condominio", label: "Fundo de Reserva",         desc: "Planeje o fundo para obras futuras" },
+    { href: "/tributacao-aluguel",       label: "Tributação do Aluguel",    desc: "Calcule o IR se o imóvel estiver alugado" },
+    { href: "/fluxo-caixa-imovel",       label: "Fluxo de Caixa do Imóvel", desc: "Projete receitas e despesas do imóvel" },
+  ],
+  "/fundo-reserva-condominio": [
+    { href: "/despesas-condominio",      label: "Despesas do Condomínio",   desc: "Estime as despesas mensais completas" },
+    { href: "/rateio-condominio",        label: "Rateio por Unidade",       desc: "Calcule a taxa de cada apartamento" },
+    { href: "/estimativa-reforma",       label: "Estimativa de Reforma",    desc: "Estime o custo das obras planejadas" },
+    { href: "/poupanca-entrada",         label: "Poupança para a Entrada",  desc: "Compare estratégias de poupança com rendimento" },
+  ],
+  "/consumo-energia": [
+    { href: "/consumo-agua",             label: "Consumo de Água",          desc: "Estime o consumo e a conta de água" },
+    { href: "/consumo-gas",              label: "Consumo de Gás",           desc: "Estime o consumo de gás da residência" },
+    { href: "/estimativa-reforma",       label: "Estimativa de Reforma",    desc: "Veja quanto custa modernizar instalações" },
+    { href: "/fluxo-caixa-imovel",       label: "Fluxo de Caixa do Imóvel", desc: "Some todas as despesas do imóvel alugado" },
+  ],
+  "/consumo-agua": [
+    { href: "/consumo-energia",          label: "Consumo de Energia",       desc: "Estime o gasto de energia elétrica" },
+    { href: "/consumo-gas",              label: "Consumo de Gás",           desc: "Estime o consumo de gás da residência" },
+    { href: "/despesas-condominio",      label: "Despesas do Condomínio",   desc: "Veja como água entra no custo total" },
+    { href: "/estimativa-reforma",       label: "Estimativa de Reforma",    desc: "Estime reformas para reduzir consumo" },
+  ],
+  "/consumo-gas": [
+    { href: "/consumo-energia",          label: "Consumo de Energia",       desc: "Estime o gasto de energia elétrica" },
+    { href: "/consumo-agua",             label: "Consumo de Água",          desc: "Estime o consumo e a conta de água" },
+    { href: "/estimativa-reforma",       label: "Estimativa de Reforma",    desc: "Estime o custo de trocar o aquecedor" },
+    { href: "/fluxo-caixa-imovel",       label: "Fluxo de Caixa do Imóvel", desc: "Some todas as despesas mensais do imóvel" },
+  ],
+};
+
+export interface RelatedGuide {
+  href: string;
+  label: string;
+  desc: string;
+}
+
+export const relatedGuides: Record<string, RelatedGuide[]> = {
+  "/financiamento": [
+    { href: "/blog/como-funciona-financiamento-imobiliario", label: "Como funciona o financiamento imobiliário",   desc: "Guia completo: etapas, documentos e custos" },
+    { href: "/blog/sac-ou-price-qual-escolher",              label: "SAC ou PRICE: qual escolher?",               desc: "Diferenças reais e em qual situação cada um vence" },
+    { href: "/blog/taxa-selic-alta-financiamento-imobiliario", label: "Selic alta e financiamento: o que muda",   desc: "Impacto nas parcelas e o que fazer agora" },
+    { href: "/blog/como-comparar-financiamentos-bancos",     label: "Como comparar propostas entre bancos",        desc: "O que olhar além da taxa de juros" },
+  ],
+  "/custos-compra": [
+    { href: "/blog/como-calcular-itbi",                      label: "Como calcular o ITBI na compra",             desc: "Fórmula, alíquotas e quando há isenção" },
+    { href: "/blog/quanto-entrada-preciso-comprar-imovel",   label: "Quanto de entrada você precisa ter",         desc: "Regras dos bancos e estratégias para juntar" },
+  ],
+  "/reajuste-aluguel": [
+    { href: "/blog/o-que-e-igpm-como-afeta-aluguel",         label: "O que é IGP-M e como afeta o aluguel",       desc: "Por que o índice sobe mais que a inflação" },
+  ],
+  "/ganho-capital": [
+    { href: "/blog/lucro-liquido-venda-imovel-quanto-fica",  label: "Quanto fica no bolso na venda do imóvel",    desc: "Todos os descontos: IR, corretagem e cartório" },
+    { href: "/blog/como-declarar-imovel-imposto-renda-2026", label: "Como declarar imóvel no IR 2026",            desc: "Guia passo a passo para não errar na declaração" },
+  ],
+  "/quanto-posso-financiar": [
+    { href: "/blog/quanto-posso-financiar-imovel",           label: "Quanto posso financiar pelo meu salário",    desc: "Como os bancos calculam sua capacidade de crédito" },
+    { href: "/blog/quanto-entrada-preciso-comprar-imovel",   label: "Quanto de entrada você precisa ter",         desc: "Regras dos bancos e estratégias para juntar" },
+  ],
+  "/amortizacao-extra": [
+    { href: "/blog/como-usar-fgts-amortizar-financiamento",  label: "Como usar o FGTS para amortizar",            desc: "Regras, limites e quanto economiza nos juros" },
+  ],
+  "/portabilidade": [
+    { href: "/blog/portabilidade-credito-imobiliario",        label: "Portabilidade de crédito imobiliário",       desc: "Quando vale a pena e como fazer o processo" },
+  ],
+  "/fgts": [
+    { href: "/blog/fgts-compra-imovel",                      label: "FGTS na compra do imóvel: guia completo",    desc: "Regras de uso, limites e documentação necessária" },
+    { href: "/blog/como-usar-fgts-amortizar-financiamento",  label: "Como usar o FGTS para amortizar",            desc: "Reduzir parcelas ou prazo: qual compensa mais" },
+  ],
+  "/mcmv": [
+    { href: "/blog/minha-casa-minha-vida",                   label: "Minha Casa Minha Vida 2026: guia completo",  desc: "Faixas de renda, subsídios e taxas de juros" },
+  ],
+  "/poupanca-entrada": [
+    { href: "/blog/quanto-entrada-preciso-comprar-imovel",   label: "Quanto de entrada você precisa ter",         desc: "Tudo que você precisa saber antes de começar a guardar" },
+  ],
+  "/consorcio": [
+    { href: "/blog/consorcio-imobiliario-como-funciona",     label: "Consórcio imobiliário: como funciona",       desc: "Vantagens, armadilhas e comparativo com financiamento" },
+  ],
+  "/planta-vs-pronto": [
+    { href: "/blog/imovel-na-planta-ou-pronto",              label: "Imóvel na planta ou pronto?",                desc: "Como decidir com números reais" },
+  ],
+  "/distrato": [
+    { href: "/blog/distrato-imovel-planta-direitos-multas",  label: "Distrato de imóvel na planta",               desc: "Direitos, multas e como calcular o reembolso" },
+  ],
+  "/custo-mudanca": [
+    { href: "/blog/quanto-custa-mudanca-residencial",         label: "Quanto custa uma mudança residencial",       desc: "Guia de preços e como economizar no frete" },
+  ],
+  "/comparador-financiamento": [
+    { href: "/blog/como-comparar-financiamentos-bancos",     label: "Como comparar propostas entre bancos",        desc: "O que olhar além da taxa nominal de juros" },
+    { href: "/blog/sac-ou-price-qual-escolher",              label: "SAC ou PRICE: qual escolher?",               desc: "Diferenças reais entre os dois sistemas" },
+  ],
+  "/renegociacao-financiamento": [
+    { href: "/blog/taxa-selic-alta-financiamento-imobiliario", label: "Selic alta e financiamento: o que fazer",  desc: "Estratégias para reduzir o custo do financiamento" },
+    { href: "/blog/portabilidade-credito-imobiliario",        label: "Portabilidade de crédito imobiliário",       desc: "Alternativa à renegociação: trocar de banco" },
+  ],
+  "/comprar-ou-alugar": [
+    { href: "/blog/comprar-ou-alugar-imovel-analise-financeira", label: "Comprar ou alugar: a conta completa",    desc: "A análise financeira que a maioria dos brasileiros não faz" },
+    { href: "/blog/vender-ou-alugar-imovel-o-que-compensa",  label: "Vender ou alugar: o que compensa mais",      desc: "Como calcular a melhor decisão para o seu caso" },
+  ],
+  "/tributacao-aluguel": [
+    { href: "/blog/como-declarar-aluguel-imposto-renda",     label: "Como declarar aluguel no IR 2026",           desc: "Carnê-leão, deduções e prazos explicados" },
+  ],
+  "/rescisao-aluguel": [
+    { href: "/blog/rescisao-contrato-aluguel-multa",         label: "Rescisão de aluguel: direitos e multas",     desc: "Como calcular a multa e quando há isenção" },
+  ],
+  "/quanto-cobrar-aluguel": [
+    { href: "/blog/como-calcular-valor-aluguel-imovel",      label: "Como calcular o valor do aluguel",           desc: "Cap rate e preço de mercado — como definir o valor certo" },
+    { href: "/blog/o-que-e-cap-rate-como-calcular",          label: "O que é cap rate e como calcular",           desc: "O indicador mais importante do investimento imobiliário" },
+  ],
+  "/seguro-fianca": [
+    { href: "/blog/seguro-fianca-caucao-fiador-qual-escolher", label: "Seguro fiança, caução ou fiador",          desc: "Qual a melhor garantia para locador e inquilino" },
+  ],
+  "/estimativa-reforma": [
+    { href: "/blog/quanto-custa-reformar-apartamento",       label: "Quanto custa reformar um apartamento",       desc: "Guia por cômodo com preços de mão de obra 2026" },
+    { href: "/blog/vale-a-pena-reformar-antes-vender-alugar", label: "Vale a pena reformar antes de vender?",    desc: "Como calcular o retorno real da reforma" },
+  ],
+  "/retorno-reforma": [
+    { href: "/blog/vale-a-pena-reformar-antes-vender-alugar", label: "Vale a pena reformar antes de vender?",    desc: "A conta do ROI que você precisa fazer antes de decidir" },
+    { href: "/blog/quanto-custa-reformar-apartamento",       label: "Quanto custa reformar um apartamento",       desc: "Referências de custo por cômodo e tipo de obra" },
+  ],
+  "/lucro-venda": [
+    { href: "/blog/lucro-liquido-venda-imovel-quanto-fica",  label: "Quanto fica no bolso na venda do imóvel",    desc: "IR, corretagem, cartório: todos os descontos do lucro" },
+    { href: "/blog/vender-ou-alugar-imovel-o-que-compensa",  label: "Vender ou alugar: o que compensa mais",      desc: "Como fazer a conta certa para a sua situação" },
+  ],
+  "/itcmd": [
+    { href: "/blog/itcmd-guia-completo-heranca-doacao-estados", label: "ITCMD: guia completo por estado",        desc: "Alíquotas e progressividade em todos os 27 estados" },
+    { href: "/blog/heranca-vs-doacao-em-vida-qual-e-melhor", label: "Herança vs. doação em vida",                desc: "Qual é melhor e quanto cada uma custa" },
+  ],
+  "/doacao-vs-inventario": [
+    { href: "/blog/heranca-vs-doacao-em-vida-qual-e-melhor", label: "Herança vs. doação em vida",                desc: "Custo total de cada caminho e qual usar" },
+    { href: "/blog/itcmd-guia-completo-heranca-doacao-estados", label: "ITCMD: guia completo por estado",        desc: "Imposto sobre herança e doação em todos os estados" },
+  ],
+  "/permuta-imovel": [
+    { href: "/blog/permuta-imovel-como-funciona-impostos",   label: "Permuta de imóvel: como funciona",          desc: "Impostos, torna e quando a troca direta compensa" },
+  ],
+  "/cap-rate": [
+    { href: "/blog/o-que-e-cap-rate-como-calcular",          label: "O que é cap rate e como calcular",           desc: "O principal indicador do investimento imobiliário" },
+    { href: "/blog/comprar-imovel-para-alugar-vale-a-pena",  label: "Comprar imóvel para alugar vale a pena?",   desc: "O cálculo completo que você precisa fazer" },
+  ],
+  "/fii-vs-imovel": [
+    { href: "/blog/fii-vs-imovel-fisico-qual-melhor-investimento", label: "FII vs imóvel físico em 2026",        desc: "Comparativo completo de retorno e liquidez" },
+    { href: "/blog/comprar-imovel-para-alugar-vale-a-pena",  label: "Comprar imóvel para alugar vale a pena?",   desc: "A conta que você precisa fazer antes de decidir" },
+  ],
+  "/imovel-vs-renda-fixa": [
+    { href: "/blog/imovel-vs-renda-fixa-onde-investir-selic-alta", label: "Imóvel vs renda fixa com Selic a 14,75%", desc: "Qual rende mais com os juros atuais?" },
+    { href: "/blog/comprar-imovel-para-alugar-vale-a-pena",  label: "Comprar imóvel para alugar vale a pena?",   desc: "Análise de retorno real considerando todos os custos" },
+  ],
+  "/tir-imovel": [
+    { href: "/blog/tir-imovel-como-calcular-taxa-interna-retorno", label: "TIR do imóvel: como calcular",        desc: "Por que a TIR é o melhor indicador de retorno" },
+    { href: "/blog/o-que-e-cap-rate-como-calcular",          label: "O que é cap rate e como calcular",           desc: "Cap rate vs TIR: quando usar cada um" },
+  ],
+  "/airbnb-vs-aluguel": [
+    { href: "/blog/airbnb-vs-aluguel-tradicional-qual-rende-mais", label: "Airbnb vs. aluguel tradicional",      desc: "Simulação com custos reais e break-even de ocupação" },
+  ],
+  "/fluxo-caixa-imovel": [
+    { href: "/blog/fluxo-caixa-imovel-aluguel-quanto-sobra", label: "Fluxo de caixa do imóvel para aluguel",    desc: "Quanto sobra de verdade todo mês após todas as despesas" },
+    { href: "/blog/comprar-imovel-para-alugar-vale-a-pena",  label: "Comprar imóvel para alugar vale a pena?",   desc: "O cálculo completo do investimento" },
+  ],
+  "/leilao-imovel": [
+    { href: "/blog/leilao-de-imovel-como-funciona",          label: "Leilão de imóvel: como funciona",           desc: "Riscos reais e se vale a pena comprar em leilão" },
+  ],
+  "/despesas-condominio": [
+    { href: "/blog/quanto-custa-condominio-por-mes",         label: "Quanto custa um condomínio por mês?",        desc: "Guia por padrão e cidade" },
+    { href: "/blog/rateio-despesas-condominio-como-funciona", label: "Como funciona o rateio de condomínio?",     desc: "Igualitário, fração ideal, área e misto" },
+    { href: "/blog/fundo-reserva-condominio-o-que-e",        label: "Fundo de reserva: o que é e quanto ter",    desc: "Como planejar a reserva para obras" },
+  ],
+  "/rateio-condominio": [
+    { href: "/blog/rateio-despesas-condominio-como-funciona", label: "Como funciona o rateio de condomínio?",     desc: "Os 4 critérios e qual é mais justo" },
+    { href: "/blog/quanto-custa-condominio-por-mes",         label: "Quanto custa um condomínio por mês?",        desc: "Guia completo por padrão e cidade" },
+  ],
+  "/fundo-reserva-condominio": [
+    { href: "/blog/fundo-reserva-condominio-o-que-e",        label: "Fundo de reserva: o que é e quanto ter",    desc: "Como planejar e quando usar" },
+    { href: "/blog/quanto-custa-condominio-por-mes",         label: "Quanto custa um condomínio por mês?",        desc: "Guia completo de despesas condominiais" },
+  ],
+  "/consumo-energia": [
+    { href: "/blog/como-reduzir-conta-de-luz-apartamento",   label: "Como reduzir a conta de luz",               desc: "Guia por aparelho com dicas práticas" },
+  ],
+  "/consumo-agua": [
+    { href: "/blog/como-economizar-agua-apartamento",        label: "Como economizar água no apartamento",        desc: "Onde vai a água e o que realmente funciona" },
+  ],
+  "/consumo-gas": [
+    { href: "/blog/quanto-gas-apartamento-consome-por-mes",  label: "Quanto gás um apartamento consome?",         desc: "Botijão vs gás encanado — comparativo completo" },
+  ],
 };

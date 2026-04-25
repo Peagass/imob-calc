@@ -53,7 +53,7 @@ export default function LeilaoImovelPage() {
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
         <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Compra</span>
-        <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Custo Real de Leilão de Imóvel</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Calculadora de Leilão de Imóvel</h1>
         <p className="text-slate-500">
           Calcule o custo total do arremate incluindo ITBI, comissão do leiloeiro, dívidas assumidas, reforma e cartório.
         </p>

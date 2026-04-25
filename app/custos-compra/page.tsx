@@ -44,7 +44,7 @@ export default function CustosCompraPage() {
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
         <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Compra</span>
-        <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Custos Totais da Compra</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Calculadora de Custos de Compra de Imóvel</h1>
         <p className="text-slate-500">
           Descubra quanto você vai pagar além do preço do imóvel: ITBI, cartório e avaliação bancária.
         </p>

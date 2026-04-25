@@ -45,6 +45,17 @@ Antes de adicionar ou atualizar qualquer valor, verifique qual é o mês e ano a
 
 ---
 
+## Ferramentas e serviços externos sugeridos ao usuário
+
+Ao recomendar qualquer ferramenta, plataforma ou serviço externo (para tráfego, SEO, analytics, marketing, desenvolvimento, etc.):
+
+- **Confirme que o serviço ainda existe e está ativo.** Serviços encerrados não devem ser recomendados (ex: Yahoo Respostas, Google Podcasts, Heroku free tier, Parse).
+- Prefira ferramentas com adoção atual consolidada e que estejam sendo ativamente desenvolvidas.
+- Se houver incerteza sobre o status atual de um serviço, mencione isso explicitamente e sugira que o usuário verifique antes de investir tempo.
+- O knowledge cutoff do modelo pode estar defasado — trate sugestões como ponto de partida, não como verdade absoluta.
+
+---
+
 ## Checklist ao adicionar novo conteúdo
 
 - [ ] Verificar se os valores numéricos são da legislação/tabela vigente no ano atual

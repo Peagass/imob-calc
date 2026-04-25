@@ -1,9 +1,12 @@
 import Link from "next/link";
+import SearchCalculadoras from "@/components/SearchCalculadoras";
+import SugestaoCalculadora from "@/components/SugestaoCalculadora";
 import {
   Calculator, TrendingUp, ArrowLeftRight, BarChart3, Percent, Home, PiggyBank,
   Zap, RefreshCw, Palmtree, Scale, Truck, Landmark, Target, Shield, Hammer,
   Wrench, Receipt, FileText, LineChart, PieChart, Gavel, Building2, Coins, ArrowRightLeft,
   GitMerge, TrendingDown, Undo2, SlidersHorizontal, RefreshCcw, Wallet, Repeat,
+  LayoutGrid, Divide, Vault, Plug, Droplets, Flame,
 } from "lucide-react";
 
 const categorias = [
@@ -204,6 +207,49 @@ const categorias = [
     ],
   },
   {
+    titulo: "Custos",
+    cor: "green",
+    items: [
+      {
+        href: "/despesas-condominio",
+        icon: LayoutGrid,
+        titulo: "Despesas do Condomínio",
+        descricao: "Estime folha de funcionários, manutenção, seguro e taxa média por unidade — por padrão e localização.",
+        destaque: true,
+      },
+      {
+        href: "/rateio-condominio",
+        icon: Divide,
+        titulo: "Rateio por Unidade",
+        descricao: "Calcule quanto sua unidade paga pelo critério igualitário, fração ideal ou proporcional à área.",
+      },
+      {
+        href: "/fundo-reserva-condominio",
+        icon: Vault,
+        titulo: "Fundo de Reserva",
+        descricao: "Em quantos meses o fundo atingirá a meta da obra planejada? Projete o saldo com rendimento.",
+      },
+      {
+        href: "/consumo-energia",
+        icon: Plug,
+        titulo: "Consumo de Energia Elétrica",
+        descricao: "Estime o consumo em kWh e o valor da conta por aparelho: AC, chuveiro, geladeira, TV e mais.",
+      },
+      {
+        href: "/consumo-agua",
+        icon: Droplets,
+        titulo: "Consumo de Água",
+        descricao: "Estime m³/mês e o custo por banho, descarga, máquina de lavar e jardim. Compare com a média brasileira.",
+      },
+      {
+        href: "/consumo-gas",
+        icon: Flame,
+        titulo: "Consumo de Gás",
+        descricao: "Quantos botijões P13 por mês? Estime o consumo de fogão, aquecedor e secadora em GLP ou gás natural.",
+      },
+    ],
+  },
+  {
     titulo: "Investimento",
     cor: "teal",
     items: [
@@ -253,6 +299,7 @@ const corMap: Record<string, { badge: string; destaqueCard: string; hover: strin
   amber:  { badge: "bg-amber-50 text-amber-700",    destaqueCard: "border-amber-200 bg-amber-50/40",   hover: "group-hover:text-amber-700" },
   orange: { badge: "bg-orange-50 text-orange-700",  destaqueCard: "border-orange-200 bg-orange-50/40", hover: "group-hover:text-orange-700" },
   violet: { badge: "bg-violet-50 text-violet-700",  destaqueCard: "border-violet-200 bg-violet-50/40", hover: "group-hover:text-violet-700" },
+  green:  { badge: "bg-green-50 text-green-700",    destaqueCard: "border-green-200 bg-green-50/40",   hover: "group-hover:text-green-700" },
   teal:   { badge: "bg-teal-50 text-teal-700",      destaqueCard: "border-teal-200 bg-teal-50/40",     hover: "group-hover:text-teal-700" },
 };
 
@@ -262,15 +309,16 @@ export default function HomePage() {
       {/* Hero */}
       <div className="text-center mb-14">
         <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
-          33 calculadoras · 100% gratuito
+          40 calculadoras · 100% gratuito
         </span>
         <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
-          Calculadoras para cada<br />
-          <span className="text-blue-600">decisão imobiliária</span>
+          Calculadoras imobiliárias<br />
+          <span className="text-blue-600">para você decidir melhor</span>
         </h1>
-        <p className="text-slate-500 text-lg max-w-xl mx-auto">
-          Ferramentas práticas para brasileiros que querem entender os números antes de comprar, vender ou alugar.
+        <p className="text-slate-500 text-lg max-w-xl mx-auto mb-6">
+          Ferramentas práticas para quem quer entender os números antes de comprar, vender, alugar ou reformar — baseadas nos dados e leis do mercado imobiliário brasileiro.
         </p>
+        <SearchCalculadoras />
       </div>
 
       {/* Categorias */}
@@ -328,6 +376,8 @@ export default function HomePage() {
           Selic, IGP-M, IPCA e INPC são atualizados periodicamente. Os valores podem conter defasagem ou erros — sempre confirme antes de tomar decisões.
         </p>
       </div>
+
+      <SugestaoCalculadora />
     </div>
   );
 }

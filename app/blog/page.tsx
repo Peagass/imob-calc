@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/seo";
 import { BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Guias — Mercado Imobiliário no Brasil | CalculaImóvel",
+  title: { absolute: "Guias — Mercado Imobiliário no Brasil | CalculaImóvel" },
   description:
     "Artigos práticos sobre compra, venda, aluguel, reforma e investimento imobiliário. Guias claros para tomar as melhores decisões com seu imóvel.",
   alternates: { canonical: `${SITE_URL}/blog` },

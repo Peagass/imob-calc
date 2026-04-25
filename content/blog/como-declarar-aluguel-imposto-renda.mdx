@@ -1,5 +1,5 @@
 ---
-title: "Como Declarar Aluguel Recebido no Imposto de Renda 2026"
+title: "Como Declarar Aluguel no Imposto de Renda 2026"
 description: "Passo a passo para declarar renda de aluguel no IRPF: onde informar, quais deduções são permitidas, como evitar a malha fina e quanto de imposto pagar."
 date: "2026-04-08"
 category: "Aluguel"
@@ -30,17 +30,23 @@ Você não paga imposto sobre o valor bruto do aluguel. A Receita Federal permit
 
 **O que NÃO pode ser deduzido:** manutenção, reforma, depreciação do imóvel — essas despesas só são relevantes para apuração do ganho de capital na venda, não para o carnê-leão.
 
-## A tabela progressiva do IRPF 2024
+## A tabela progressiva do IRPF 2026
 
 Após as deduções, o IR é calculado sobre a **base de cálculo líquida** usando a tabela progressiva mensal:
 
 | Base de cálculo | Alíquota | Dedução |
 |-----------------|----------|---------|
-| Até R$ 2.259,20 | Isento | — |
-| R$ 2.259,21 a R$ 2.826,65 | 7,5% | R$ 169,44 |
-| R$ 2.826,66 a R$ 3.751,05 | 15% | R$ 381,44 |
-| R$ 3.751,06 a R$ 4.664,68 | 22,5% | R$ 662,77 |
-| Acima de R$ 4.664,68 | 27,5% | R$ 896,00 |
+| Até R$ 2.428,80 | Isento | — |
+| R$ 2.428,81 a R$ 2.826,65 | 7,5% | R$ 182,16 |
+| R$ 2.826,66 a R$ 3.751,05 | 15% | R$ 394,16 |
+| R$ 3.751,06 a R$ 4.664,68 | 22,5% | R$ 675,49 |
+| Acima de R$ 4.664,68 | 27,5% | R$ 908,73 |
+
+### Isenção ampliada pela Lei 15.270/2025
+
+A partir de 2026, quem tem base de cálculo total de até **R$ 5.000/mês** está automaticamente isento de IR — mesmo que a tabela indicasse imposto a pagar. Para bases entre R$ 5.000 e R$ 7.350, existe um **redutor progressivo** que diminui o imposto gradualmente.
+
+Na prática: se o aluguel for sua única renda (ou a soma de todas as rendas não ultrapassar R$ 5.000/mês), você provavelmente não paga carnê-leão.
 
 **Atenção:** se você tem **outras rendas tributáveis** (salário, pró-labore), elas são somadas ao aluguel para determinar a faixa — a alíquota do aluguel é marginal, não isolada. Isso pode aumentar significativamente o imposto.
 
@@ -49,17 +55,19 @@ Após as deduções, o IR é calculado sobre a **base de cálculo líquida** usa
 Você recebe R$ 3.000 de aluguel por mês. O IPTU custa R$ 250/mês. Você não tem outras rendas tributáveis.
 
 - Base de cálculo: R$ 3.000 − R$ 250 = **R$ 2.750**
-- Alíquota: 7,5% → IR = R$ 2.750 × 7,5% − R$ 169,44 = **R$ 36,81/mês**
-- IR anual: **R$ 441,72**
+- Base ≤ R$ 5.000 → **IR = R$ 0** (isento pela Lei 15.270/2025)
+- IR anual: **R$ 0**
 
 Agora, se você também tem um salário de R$ 4.000:
 
-- Base total: R$ 4.000 + R$ 2.750 = R$ 6.750
-- IR sobre R$ 6.750 = R$ 6.750 × 27,5% − R$ 896 = **R$ 960,25**
-- IR só sobre o salário = R$ 4.000 × 22,5% − R$ 662,77 = **R$ 237,23**
-- IR marginal do aluguel = R$ 960,25 − R$ 237,23 = **R$ 723,02/mês**
+- Base total: R$ 4.000 + R$ 2.750 = **R$ 6.750**
+- IR pela tabela: R$ 6.750 × 27,5% − R$ 908,73 = R$ 947,52
+- Redutor (base entre R$ 5.000–R$ 7.350): R$ 978,62 − 0,133145 × 6.750 = **−R$ 79,89**
+- IR após redutor: R$ 947,52 − R$ 79,89 = **R$ 867,63**
+- IR só sobre o salário: R$ 4.000 ≤ R$ 5.000 → R$ 0
+- **IR marginal do aluguel = R$ 867,63/mês**
 
-A diferença é enorme. O aluguel sozinho geraria R$ 36,81 — com o salário, gera R$ 723,02. É por isso que o simulador precisa considerar todas as suas rendas.
+A diferença é enorme: sem outras rendas, o aluguel seria isento — com um salário de R$ 4.000, gera R$ 867,63/mês de carnê-leão. É por isso que o simulador precisa considerar todas as suas rendas.
 
 ## Como pagar o carnê-leão
 
@@ -95,8 +103,13 @@ Os carnês-leão pagos ao longo do ano são abatidos do imposto total — você 
 
 ## Quando há isenção?
 
-Você não paga IR sobre aluguel quando a **base de cálculo mensal** (após deduções) fica abaixo de R$ 2.259,20 — o limite de isenção da tabela progressiva de 2024.
+Em 2026, você não paga IR sobre aluguel em dois cenários:
 
-Mas atenção: mesmo isento, você deve declarar o aluguel na declaração anual se estiver obrigado a declarar IRPF (o que acontece se a soma dos rendimentos superar o limite anual de obrigatoriedade).
+1. **Base ≤ R$ 2.428,80** — faixa isenta da tabela progressiva
+2. **Soma de todas as rendas tributáveis ≤ R$ 5.000/mês** — isenção ampliada pela Lei 15.270/2025
+
+Importante: a isenção da Lei 15.270/2025 considera a **renda total** do mês, não só o aluguel. Se você tem salário + aluguel e a soma ultrapassar R$ 5.000, você paga IR sobre o excedente.
+
+Mesmo isento, declare o aluguel na declaração anual se estiver obrigado a declarar IRPF (o que acontece se a soma dos rendimentos superar o limite anual de obrigatoriedade).
 
 Use a calculadora para descobrir exatamente quanto você vai pagar — e planejar se vale a pena fazer deduções adicionais.

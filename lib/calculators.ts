@@ -2686,3 +2686,494 @@ export function calcularPermuta(input: PermutaInput): PermutaResult {
     observacoes,
   };
 }
+
+// ──────────────────────────────────────────────
+// CONDOMÍNIO — DESPESAS ESTIMADAS
+// ──────────────────────────────────────────────
+
+export type PadraoCondominio = "economico" | "medio" | "alto" | "luxo";
+export type LocalizacaoCondominio = "interior" | "capital" | "metropole";
+
+export interface DespesasCondominioInput {
+  numUnidades: number;
+  numPortarias: number;
+  padrao: PadraoCondominio;
+  localizacao: LocalizacaoCondominio;
+  portaria24h: boolean;
+  temElevador: boolean;
+  numElevadores: number;
+  temPiscina: boolean;
+  temAcademia: boolean;
+  temSalaoFestas: boolean;
+  temQuadra: boolean;
+  temJardim: boolean;
+}
+
+export interface FuncionarioEstimado {
+  funcao: string;
+  quantidade: number;
+  custoUnitario: number;
+  custoTotal: number;
+}
+
+export interface ItemDespesaCond {
+  categoria: string;
+  valor: number;
+  percentual: number;
+}
+
+export interface DespesasCondominioResult {
+  funcionarios: FuncionarioEstimado[];
+  folhaPagamento: number;
+  itemsDespesa: ItemDespesaCond[];
+  totalMensal: number;
+  taxaMedia: number;
+  taxaMin: number;
+  taxaMax: number;
+}
+
+export function calcularDespesasCondominio(input: DespesasCondominioInput): DespesasCondominioResult {
+  const { numUnidades, numPortarias, padrao, localizacao, portaria24h,
+    temElevador, numElevadores, temPiscina, temAcademia, temSalaoFestas, temQuadra, temJardim } = input;
+
+  const locMult = { interior: 1.0, capital: 1.18, metropole: 1.42 }[localizacao];
+  const encargos = 1.72;
+
+  const sal = { zelador: 2800, ajudante: 1900, porteiro: 2400, faxineiro: 2000, jardineiro: 2000, gerente: 4500, vigilante: 3200 };
+
+  const staffRaw: { funcao: string; qtd: number; salario: number }[] = [];
+
+  staffRaw.push({ funcao: "Zelador", qtd: 1, salario: sal.zelador });
+  if (padrao === "alto" || padrao === "luxo") staffRaw.push({ funcao: "Ajudante de zelador", qtd: 1, salario: sal.ajudante });
+
+  // Econômico: sem porteiro — portaria digital/interfone ou acesso por conta do morador.
+  // Médio+: escala 12×36 (4 porteiros/posto para 24h) ou diurna (2 porteiros/posto).
+  if (padrao !== "economico") {
+    const porteirosPerPost = portaria24h ? 4 : 2;
+    const numPostos = Math.max(1, numPortarias);
+    staffRaw.push({ funcao: `Porteiro (escala ${portaria24h ? "12×36" : "diurna"})`, qtd: porteirosPerPost * numPostos, salario: sal.porteiro });
+  }
+
+  // Vigilante / segurança: alto e luxo com portaria 24h incluem segurança armada ou desarmada.
+  // Luxo: cobertura 24h (4 vigilantes, escala 12×36). Alto: cobertura parcial (2 vigilantes).
+  if (padrao === "alto" && portaria24h) {
+    staffRaw.push({ funcao: "Vigilante / Segurança", qtd: 2, salario: sal.vigilante });
+  } else if (padrao === "luxo") {
+    const qtdVigilante = portaria24h ? 4 : 2;
+    staffRaw.push({ funcao: "Vigilante / Segurança (12×36)", qtd: qtdVigilante, salario: sal.vigilante });
+  }
+
+  const unidsPorFax = { economico: 60, medio: 40, alto: 25, luxo: 18 }[padrao];
+  staffRaw.push({ funcao: "Faxineiro", qtd: Math.max(1, Math.ceil(numUnidades / unidsPorFax)), salario: sal.faxineiro });
+
+  if (temJardim) staffRaw.push({ funcao: "Jardineiro", qtd: padrao === "luxo" ? 2 : 1, salario: sal.jardineiro });
+  if (padrao === "luxo" && numUnidades >= 80) staffRaw.push({ funcao: "Gerente predial", qtd: 1, salario: sal.gerente });
+
+  const funcionarios: FuncionarioEstimado[] = staffRaw.map(({ funcao, qtd, salario }) => {
+    const custoUnitario = Math.round(salario * locMult * encargos);
+    return { funcao, quantidade: qtd, custoUnitario, custoTotal: custoUnitario * qtd };
+  });
+
+  const folhaPagamento = funcionarios.reduce((s, f) => s + f.custoTotal, 0);
+
+  const cpU = {
+    manutencao: { economico: 9,  medio: 16, alto: 35, luxo: 70 }[padrao],
+    energia:    { economico: 7,  medio: 13, alto: 26, luxo: 52 }[padrao],
+    agua:       { economico: 4,  medio: 8,  alto: 16, luxo: 32 }[padrao],
+    seguro:     { economico: 6,  medio: 10, alto: 18, luxo: 32 }[padrao],
+  };
+
+  const manutencao = cpU.manutencao * numUnidades;
+  const energia    = cpU.energia    * numUnidades;
+  const agua       = cpU.agua       * numUnidades;
+  const seguro     = cpU.seguro     * numUnidades;
+
+  const custoElev          = temElevador    ? numElevadores * ({ economico: 800, medio: 1100, alto: 1600, luxo: 2200 }[padrao]) : 0;
+  const custoPorc          = temPiscina     ? ({ economico: 800,  medio: 1200, alto: 1800, luxo: 3000 }[padrao]) : 0;
+  const custoAcad          = temAcademia    ? ({ economico: 400,  medio: 700,  alto: 1400, luxo: 2500 }[padrao]) : 0;
+  const custoSalao         = temSalaoFestas ? ({ economico: 200,  medio: 350,  alto: 600,  luxo: 1200 }[padrao]) : 0;
+  const custoQuadra        = temQuadra      ? ({ economico: 200,  medio: 400,  alto: 800,  luxo: 1500 }[padrao]) : 0;
+  // Portaria digital: só para econômico com portaria 24h (câmeras, interfone IP, acesso remoto)
+  const custoPortDigital   = (padrao === "economico" && portaria24h) ? 450 : 0;
+
+  const subtotal = folhaPagamento + manutencao + energia + agua + seguro + custoElev + custoPorc + custoAcad + custoSalao + custoQuadra + custoPortDigital;
+  const pAdmin = { economico: 0.08, medio: 0.09, alto: 0.10, luxo: 0.10 }[padrao];
+  const pFundo = { economico: 0.05, medio: 0.07, alto: 0.08, luxo: 0.10 }[padrao];
+  const administradora = subtotal * pAdmin;
+  const fundoReserva   = subtotal * pFundo;
+  const totalMensal    = subtotal + administradora + fundoReserva;
+
+  const rawItems: { categoria: string; valor: number }[] = [
+    { categoria: "Folha de pagamento", valor: folhaPagamento },
+    { categoria: "Manutenção predial", valor: manutencao },
+    { categoria: "Energia (áreas comuns)", valor: energia },
+    { categoria: "Água (áreas comuns)", valor: agua },
+    { categoria: "Seguro predial", valor: seguro },
+    ...(custoElev        > 0 ? [{ categoria: `Elevadores (${numElevadores})`, valor: custoElev }] : []),
+    ...(custoPorc        > 0 ? [{ categoria: "Manutenção piscina", valor: custoPorc }] : []),
+    ...(custoAcad        > 0 ? [{ categoria: "Academia / equipamentos", valor: custoAcad }] : []),
+    ...(custoSalao       > 0 ? [{ categoria: "Salão de festas", valor: custoSalao }] : []),
+    ...(custoQuadra      > 0 ? [{ categoria: "Quadra esportiva", valor: custoQuadra }] : []),
+    ...(custoPortDigital > 0 ? [{ categoria: "Portaria digital (sistema)", valor: custoPortDigital }] : []),
+    { categoria: "Administradora", valor: administradora },
+    { categoria: "Fundo de reserva", valor: fundoReserva },
+  ];
+
+  const totalPct = rawItems.reduce((s, i) => s + i.valor, 0);
+  const itemsDespesa: ItemDespesaCond[] = rawItems.map(i => ({ ...i, percentual: totalPct > 0 ? (i.valor / totalPct) * 100 : 0 }));
+
+  const taxaMedia = totalMensal / numUnidades;
+  return { funcionarios, folhaPagamento, itemsDespesa, totalMensal, taxaMedia, taxaMin: taxaMedia * 0.85, taxaMax: taxaMedia * 1.20 };
+}
+
+// ──────────────────────────────────────────────
+// CONDOMÍNIO — RATEIO POR UNIDADE
+// ──────────────────────────────────────────────
+
+export type CriterioRateio = "igualitario" | "fracao" | "area" | "misto";
+
+export interface RateioCondominioInput {
+  despesaTotal: number;
+  numUnidades: number;
+  criterio: CriterioRateio;
+  areaUnidade: number;
+  areaMedia: number;
+  fracaoIdeal: number;      // % (ex: 2.5 for 2.5%)
+  proporcaoMisto: number;   // % weight on fracao vs igualitario (0-100)
+}
+
+export interface RateioCondominioResult {
+  igualitario: number;
+  porFracao: number;
+  porArea: number;
+  misto: number;
+  valorFinal: number;
+  percentualDaDespesa: number;
+  variacaoVsIgualitario: number;
+}
+
+export function calcularRateioCondominio(input: RateioCondominioInput): RateioCondominioResult {
+  const { despesaTotal, numUnidades, criterio, areaUnidade, areaMedia, fracaoIdeal, proporcaoMisto } = input;
+
+  const igualitario = numUnidades > 0 ? despesaTotal / numUnidades : 0;
+  const porFracao   = despesaTotal * (fracaoIdeal / 100);
+  const ratioArea   = areaMedia > 0 ? areaUnidade / areaMedia : 1;
+  const porArea     = igualitario * ratioArea;
+  const misto       = porFracao * (proporcaoMisto / 100) + igualitario * (1 - proporcaoMisto / 100);
+
+  const valorFinal = { igualitario, fracao: porFracao, area: porArea, misto }[criterio];
+
+  return {
+    igualitario, porFracao, porArea, misto,
+    valorFinal,
+    percentualDaDespesa: despesaTotal > 0 ? (valorFinal / despesaTotal) * 100 : 0,
+    variacaoVsIgualitario: igualitario > 0 ? ((valorFinal - igualitario) / igualitario) * 100 : 0,
+  };
+}
+
+// ──────────────────────────────────────────────
+// CONDOMÍNIO — FUNDO DE RESERVA
+// ──────────────────────────────────────────────
+
+export interface FundoReservaInput {
+  despesaMensal: number;
+  percentualFundo: number;
+  saldoAtual: number;
+  rendimentoAnual: number;
+  valorObra: number;
+  prazoObra: number; // months
+}
+
+export interface FundoReservaResult {
+  aporteMensal: number;
+  mesesParaAtingir: number;
+  saldoProjetado: { mes: number; saldo: number }[];
+  atingeNoPrazo: boolean;
+  percentualNecessario: number;
+  saldoMinRecomendado: number;
+}
+
+export function calcularFundoReserva(input: FundoReservaInput): FundoReservaResult {
+  const { despesaMensal, percentualFundo, saldoAtual, rendimentoAnual, valorObra, prazoObra } = input;
+
+  const aporteMensal = despesaMensal * (percentualFundo / 100);
+  const taxaMensal   = Math.pow(1 + rendimentoAnual / 100, 1 / 12) - 1;
+
+  let saldo = saldoAtual;
+  let meses = 0;
+  while (saldo < valorObra && meses < 360) {
+    saldo = saldo * (1 + taxaMensal) + aporteMensal;
+    meses++;
+  }
+  const mesesParaAtingir = saldo >= valorObra ? meses : 361;
+
+  const totalMeses = Math.min(Math.max(prazoObra * 2, 48), 120);
+  const step = Math.max(1, Math.floor(totalMeses / 24));
+  const saldoProjetado: { mes: number; saldo: number }[] = [];
+  let s = saldoAtual;
+  for (let m = 0; m <= totalMeses; m += step) {
+    saldoProjetado.push({ mes: m, saldo: Math.round(s) });
+    for (let i = 0; i < step; i++) s = s * (1 + taxaMensal) + aporteMensal;
+  }
+
+  const atingeNoPrazo = mesesParaAtingir <= prazoObra;
+
+  let percentualNecessario = percentualFundo;
+  if (!atingeNoPrazo && prazoObra > 0) {
+    const factor = taxaMensal > 0 ? Math.pow(1 + taxaMensal, prazoObra) : 1;
+    const pmt = taxaMensal > 0
+      ? (valorObra - saldoAtual * factor) * taxaMensal / (factor - 1)
+      : (valorObra - saldoAtual) / prazoObra;
+    percentualNecessario = despesaMensal > 0 ? Math.max(percentualFundo, (Math.max(0, pmt) / despesaMensal) * 100) : percentualFundo;
+  }
+
+  return { aporteMensal, mesesParaAtingir, saldoProjetado, atingeNoPrazo, percentualNecessario, saldoMinRecomendado: despesaMensal * 2 };
+}
+
+// ──────────────────────────────────────────────
+// CONSUMO — ENERGIA ELÉTRICA
+// ──────────────────────────────────────────────
+
+export type BandeiraTarifaria = "verde" | "amarela" | "vermelha1" | "vermelha2";
+
+export interface ConsumoEnergiaInput {
+  tarifaKwh: number;
+  bandeira: BandeiraTarifaria;
+  numAr: number;
+  btuAr: number;
+  horasAr: number;
+  numChuveiro: number;
+  potenciaChuveiro: number;
+  minutosChuveiro: number;
+  tipoGeladeira: "simples" | "duplex" | "side" | "nenhuma";
+  ciclosMaquina: number;
+  temSecadora: boolean;
+  horasTV: number;
+  numTV: number;
+  temMicroondas: boolean;
+  temComputador: boolean;
+  horasComputador: number;
+  numComodos: number;
+  tipoIluminacao: "led" | "fluorescente" | "incandescente";
+}
+
+export interface ItemConsumoEnergia {
+  item: string;
+  kwhMes: number;
+  custoMes: number;
+  percentual: number;
+}
+
+export interface ConsumoEnergiaResult {
+  kwhMes: number;
+  custoBase: number;
+  additivoBandeira: number;
+  custoTotal: number;
+  itens: ItemConsumoEnergia[];
+  comparacaoMedia: number;
+}
+
+export function calcularConsumoEnergia(input: ConsumoEnergiaInput): ConsumoEnergiaResult {
+  const { tarifaKwh, bandeira, numAr, btuAr, horasAr, numChuveiro, potenciaChuveiro, minutosChuveiro,
+    tipoGeladeira, ciclosMaquina, temSecadora, horasTV, numTV, temMicroondas, temComputador,
+    horasComputador, numComodos, tipoIluminacao } = input;
+
+  const D = 30;
+  const acW  = btuAr <= 9000 ? 1100 : btuAr <= 12000 ? 1450 : btuAr <= 18000 ? 2000 : 2800;
+  const kwhAr       = numAr * (acW / 1000) * horasAr * D;
+  const kwhChuveiro = numChuveiro * (potenciaChuveiro / 1000) * (minutosChuveiro / 60) * D;
+  const kwhGelad    = ({ nenhuma: 0, simples: 35, duplex: 50, side: 70 } as Record<string, number>)[tipoGeladeira];
+  const kwhMaq      = (ciclosMaquina / 7) * D * 0.5;
+  const kwhSec      = temSecadora ? (ciclosMaquina / 7) * D * 2.5 : 0;
+  const kwhTV       = numTV * 0.09 * horasTV * D;
+  const kwhMicro    = temMicroondas ? 1.2 * (20 / 60) * D : 0;
+  const kwhComp     = temComputador ? 0.15 * horasComputador * D : 0;
+  const wLuz        = ({ led: 15, fluorescente: 40, incandescente: 100 } as Record<string, number>)[tipoIluminacao];
+  const kwhLuz      = numComodos * (wLuz / 1000) * 4 * D;
+
+  const raw = [
+    { item: "Ar-condicionado",       kwh: kwhAr },
+    { item: "Chuveiro elétrico",     kwh: kwhChuveiro },
+    { item: "Geladeira",             kwh: kwhGelad },
+    { item: "Máquina de lavar",      kwh: kwhMaq },
+    { item: "Secadora",              kwh: kwhSec },
+    { item: "Televisão",             kwh: kwhTV },
+    { item: "Micro-ondas",           kwh: kwhMicro },
+    { item: "Computador/notebook",   kwh: kwhComp },
+    { item: "Iluminação",            kwh: kwhLuz },
+  ].filter(i => i.kwh > 0);
+
+  const kwhMes = raw.reduce((s, i) => s + i.kwh, 0);
+  const addPerKwh = ({ verde: 0, amarela: 0.01874, vermelha1: 0.03971, vermelha2: 0.09492 } as Record<string, number>)[bandeira];
+  const custoBase       = kwhMes * tarifaKwh;
+  const additivoBandeira = kwhMes * addPerKwh;
+  const custoTotal      = custoBase + additivoBandeira;
+  const tarifaFull      = tarifaKwh + addPerKwh;
+
+  const itens: ItemConsumoEnergia[] = raw.map(i => ({
+    item: i.item,
+    kwhMes:  Math.round(i.kwh * 10) / 10,
+    custoMes: i.kwh * tarifaFull,
+    percentual: kwhMes > 0 ? (i.kwh / kwhMes) * 100 : 0,
+  }));
+
+  return { kwhMes: Math.round(kwhMes * 10) / 10, custoBase, additivoBandeira, custoTotal, itens, comparacaoMedia: ((kwhMes - 160) / 160) * 100 };
+}
+
+// ──────────────────────────────────────────────
+// CONSUMO — ÁGUA
+// ──────────────────────────────────────────────
+
+export type TipoChuveiro = "economico" | "normal" | "banheira";
+export type TipoDescarga = "economica" | "normal";
+
+export interface ConsumoAguaInput {
+  numMoradores: number;
+  minutosbanho: number;
+  tipochuveiro: TipoChuveiro;
+  tipodescarga: TipoDescarga;
+  acionamentosDescarga: number;
+  ciclosMaquinaLavar: number;
+  temJardim: boolean;
+  m2jardim: number;
+  temPiscina: boolean;
+  tarifaM3: number;
+}
+
+export interface ItemConsumoAgua {
+  uso: string;
+  litrosDia: number;
+  percentual: number;
+}
+
+export interface ConsumoAguaResult {
+  m3Mes: number;
+  litrosPessoa: number;
+  custoEstimado: number;
+  itens: ItemConsumoAgua[];
+  comparacaoMedia: string;
+  classificacao: "excelente" | "bom" | "medio" | "alto" | "muito_alto";
+}
+
+export function calcularConsumoAgua(input: ConsumoAguaInput): ConsumoAguaResult {
+  const { numMoradores, minutosbanho, tipochuveiro, tipodescarga, acionamentosDescarga,
+    ciclosMaquinaLavar, temJardim, m2jardim, temPiscina, tarifaM3 } = input;
+
+  const litrosBanho   = (tipochuveiro === "banheira" ? 200 : (tipochuveiro === "economico" ? 6 : 12) * minutosbanho) * numMoradores;
+  const litrosDesc    = (tipodescarga === "economica" ? 6 : 9) * acionamentosDescarga * numMoradores;
+  const litrosOutros  = 50 * numMoradores;
+  const litrosMaq     = (ciclosMaquinaLavar / 7) * 80;
+  const litrosJardim  = temJardim ? m2jardim * 1.3 : 0;
+  const litrosPiscina = temPiscina ? 2000 / 30 : 0;
+
+  const raw = [
+    { uso: "Banho",                     litros: litrosBanho },
+    { uso: "Descarga",                  litros: litrosDesc },
+    { uso: "Torneiras (pia/cozinha)",   litros: litrosOutros },
+    { uso: "Máquina de lavar",          litros: litrosMaq },
+    { uso: "Jardim",                    litros: litrosJardim },
+    { uso: "Piscina",                   litros: litrosPiscina },
+  ].filter(i => i.litros > 0);
+
+  const totalDia = raw.reduce((s, i) => s + i.litros, 0);
+  const m3Mes = (totalDia * 30) / 1000;
+  const litrosPessoa = numMoradores > 0 ? totalDia / numMoradores : 0;
+  const custoEstimado = tarifaM3 > 0 ? m3Mes * tarifaM3 : 0;
+
+  const itens: ItemConsumoAgua[] = raw.map(i => ({
+    uso: i.uso,
+    litrosDia: Math.round(i.litros),
+    percentual: totalDia > 0 ? (i.litros / totalDia) * 100 : 0,
+  }));
+
+  const classificacao = litrosPessoa < 80 ? "excelente" : litrosPessoa < 130 ? "bom" : litrosPessoa < 180 ? "medio" : litrosPessoa < 250 ? "alto" : "muito_alto";
+  const brasilMedia = 154;
+  const diff = Math.abs(Math.round((litrosPessoa - brasilMedia) / brasilMedia * 100));
+  const comparacaoMedia = litrosPessoa <= brasilMedia ? `${diff}% abaixo da média brasileira` : `${diff}% acima da média brasileira`;
+
+  return { m3Mes: Math.round(m3Mes * 10) / 10, litrosPessoa: Math.round(litrosPessoa), custoEstimado, itens, comparacaoMedia, classificacao };
+}
+
+// ──────────────────────────────────────────────
+// CONSUMO — GÁS
+// ──────────────────────────────────────────────
+
+export type TipoFornecimentoGas = "botijao" | "glp_encanado" | "gn";
+export type TipoAquecedor = "gas_passagem" | "gas_central" | "eletrico" | "nao_tem";
+export type UsoForno = "raro" | "moderado" | "frequente";
+
+export interface ConsumoGasInput {
+  numMoradores: number;
+  tipoFornecimento: TipoFornecimentoGas;
+  precoUnidade: number;
+  temFogao: boolean;
+  numBocas: number;
+  refeicoesDia: number;
+  tipoAquecedor: TipoAquecedor;
+  minutosBanhoGas: number;
+  temSecadoraGas: boolean;
+  ciclosSecadoraSemana: number;
+  temForno: boolean;
+  usoForno: UsoForno;
+}
+
+export interface ItemConsumoGas {
+  uso: string;
+  m3Mes: number;
+  custoMes: number;
+  percentual: number;
+}
+
+export interface ConsumoGasResult {
+  consumoM3Mes: number;
+  consumoKgMes: number;
+  botijoesMes: number;
+  custoMes: number;
+  itens: ItemConsumoGas[];
+}
+
+export function calcularConsumoGas(input: ConsumoGasInput): ConsumoGasResult {
+  const { numMoradores, tipoFornecimento, precoUnidade, temFogao, numBocas, refeicoesDia,
+    tipoAquecedor, minutosBanhoGas, temSecadoraGas, ciclosSecadoraSemana, temForno, usoForno } = input;
+
+  const D = 30;
+  const isGN = tipoFornecimento === "gn";
+  const gnF  = isGN ? 2.3 : 1; // GN needs ~2.3× more m³ for same heat output
+
+  const m3FogaoMes  = temFogao ? (numBocas >= 6 ? 0.10 : 0.08) * refeicoesDia * gnF * D : 0;
+  const m3AquecMes  = (tipoAquecedor === "gas_passagem" || tipoAquecedor === "gas_central")
+    ? numMoradores * (minutosBanhoGas / 10) * (tipoAquecedor === "gas_central" ? 0.14 : 0.11) * gnF * D
+    : 0;
+  const m3SecMes    = temSecadoraGas ? (ciclosSecadoraSemana / 7) * D * 0.4 * gnF : 0;
+  const m3FornoMes  = temForno ? ({ raro: 0.06, moderado: 0.12, frequente: 0.20 } as Record<string, number>)[usoForno] * gnF * D : 0;
+
+  const raw = [
+    { uso: "Fogão",            m3: m3FogaoMes },
+    { uso: "Aquecedor de água", m3: m3AquecMes },
+    { uso: "Secadora a gás",   m3: m3SecMes },
+    { uso: "Forno",            m3: m3FornoMes },
+  ].filter(i => i.m3 > 0);
+
+  const consumoM3Mes = raw.reduce((s, i) => s + i.m3, 0);
+  const consumoKgMes = isGN ? 0 : consumoM3Mes * 1.52;
+  const botijoesMes  = isGN ? 0 : consumoKgMes / 13;
+
+  const custoMes = tipoFornecimento === "botijao"
+    ? botijoesMes * precoUnidade
+    : consumoM3Mes * precoUnidade;
+
+  const itens: ItemConsumoGas[] = raw.map(i => ({
+    uso: i.uso,
+    m3Mes: Math.round(i.m3 * 100) / 100,
+    custoMes: consumoM3Mes > 0 ? (i.m3 / consumoM3Mes) * custoMes : 0,
+    percentual: consumoM3Mes > 0 ? (i.m3 / consumoM3Mes) * 100 : 0,
+  }));
+
+  return {
+    consumoM3Mes: Math.round(consumoM3Mes * 100) / 100,
+    consumoKgMes: Math.round(consumoKgMes * 10) / 10,
+    botijoesMes:  Math.round(botijoesMes * 10) / 10,
+    custoMes,
+    itens,
+  };
+}

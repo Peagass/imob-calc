@@ -55,6 +55,17 @@ const grupos = [
     ],
   },
   {
+    label: "Custos",
+    links: [
+      { href: "/despesas-condominio",      label: "Despesas do Condomínio" },
+      { href: "/rateio-condominio",        label: "Rateio por Unidade" },
+      { href: "/fundo-reserva-condominio", label: "Fundo de Reserva" },
+      { href: "/consumo-energia",          label: "Consumo de Energia" },
+      { href: "/consumo-agua",             label: "Consumo de Água" },
+      { href: "/consumo-gas",              label: "Consumo de Gás" },
+    ],
+  },
+  {
     label: "Investimento",
     links: [
       { href: "/imovel-vs-renda-fixa", label: "Imóvel vs. Renda Fixa" },

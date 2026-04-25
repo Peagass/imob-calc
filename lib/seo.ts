@@ -20,7 +20,7 @@ export const pages: Record<string, PageMeta> = {
   "/": {
     title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description:
-      "29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil. Dados atualizados do Banco Central.",
+      "40 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil. Dados atualizados do Banco Central.",
   },
   "/custos-compra": {
     title: "Calculadora de Custos de Compra de Imóvel | ITBI, Escritura e Registro",
@@ -196,6 +196,46 @@ export const pages: Record<string, PageMeta> = {
     title: "Notícias do Mercado Imobiliário | CalculaImóvel",
     description:
       "Acompanhe as últimas notícias do mercado imobiliário brasileiro: preços, financiamento, Selic, MCMV, aluguel e tendências. Atualizado regularmente.",
+  },
+  "/despesas-condominio": {
+    title: "Calculadora de Despesas de Condomínio | Taxa Mensal Estimada por Padrão",
+    description:
+      "Estime as despesas mensais do condomínio: folha de funcionários, manutenção, energia, seguro, administradora e fundo de reserva. Calcule a taxa média por unidade.",
+  },
+  "/rateio-condominio": {
+    title: "Calculadora de Rateio de Condomínio | Taxa da Sua Unidade",
+    description:
+      "Calcule quanto sua unidade paga pelo critério igualitário, fração ideal, proporcional à área ou misto. Compare os diferentes critérios de rateio.",
+  },
+  "/fundo-reserva-condominio": {
+    title: "Calculadora de Fundo de Reserva de Condomínio | Planejamento de Obras",
+    description:
+      "Calcule em quantos meses o fundo de reserva atingirá a meta para uma obra planejada. Projete o saldo com rendimento e descubra o percentual necessário.",
+  },
+  "/consumo-energia": {
+    title: "Calculadora de Consumo de Energia Elétrica | Estimativa da Conta de Luz",
+    description:
+      "Estime o consumo de energia elétrica em kWh e o valor da sua conta por aparelho: ar-condicionado, chuveiro, geladeira, TV e mais. Com bandeira tarifária.",
+  },
+  "/consumo-agua": {
+    title: "Calculadora de Consumo de Água | Estimativa de m³ e Conta Mensal",
+    description:
+      "Estime o consumo de água em m³ por mês com base em moradores, banho, descarga, máquina de lavar e jardim. Compare com a média brasileira de 154L/pessoa/dia.",
+  },
+  "/consumo-gas": {
+    title: "Calculadora de Consumo de Gás | Botijão P13, GLP e Gás Natural",
+    description:
+      "Estime o consumo de gás por fogão, aquecedor e secadora. Veja quantos botijões P13 por mês e compare GLP com gás natural encanado.",
+  },
+  "/sobre": {
+    title: "Sobre o CalculaImóvel | Calculadoras Imobiliárias Gratuitas",
+    description:
+      "Conheça o CalculaImóvel: 40 calculadoras gratuitas para brasileiros tomarem decisões imobiliárias com base em dados reais do Banco Central.",
+  },
+  "/metodologia": {
+    title: "Metodologia das Calculadoras | CalculaImóvel",
+    description:
+      "Entenda as fórmulas, fontes e premissas por trás de cada calculadora do CalculaImóvel: SAC, PRICE, cap rate, TIR, reajuste, ganho de capital e mais.",
   },
 };
 

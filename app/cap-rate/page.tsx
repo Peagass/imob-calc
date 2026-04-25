@@ -13,7 +13,7 @@ export default async function CapRatePage() {
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="mb-8">
         <span className="text-xs font-semibold text-violet-600 uppercase tracking-wide">Investimento</span>
-        <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Cap Rate — Rentabilidade do Aluguel</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mt-1 mb-2">Calculadora de Cap Rate Imobiliário</h1>
         <p className="text-slate-500">
           Calcule o retorno real do imóvel alugado e compare com outras aplicações financeiras.
         </p>

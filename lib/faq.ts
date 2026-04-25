@@ -781,4 +781,146 @@ export const faqs: Record<string, FaqItem[]> = {
       a: "A comissão do leiloeiro é geralmente de 5% sobre o valor do lance vencedor, paga pelo arrematante além do preço arrematado. Em alguns leilões judiciais, a comissão já está incluída. Verifique sempre no edital se a comissão é 'sobre' ou 'incluída no' valor do lance.",
     },
   ],
+
+  "/despesas-condominio": [
+    {
+      q: "O que está incluído no cálculo da taxa de condomínio?",
+      a: "A taxa de condomínio cobre folha de pagamento dos funcionários (geralmente 40–60% da despesa total), manutenção predial, energia e água das áreas comuns, seguro do edifício, taxa da administradora (7–10%) e fundo de reserva (5–10%). Em condomínios com amenidades, os custos de manutenção de elevadores, piscina e academia também entram.",
+    },
+    {
+      q: "Quanto representa a folha de pagamento nas despesas do condomínio?",
+      a: "A folha de pagamento costuma representar entre 40% e 65% das despesas mensais de um condomínio residencial. Inclui salário bruto mais os encargos sociais (INSS patronal, FGTS, férias, 13º salário e outros), que somam aproximadamente 70–75% sobre o salário-base.",
+    },
+    {
+      q: "Por que portaria 24h precisa de 4 porteiros por entrada?",
+      a: "Na escala 12×36 — a mais comum em condomínios —, cada porteiro trabalha 12 horas e folga as 36 horas seguintes. Para cobrir 24h/dia (turno dia + turno noite), são necessários 2 porteiros por dia. Como cada um trabalha em dias alternados, precisam de 4 porteiros por posto para não haver nenhum turno descoberto ao longo da semana, incluindo fins de semana e feriados.",
+    },
+    {
+      q: "Como o padrão do condomínio afeta o custo?",
+      a: "Condomínios de alto padrão e luxo têm custos muito maiores por unidade por três razões: mais funcionários por unidade, salários mais altos (compatíveis com o perfil do empreendimento), e mais amenidades para manter — piscinas, academias, jardins elaborados e salões de festas aumentam significativamente o custo fixo mensal.",
+    },
+    {
+      q: "Por que o número de portarias afeta o custo?",
+      a: "Cada portaria é um posto de trabalho independente que precisa ser coberto em escala 12×36, exigindo 4 porteiros por portaria para cobertura 24h/7 dias. Um condomínio com 2 portarias distintas tem o dobro do custo de portaria de um com apenas 1 — independentemente do número de torres. Prédios com 2 torres frequentemente compartilham uma única portaria, por isso o campo pede o número de portarias e não de torres.",
+    },
+    {
+      q: "O fundo de reserva é obrigatório?",
+      a: "Sim. A Lei 4.591/1964 e o Código Civil (art. 1.348) obrigam a criação de fundo de reserva. A convenção do condomínio define o percentual — geralmente entre 5% e 10% das despesas mensais. O fundo existe para cobrir despesas extraordinárias sem necessidade de cobranças emergenciais dos moradores.",
+    },
+  ],
+
+  "/rateio-condominio": [
+    {
+      q: "Qual a diferença entre rateio igualitário e por fração ideal?",
+      a: "No rateio igualitário, todos os apartamentos pagam o mesmo valor independente do tamanho. No rateio por fração ideal, cada unidade paga proporcionalmente à sua fração do terreno — coberturas e apartamentos maiores pagam mais. A maioria das convenções adota um modelo misto: igualitário para despesas ordinárias e por fração para obras.",
+    },
+    {
+      q: "O que é fração ideal e onde encontrá-la?",
+      a: "A fração ideal é o percentual do terreno total que pertence à sua unidade. Está descrita na convenção do condomínio e na escritura do imóvel. Uma cobertura típica pode ter fração ideal 2–3× maior que um apartamento padrão no mesmo prédio.",
+    },
+    {
+      q: "Posso contestar o critério de rateio do meu condomínio?",
+      a: "Sim, mas é necessário aprovação em assembleia com quórum específico (geralmente 2/3 dos condôminos). O critério de rateio está na convenção do condomínio, e alterá-la exige esse quórum qualificado. Consulte a convenção do seu condomínio para saber o critério vigente.",
+    },
+    {
+      q: "O inquilino paga a taxa de condomínio?",
+      a: "Depende do contrato de locação. A Lei do Inquilinato permite que as despesas ordinárias do condomínio sejam repassadas ao inquilino. Despesas extraordinárias (obras, reformas estruturais, fundo de reserva) são responsabilidade do proprietário, mesmo que o imóvel esteja alugado.",
+    },
+    {
+      q: "O que acontece com as unidades inadimplentes?",
+      a: "A inadimplência de um condômino não reduz os serviços do condomínio — as despesas continuam e o restante dos condôminos absorve provisoriamente o custo. O condomínio pode cobrar multa de 2%, juros de 1% ao mês e corrigir o débito pelo IPCA. Em último caso, pode entrar com ação de execução e incluir o devedor no SPC/SERASA.",
+    },
+  ],
+
+  "/fundo-reserva-condominio": [
+    {
+      q: "Qual o percentual ideal para o fundo de reserva?",
+      a: "A maioria das convenções estabelece 5% das despesas mensais. Especialistas em administração condominial recomendam entre 5% e 10%, dependendo da idade do prédio. Condomínios mais antigos (10+ anos) devem aportar mais, pois as necessidades de manutenção estrutural aumentam com o tempo.",
+    },
+    {
+      q: "O fundo de reserva pode ser investido?",
+      a: "Sim. O condomínio pode e deve aplicar o fundo de reserva em investimentos conservadores: poupança, CDB de banco de primeira linha ou Tesouro Direto. A decisão de onde investir deve ser aprovada em assembleia. O rendimento pertence ao condomínio e é incorporado ao saldo.",
+    },
+    {
+      q: "O síndico pode usar o fundo de reserva sem aprovação?",
+      a: "Apenas para despesas urgentes e inadiáveis. Para obras planejadas, é necessário aprovação em assembleia. O uso indevido do fundo de reserva configura má gestão e pode responsabilizar civil e criminalmente o síndico. Toda movimentação deve ser prestada em contas na assembleia anual.",
+    },
+    {
+      q: "O que acontece quando o fundo de reserva é insuficiente para uma obra?",
+      a: "O condomínio precisa aprovar uma cobrança extraordinária — um rateio especial dividido entre todos os condôminos proporcionalmente. Alternativamente, pode contratar crédito condominial (empréstimo específico para condomínios) e pagar parcelado. Ter um fundo de reserva robusto evita essas situações.",
+    },
+    {
+      q: "Posso pedir restituição do fundo de reserva ao vender o apartamento?",
+      a: "Não. O fundo de reserva pertence ao condomínio, não ao condômino individualmente. Ao vender o imóvel, você cede o imóvel com o direito de uso das áreas comuns, mas não tem direito a receber de volta o que contribuiu ao fundo. O novo proprietário passa a contribuir e a se beneficiar.",
+    },
+  ],
+
+  "/consumo-energia": [
+    {
+      q: "Quais aparelhos mais consomem energia em casa?",
+      a: "Os maiores vilões no Brasil são: chuveiro elétrico (em uso intenso pode representar 20–30% da conta), ar-condicionado (especialmente os modelos mais antigos sem inverter), geladeira (funciona 24h e representa 10–20%) e secadora de roupas. Juntos, esses quatro aparelhos podem somar 70–80% do consumo mensal.",
+    },
+    {
+      q: "O ar-condicionado inverter consome muito menos?",
+      a: "Sim. Um ar-condicionado inverter consome em média 35–60% menos energia que um modelo convencional de mesma capacidade. O inverter ajusta a velocidade do compressor continuamente, enquanto o convencional liga e desliga. Em uso diário, a economia pode pagar o custo de troca em 1–2 anos.",
+    },
+    {
+      q: "O que é a bandeira tarifária e como ela afeta minha conta?",
+      a: "A bandeira tarifária é um sistema de cobrança extra quando o nível dos reservatórios hidrelétricos cai. Bandeira verde = sem cobrança extra. Amarela = R$ 0,01874/kWh. Vermelha 1 = R$ 0,03971/kWh. Vermelha 2 = R$ 0,09492/kWh. Em períodos de seca prolongada, a bandeira vermelha 2 pode aumentar a conta em 10–15%.",
+    },
+    {
+      q: "Vale a pena trocar lâmpadas incandescentes por LED?",
+      a: "Muito. Uma lâmpada LED de 9W entrega a mesma luminosidade de uma incandescente de 60W, consumindo 85% menos energia. Para uma casa com 10 lâmpadas usadas 4h/dia, a troca economiza cerca de 60 kWh/mês — equivalente a R$ 45–60 por mês na conta de luz. O payback do investimento é rápido, geralmente menos de 6 meses.",
+    },
+    {
+      q: "Como calcular a tarifa de energia elétrica da minha distribuidora?",
+      a: "Sua conta de energia mostra o consumo em kWh e o valor total. Divida o valor total (excluindo tributos fixos como COSIP) pelo kWh consumido para obter a tarifa efetiva. As tarifas variam muito por estado e distribuidora — de R$ 0,55/kWh a R$ 1,00/kWh dependendo da região e da faixa de consumo.",
+    },
+  ],
+
+  "/consumo-agua": [
+    {
+      q: "Qual o consumo médio de água por pessoa no Brasil?",
+      a: "Segundo o SNIS (Sistema Nacional de Informações sobre Saneamento), o consumo médio brasileiro é de aproximadamente 154 litros por pessoa por dia. Isso varia bastante: em cidades maiores como SP o consumo é menor (~140L), enquanto em cidades com acesso fácil a água pode ultrapassar 200L/pessoa/dia.",
+    },
+    {
+      q: "O que mais consome água em casa?",
+      a: "O banho é responsável por 30–40% do consumo doméstico total, seguido pela descarga (25–30%) e torneiras de pia e cozinha (20–25%). A máquina de lavar representa cerca de 10–15%. O chuveiro de 12L/min com banho de 15 minutos consome 180L por banho — um dos maiores desperdícios facilmente corrigíveis.",
+    },
+    {
+      q: "Como reduzir o consumo de água em casa?",
+      a: "As medidas mais eficazes: trocar a descarga de 9L para 6L (economiza ~45L/pessoa/dia), reduzir o tempo de banho em 5 minutos (economiza 60L por banho com chuveiro normal), instalar arejadores nas torneiras (reduzem o fluxo de 12L/min para 6L/min sem perder pressão), e usar a máquina de lavar sempre cheia.",
+    },
+    {
+      q: "Quanto custa 1m³ de água nas principais cidades?",
+      a: "As tarifas variam significativamente: São Paulo (Sabesp) ~R$ 11–20/m³ dependendo da faixa, Rio de Janeiro (Cedae) ~R$ 8–15/m³, Belo Horizonte (Copasa) ~R$ 10–18/m³. Todas utilizam tarifa progressiva — quanto mais você consome, mais cara fica cada m³ adicional.",
+    },
+    {
+      q: "A piscina consome muita água?",
+      a: "Uma piscina residencial de 50m³ (padrão para casas) perde em média 1–3m³ por mês em evaporação e respingos. Se for necessário esvaziar e encher novamente, o consumo é muito maior. Cobrir a piscina quando não está em uso reduz a evaporação em até 70% e é a medida mais econômica.",
+    },
+  ],
+
+  "/consumo-gas": [
+    {
+      q: "Quanto dura um botijão P13 de gás?",
+      a: "Para uma família de 4 pessoas usando fogão e aquecedor a gás com banhos médios de 10 minutos, um botijão P13 (13kg) dura em média 30–45 dias. Só com fogão (sem aquecedor), pode durar 60–90 dias. O aquecedor de água é responsável por 50–70% do consumo de gás na maioria das residências.",
+    },
+    {
+      q: "Gás natural encanado é mais barato que botijão?",
+      a: "Em geral, sim — o gás natural encanado costuma ser 20–40% mais barato por unidade de energia do que o GLP de botijão, além de oferecer mais conveniência. No entanto, exige obra para instalação e é disponível apenas em algumas cidades e bairros. O custo fixo da disponibilidade também deve ser considerado na conta.",
+    },
+    {
+      q: "Qual a diferença entre GLP e Gás Natural?",
+      a: "O GLP (Gás Liquefeito de Petróleo) é o gás do botijão ou do encanamento de alguns prédios — mistura de propano e butano. O Gás Natural (GN) vem da rede pública de distribuição, é composto principalmente de metano e tem menor densidade energética por m³ (exige mais m³ para a mesma energia que o GLP).",
+    },
+    {
+      q: "O aquecedor de passagem consome mais gás que o de acumulação?",
+      a: "O aquecedor de passagem (instantâneo) aquece a água no momento do uso com alta potência. O de acumulação mantém um reservatório quente continuamente. Para famílias maiores com uso intenso, o de passagem pode ser mais eficiente por não ter perdas de calor no reservatório. Para uso esporádico, o de acumulação tende a ser mais econômico.",
+    },
+    {
+      q: "Como saber se tem vazamento de gás?",
+      a: "O gás é odorizado artificialmente com mercaptano para ser detectável pelo cheiro. Sinais de vazamento: cheiro de ovo podre, pressão anormalmente baixa no fogão, conta de gás muito acima do esperado. Em caso de suspeita: não acenda interruptores, ventile o ambiente, feche o registro e chame a distribuidora ou bombeiros.",
+    },
+  ],
 };

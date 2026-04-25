@@ -61,7 +61,7 @@ export default function Image() {
             lineHeight: "1.45",
           }}
         >
-          29 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil
+          40 calculadoras gratuitas para compra, financiamento, aluguel, reforma e investimento imobiliário no Brasil
         </div>
 
         <div

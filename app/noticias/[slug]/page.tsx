@@ -30,11 +30,13 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.date,
       locale: "pt_BR",
+      images: [{ url: `${SITE_URL}/noticias/${slug}/opengraph-image`, width: 1200, height: 630, alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [`${SITE_URL}/noticias/${slug}/opengraph-image`],
     },
   };
 }
@@ -57,22 +59,34 @@ export default async function NoticiaPage({
 
   const newsSchema = {
     "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    headline: post.title,
-    description: post.description,
-    datePublished: post.date,
-    inLanguage: "pt-BR",
-    author: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
-    publisher: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
-    url: `${SITE_URL}/noticias/${slug}`,
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
-        { "@type": "ListItem", position: 2, name: "Notícias", item: `${SITE_URL}/noticias` },
-        { "@type": "ListItem", position: 3, name: post.title, item: `${SITE_URL}/noticias/${slug}` },
-      ],
-    },
+    "@graph": [
+      {
+        "@type": "NewsArticle",
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        dateModified: post.date,
+        inLanguage: "pt-BR",
+        mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/noticias/${slug}` },
+        image: { "@type": "ImageObject", url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630 },
+        author: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
+        publisher: {
+          "@type": "Organization",
+          name: "CalculaImóvel",
+          url: SITE_URL,
+          logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg`, width: 512, height: 512 },
+        },
+        url: `${SITE_URL}/noticias/${slug}`,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "CalculaImóvel", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Notícias", item: `${SITE_URL}/noticias` },
+          { "@type": "ListItem", position: 3, name: post.title, item: `${SITE_URL}/noticias/${slug}` },
+        ],
+      },
+    ],
   };
 
   return (

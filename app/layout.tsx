@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Suspense } from "react";
 import Script from "next/script";
+import { Inter } from "next/font/google";
 import Header from "@/components/Header";
 import IndicesTicker from "@/components/IndicesTicker";
 import Footer from "@/components/Footer";
 import { SITE_URL, ADSENSE_CLIENT, GA_ID } from "@/lib/seo";
+
+const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -30,6 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CalculaImóvel — Calculadoras Imobiliárias para Brasileiros",
     description: "40 calculadoras gratuitas para decisões imobiliárias no Brasil.",
+    site: "@calculaimovel",
   },
   robots: {
     index: true,
@@ -39,22 +43,37 @@ export const metadata: Metadata = {
   alternates: { canonical: SITE_URL },
 };
 
-const websiteSchema = {
+const siteSchema = {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "CalculaImóvel",
-  url: SITE_URL,
-  description: "Calculadoras imobiliárias gratuitas para brasileiros",
-  inLanguage: "pt-BR",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: "CalculaImóvel",
+      url: SITE_URL,
+      description: "Calculadoras imobiliárias gratuitas para brasileiros",
+      inLanguage: "pt-BR",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/?q={search_term_string}` },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "Organization",
+      name: "CalculaImóvel",
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg`, width: 512, height: 512 },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className="h-full antialiased">
+    <html lang="pt-BR" className={`h-full antialiased ${inter.variable}`}>
       <head suppressHydrationWarning>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
       </head>
       <body className="min-h-full flex flex-col bg-slate-50">

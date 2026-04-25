@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getAllNews } from "@/lib/news";
 import NewsCard from "@/components/noticias/NewsCard";
 import { SITE_URL } from "@/lib/seo";
 import { Newspaper } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Notícias do Mercado Imobiliário | CalculaImóvel",
+  title: { absolute: "Notícias do Mercado Imobiliário | CalculaImóvel" },
   description:
     "Acompanhe as principais notícias do mercado imobiliário brasileiro: legislação, taxas, financiamento, construção e tendências de preços.",
   alternates: { canonical: `${SITE_URL}/noticias` },
@@ -41,7 +42,7 @@ export default function NoticiasPage() {
         <>
           {/* Destaque — primeira notícia */}
           <div className="mb-8">
-            <a href={`/noticias/${noticias[0].slug}`} className="group block bg-white rounded-2xl border border-slate-100 p-7 hover:shadow-md transition-all">
+            <Link href={`/noticias/${noticias[0].slug}`} className="group block bg-white rounded-2xl border border-slate-100 p-7 hover:shadow-md transition-all">
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-xs font-semibold bg-slate-900 text-white px-2.5 py-1 rounded-full">
                   Mais recente
@@ -54,7 +55,7 @@ export default function NoticiasPage() {
                 {noticias[0].title}
               </h2>
               <p className="text-slate-500 leading-relaxed max-w-2xl">{noticias[0].description}</p>
-            </a>
+            </Link>
           </div>
 
           {/* Grid restante */}
