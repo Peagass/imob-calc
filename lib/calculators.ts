@@ -1483,43 +1483,85 @@ interface ITCMDFaixa {
   aliquota: number;
 }
 
-interface ITCMDConfig {
-  nome: string;
+interface ITCMDTipoConfig {
   tipo: "flat" | "progressive";
   aliquota?: number;
   faixas?: ITCMDFaixa[];
   obs?: string;
 }
 
+interface ITCMDConfig {
+  nome: string;
+  heranca: ITCMDTipoConfig;
+  doacao: ITCMDTipoConfig;
+}
+
+// Helper para criar config igual para herança e doação
+function igual(cfg: ITCMDTipoConfig, nome: string): ITCMDConfig {
+  return { nome, heranca: cfg, doacao: cfg };
+}
+
 const ITCMD_ESTADOS: Record<string, ITCMDConfig> = {
-  AC: { nome: "Acre", tipo: "flat", aliquota: 4 },
-  AL: { nome: "Alagoas", tipo: "flat", aliquota: 4 },
-  AM: { nome: "Amazonas", tipo: "progressive", faixas: [{ ate: 50000, aliquota: 2 }, { ate: Infinity, aliquota: 4 }] },
-  AP: { nome: "Amapá", tipo: "flat", aliquota: 4 },
-  BA: { nome: "Bahia", tipo: "progressive", faixas: [{ ate: 100000, aliquota: 3.5 }, { ate: 300000, aliquota: 5 }, { ate: Infinity, aliquota: 8 }], obs: "Taxa varia conforme parentesco" },
-  CE: { nome: "Ceará", tipo: "progressive", faixas: [{ ate: 150000, aliquota: 2 }, { ate: 400000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
-  DF: { nome: "Distrito Federal", tipo: "progressive", faixas: [{ ate: 1000000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }] },
-  ES: { nome: "Espírito Santo", tipo: "flat", aliquota: 4 },
-  GO: { nome: "Goiás", tipo: "progressive", faixas: [{ ate: 25000, aliquota: 2 }, { ate: 150000, aliquota: 3 }, { ate: 300000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
-  MA: { nome: "Maranhão", tipo: "progressive", faixas: [{ ate: 30000, aliquota: 1 }, { ate: 100000, aliquota: 3 }, { ate: 300000, aliquota: 5 }, { ate: Infinity, aliquota: 7 }] },
-  MG: { nome: "Minas Gerais", tipo: "flat", aliquota: 5 },
-  MS: { nome: "Mato Grosso do Sul", tipo: "flat", aliquota: 6 },
-  MT: { nome: "Mato Grosso", tipo: "progressive", faixas: [{ ate: 100000, aliquota: 2 }, { ate: 500000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
-  PA: { nome: "Pará", tipo: "progressive", faixas: [{ ate: 200000, aliquota: 2 }, { ate: 500000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }] },
-  PB: { nome: "Paraíba", tipo: "progressive", faixas: [{ ate: 50000, aliquota: 2 }, { ate: 200000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
-  PE: { nome: "Pernambuco", tipo: "progressive", faixas: [{ ate: 100000, aliquota: 2 }, { ate: 300000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
-  PI: { nome: "Piauí", tipo: "progressive", faixas: [{ ate: 200000, aliquota: 2 }, { ate: 500000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
-  PR: { nome: "Paraná", tipo: "flat", aliquota: 4 },
-  RJ: { nome: "Rio de Janeiro", tipo: "progressive", faixas: [{ ate: 100000, aliquota: 4 }, { ate: 400000, aliquota: 4.5 }, { ate: Infinity, aliquota: 8 }], obs: "Herança: 4%. Doação pode ter alíquota maior" },
-  RN: { nome: "Rio Grande do Norte", tipo: "progressive", faixas: [{ ate: 100000, aliquota: 3 }, { ate: 400000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }] },
-  RO: { nome: "Rondônia", tipo: "flat", aliquota: 4 },
-  RR: { nome: "Roraima", tipo: "flat", aliquota: 4 },
-  RS: { nome: "Rio Grande do Sul", tipo: "progressive", faixas: [{ ate: 30000, aliquota: 0 }, { ate: 150000, aliquota: 3 }, { ate: 450000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }], obs: "Isenção para heranças de pequeno valor" },
-  SC: { nome: "Santa Catarina", tipo: "progressive", faixas: [{ ate: 20000, aliquota: 1 }, { ate: 50000, aliquota: 3 }, { ate: 200000, aliquota: 5 }, { ate: 500000, aliquota: 7 }, { ate: Infinity, aliquota: 8 }] },
-  SE: { nome: "Sergipe", tipo: "flat", aliquota: 8, obs: "Alíquota aumentada em 2023" },
-  SP: { nome: "São Paulo", tipo: "flat", aliquota: 4, obs: "Proposta de alíquota progressiva até 8% em tramitação" },
-  TO: { nome: "Tocantins", tipo: "progressive", faixas: [{ ate: 100000, aliquota: 2 }, { ate: 300000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] },
+  AC: igual({ tipo: "flat", aliquota: 4 }, "Acre"),
+  AL: igual({ tipo: "flat", aliquota: 4 }, "Alagoas"),
+  AM: igual({ tipo: "progressive", faixas: [{ ate: 50000, aliquota: 2 }, { ate: Infinity, aliquota: 4 }] }, "Amazonas"),
+  AP: igual({ tipo: "flat", aliquota: 4 }, "Amapá"),
+  BA: igual({ tipo: "progressive", faixas: [{ ate: 100000, aliquota: 3.5 }, { ate: 300000, aliquota: 5 }, { ate: Infinity, aliquota: 8 }], obs: "Taxa varia conforme parentesco" }, "Bahia"),
+  CE: igual({ tipo: "progressive", faixas: [{ ate: 150000, aliquota: 2 }, { ate: 400000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Ceará"),
+  DF: igual({ tipo: "progressive", faixas: [{ ate: 1000000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }] }, "Distrito Federal"),
+  ES: igual({ tipo: "flat", aliquota: 4 }, "Espírito Santo"),
+  GO: igual({ tipo: "progressive", faixas: [{ ate: 25000, aliquota: 2 }, { ate: 150000, aliquota: 3 }, { ate: 300000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Goiás"),
+  MA: igual({ tipo: "progressive", faixas: [{ ate: 30000, aliquota: 1 }, { ate: 100000, aliquota: 3 }, { ate: 300000, aliquota: 5 }, { ate: Infinity, aliquota: 7 }] }, "Maranhão"),
+  MG: igual({ tipo: "flat", aliquota: 5 }, "Minas Gerais"),
+  MS: igual({ tipo: "flat", aliquota: 6 }, "Mato Grosso do Sul"),
+  MT: igual({ tipo: "progressive", faixas: [{ ate: 100000, aliquota: 2 }, { ate: 500000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Mato Grosso"),
+  PA: igual({ tipo: "progressive", faixas: [{ ate: 200000, aliquota: 2 }, { ate: 500000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }] }, "Pará"),
+  PB: igual({ tipo: "progressive", faixas: [{ ate: 50000, aliquota: 2 }, { ate: 200000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Paraíba"),
+  PE: igual({ tipo: "progressive", faixas: [{ ate: 100000, aliquota: 2 }, { ate: 300000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Pernambuco"),
+  PI: igual({ tipo: "progressive", faixas: [{ ate: 200000, aliquota: 2 }, { ate: 500000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Piauí"),
+  PR: igual({ tipo: "flat", aliquota: 4 }, "Paraná"),
+  // RJ — Lei 7.174/2015: herança progressiva 4/4,5/8%; doação flat 4% (Lei 1.427/89)
+  RJ: {
+    nome: "Rio de Janeiro",
+    heranca: { tipo: "progressive", faixas: [{ ate: 100000, aliquota: 4 }, { ate: 400000, aliquota: 4.5 }, { ate: Infinity, aliquota: 8 }], obs: "Herança/Causa Mortis: progressiva 4%→8% (Lei 7.174/2015)" },
+    doacao: { tipo: "flat", aliquota: 4, obs: "Doação: alíquota flat 4% (Lei 1.427/89)" },
+  },
+  RN: igual({ tipo: "progressive", faixas: [{ ate: 100000, aliquota: 3 }, { ate: 400000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }] }, "Rio Grande do Norte"),
+  RO: igual({ tipo: "flat", aliquota: 4 }, "Rondônia"),
+  RR: igual({ tipo: "flat", aliquota: 4 }, "Roraima"),
+  // RS — Lei 8.821/89: herança tem isenção até ~R$ 30k; doação não tem isenção, começa em 3%
+  RS: {
+    nome: "Rio Grande do Sul",
+    heranca: { tipo: "progressive", faixas: [{ ate: 30000, aliquota: 0 }, { ate: 150000, aliquota: 3 }, { ate: 450000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }], obs: "Herança: isenção até ~R$ 30 mil (Lei 8.821/89)" },
+    doacao: { tipo: "progressive", faixas: [{ ate: 150000, aliquota: 3 }, { ate: 450000, aliquota: 4 }, { ate: Infinity, aliquota: 6 }], obs: "Doação: sem isenção inicial (Lei 8.821/89)" },
+  },
+  SC: igual({ tipo: "progressive", faixas: [{ ate: 20000, aliquota: 1 }, { ate: 50000, aliquota: 3 }, { ate: 200000, aliquota: 5 }, { ate: 500000, aliquota: 7 }, { ate: Infinity, aliquota: 8 }] }, "Santa Catarina"),
+  SE: igual({ tipo: "flat", aliquota: 8, obs: "Alíquota única 8% desde 2023" }, "Sergipe"),
+  SP: igual({ tipo: "flat", aliquota: 4, obs: "Proposta de alíquota progressiva até 8% em tramitação" }, "São Paulo"),
+  TO: igual({ tipo: "progressive", faixas: [{ ate: 100000, aliquota: 2 }, { ate: 300000, aliquota: 4 }, { ate: Infinity, aliquota: 8 }] }, "Tocantins"),
 };
+
+function aplicarFaixas(faixas: ITCMDFaixa[], base: number): { faixasAplicadas: ITCMDResult["faixasAplicadas"]; imposto: number } {
+  let restante = base;
+  let limiteAnterior = 0;
+  let imposto = 0;
+  const faixasAplicadas: ITCMDResult["faixasAplicadas"] = [];
+  for (const faixa of faixas) {
+    if (restante <= 0) break;
+    const baseNaFaixa = Math.min(restante, faixa.ate - limiteAnterior);
+    const impostoFaixa = baseNaFaixa * (faixa.aliquota / 100);
+    if (baseNaFaixa > 0) {
+      const label = faixa.ate === Infinity
+        ? `Acima de R$ ${limiteAnterior.toLocaleString("pt-BR")}`
+        : `Até R$ ${faixa.ate.toLocaleString("pt-BR")}`;
+      faixasAplicadas.push({ faixa: label, base: baseNaFaixa, aliquota: faixa.aliquota, imposto: impostoFaixa });
+    }
+    imposto += impostoFaixa;
+    restante -= baseNaFaixa;
+    limiteAnterior = faixa.ate;
+  }
+  return { faixasAplicadas, imposto };
+}
 
 export function calcularITCMD(input: ITCMDInput): ITCMDResult {
   const { valorBem, uf, tipoTransmissao } = input;
@@ -1529,38 +1571,26 @@ export function calcularITCMD(input: ITCMDInput): ITCMDResult {
     return { impostoDevido: 0, aliquotaEfetiva: 0, baseCalculo: valorBem, faixasAplicadas: [], observacao: "Estado não encontrado" };
   }
 
-  // Doação geralmente tem alíquota maior em alguns estados — aplicamos multiplicador 1.0 (mesmo valor por simplicidade)
-  // Estados que diferenciam (RJ, BA) são sinalizados na observação
+  const tipoConfig = tipoTransmissao === "heranca" ? config.heranca : config.doacao;
   const baseCalculo = valorBem;
   let impostoDevido = 0;
-  const faixasAplicadas: ITCMDResult["faixasAplicadas"] = [];
+  let faixasAplicadas: ITCMDResult["faixasAplicadas"] = [];
 
-  if (config.tipo === "flat") {
-    const aliq = (config.aliquota ?? 0) / 100;
+  if (tipoConfig.tipo === "flat") {
+    const aliq = (tipoConfig.aliquota ?? 0) / 100;
     impostoDevido = baseCalculo * aliq;
-    faixasAplicadas.push({ faixa: "Alíquota única", base: baseCalculo, aliquota: config.aliquota ?? 0, imposto: impostoDevido });
-  } else if (config.faixas) {
-    let restante = baseCalculo;
-    let limiteAnterior = 0;
-    for (const faixa of config.faixas) {
-      if (restante <= 0) break;
-      const baseNaFaixa = Math.min(restante, faixa.ate - limiteAnterior);
-      const imposto = baseNaFaixa * (faixa.aliquota / 100);
-      if (baseNaFaixa > 0) {
-        const label = faixa.ate === Infinity ? `Acima de R$ ${limiteAnterior.toLocaleString("pt-BR")}` : `Até R$ ${faixa.ate.toLocaleString("pt-BR")}`;
-        faixasAplicadas.push({ faixa: label, base: baseNaFaixa, aliquota: faixa.aliquota, imposto });
-      }
-      impostoDevido += imposto;
-      restante -= baseNaFaixa;
-      limiteAnterior = faixa.ate;
-    }
+    faixasAplicadas.push({ faixa: "Alíquota única", base: baseCalculo, aliquota: tipoConfig.aliquota ?? 0, imposto: impostoDevido });
+  } else if (tipoConfig.faixas) {
+    const resultado = aplicarFaixas(tipoConfig.faixas, baseCalculo);
+    impostoDevido = resultado.imposto;
+    faixasAplicadas = resultado.faixasAplicadas;
   }
 
   const aliquotaEfetiva = baseCalculo > 0 ? (impostoDevido / baseCalculo) * 100 : 0;
   const observacao = [
     `${config.nome} (${uf})`,
-    tipoTransmissao === "heranca" ? "Herança / Causa Mortis" : "Doação",
-    config.obs ?? "",
+    tipoTransmissao === "heranca" ? "Herança / Causa Mortis" : "Doação em vida",
+    tipoConfig.obs ?? "",
     "As alíquotas são aproximadas — consulte a legislação estadual vigente e um especialista.",
   ].filter(Boolean).join(" · ");
 
