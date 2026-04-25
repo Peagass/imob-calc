@@ -24,7 +24,7 @@ export default function SugestaoCalculadora() {
     });
 
     try {
-      const res = await fetch("/", {
+      const res = await fetch("/netlify-forms.html", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: body.toString(),
@@ -44,12 +44,6 @@ export default function SugestaoCalculadora() {
 
   return (
     <>
-      {/* Formulário oculto para o Netlify detectar em build */}
-      <form name="sugestao-calculadora" data-netlify="true" hidden>
-        <input type="text" name="sugestao" />
-        <input type="email" name="email" />
-      </form>
-
       <div className="mt-10 rounded-2xl p-8 bg-gradient-to-br from-slate-800 to-slate-900 text-white">
         <div className="flex flex-col md:flex-row md:items-center gap-8">
           {/* Texto */}
