@@ -5,9 +5,9 @@ import remarkUnwrapImages from "remark-unwrap-images";
 import Link from "next/link";
 import MdxImage from "@/components/MdxImage";
 import Summary from "@/components/Summary";
-import { getAllNews, getNewsBySlug } from "@/lib/news";
+import { getAllNews, getNewsBySlug, getRelatedNews } from "@/lib/news";
 import { SITE_URL } from "@/lib/seo";
-import { Clock, ArrowLeft, ExternalLink } from "lucide-react";
+import { Clock, ArrowLeft, ExternalLink, Newspaper } from "lucide-react";
 
 export const dynamicParams = false;
 
@@ -59,6 +59,7 @@ export default async function NoticiaPage({
 }) {
   const { slug } = await params;
   const post = getNewsBySlug(slug);
+  const related = getRelatedNews(slug, post.category);
 
   const newsSchema = {
     "@context": "https://schema.org",
@@ -68,10 +69,10 @@ export default async function NoticiaPage({
         headline: post.title,
         description: post.description,
         datePublished: post.date,
-        dateModified: post.date,
+        dateModified: post.lastModified ?? post.date,
         inLanguage: "pt-BR",
         mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/noticias/${slug}` },
-        image: { "@type": "ImageObject", url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630 },
+        image: { "@type": "ImageObject", url: `${SITE_URL}/noticias/${slug}/opengraph-image`, width: 1200, height: 630 },
         author: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
         publisher: {
           "@type": "Organization",
@@ -80,6 +81,13 @@ export default async function NoticiaPage({
           logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg`, width: 512, height: 512 },
         },
         url: `${SITE_URL}/noticias/${slug}`,
+        speakable: {
+          "@type": "SpeakableSpecification",
+          cssSelector: ["h1", ".article-summary", "h2:first-of-type + p"],
+        },
+        ...(post.mentions?.length
+          ? { mentions: post.mentions.map((name) => ({ "@type": "Organization", name })) }
+          : {}),
       },
       {
         "@type": "BreadcrumbList",
@@ -145,8 +153,35 @@ export default async function NoticiaPage({
         <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm, remarkUnwrapImages] } }} components={{ img: (props) => <MdxImage {...props} />, Summary }} />
       </article>
 
+      {/* Artigos relacionados */}
+      {related.length > 0 && (
+        <div className="mt-10 pt-8 border-t border-slate-100">
+          <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <Newspaper className="w-5 h-5 text-slate-400" />
+            Notícias relacionadas
+          </h2>
+          <div className="space-y-3">
+            {related.map((n) => (
+              <Link
+                key={n.slug}
+                href={`/noticias/${n.slug}`}
+                className="flex items-start justify-between gap-4 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-xl px-4 py-3 transition-colors group"
+              >
+                <div>
+                  <p className="text-sm font-semibold text-slate-800 group-hover:text-indigo-700 leading-snug">{n.title}</p>
+                  <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{n.description}</p>
+                </div>
+                <span className="text-xs text-slate-400 shrink-0 mt-0.5 flex items-center gap-1">
+                  <Clock className="w-3 h-3" />{n.readingTime} min
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Voltar */}
-      <div className="mt-10 pt-8 border-t border-slate-100">
+      <div className="mt-6 pt-6 border-t border-slate-100">
         <Link href="/noticias" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Ver todas as notícias

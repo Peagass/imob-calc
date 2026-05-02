@@ -9,10 +9,12 @@ export interface NewsMeta {
   title: string;
   description: string;
   date: string;
+  lastModified?: string;
   category: string;
   tags: string[];
   fonte?: string;
   readingTime: number;
+  mentions?: string[];
 }
 
 export interface NewsPost extends NewsMeta {
@@ -37,4 +39,10 @@ export function getNewsBySlug(slug: string): NewsPost {
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
   return { slug, ...(data as Omit<NewsMeta, "slug">), content };
+}
+
+export function getRelatedNews(currentSlug: string, category: string, limit = 3): NewsMeta[] {
+  return getAllNews()
+    .filter((n) => n.slug !== currentSlug && n.category === category)
+    .slice(0, limit);
 }
