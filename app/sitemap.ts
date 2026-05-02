@@ -16,6 +16,20 @@ const bcbRoutes = new Set([
   "/airbnb-vs-aluguel",
 ]);
 
+// Calculadoras de maior intenção de busca — prioridade elevada para crawlers
+const highPriorityRoutes = new Set([
+  "/financiamento",
+  "/comprar-ou-alugar",
+  "/ganho-capital",
+  "/cap-rate",
+  "/reajuste-aluguel",
+  "/custos-compra",
+  "/mcmv",
+  "/fgts",
+  "/quanto-posso-financiar",
+  "/tributacao-aluguel",
+]);
+
 // Páginas institucionais estáticas
 const institutionalRoutes = new Set(["/sobre", "/metodologia"]);
 
@@ -33,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : bcbRoutes.has(route)
       ? "weekly"
       : "monthly",
-    priority: route === "/" ? 1 : institutionalRoutes.has(route) ? 0.5 : 0.8,
+    priority: route === "/" ? 1 : institutionalRoutes.has(route) ? 0.5 : highPriorityRoutes.has(route) ? 0.9 : 0.8,
   }));
 
   const blogIndex: MetadataRoute.Sitemap = [

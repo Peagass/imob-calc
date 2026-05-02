@@ -1,0 +1,76 @@
+# CalculaImóvel
+> Plataforma gratuita de calculadoras imobiliárias para brasileiros tomarem decisões com base em dados reais.
+
+CalculaImóvel oferece mais de 40 calculadoras cobrindo financiamento, aluguel, impostos, investimento e reforma imobiliária no Brasil. Os dados de índices (IPCA, IGP-M, INPC, Selic, TR) são atualizados automaticamente via API oficial do Banco Central do Brasil (BCB/SGS). As fórmulas seguem a resolução CMN 4.676/2018 e a legislação tributária vigente.
+
+## Calculadoras de Financiamento e Compra
+
+- [Simulador de Financiamento Imobiliário SAC e PRICE](https://calculaimovel.com.br/financiamento): Compare os sistemas SAC e PRICE com tabelas de amortização mês a mês, total de juros e impacto de diferentes taxas e prazos.
+- [Quanto Posso Financiar?](https://calculaimovel.com.br/quanto-posso-financiar): Calcula o valor máximo de imóvel financiável com base na renda e entrada disponível, respeitando o limite de 30% de comprometimento.
+- [Calculadora de Custos de Compra de Imóvel](https://calculaimovel.com.br/custos-compra): Calcula ITBI, escritura, registro em cartório e avaliação bancária — o custo total real além do preço anunciado.
+- [Simulador Minha Casa Minha Vida 2026](https://calculaimovel.com.br/mcmv): Descobre a faixa de renda no MCMV, o subsídio estimado e a parcela com taxas preferenciais do programa habitacional federal.
+- [Simulador de FGTS para Compra de Imóvel](https://calculaimovel.com.br/fgts): Projeta o saldo do FGTS na data da compra e calcula quanto usar como entrada, amortização ou quitação.
+- [Comparador de Financiamentos Imobiliários](https://calculaimovel.com.br/comparador-financiamento): Compara dois financiamentos lado a lado — taxas, parcelas e custo total real.
+- [Portabilidade de Financiamento Imobiliário](https://calculaimovel.com.br/portabilidade): Calcula a economia real da portabilidade de crédito imobiliário descontando os custos de transferência.
+- [Calculadora de Amortização Extraordinária](https://calculaimovel.com.br/amortizacao-extra): Simula quanto se economiza em juros e quantos meses se corta pagando amortizações extras.
+- [Simulador de Renegociação de Financiamento](https://calculaimovel.com.br/renegociacao-financiamento): Calcula a economia real de reduzir a taxa do financiamento, com breakeven e gráfico de economia acumulada.
+- [Poupança para Entrada de Imóvel](https://calculaimovel.com.br/poupanca-entrada): Calcula o aporte mensal necessário para juntar a entrada no prazo desejado, comparando poupança, CDB, LCI/LCA e Tesouro.
+- [Imóvel na Planta vs Pronto](https://calculaimovel.com.br/planta-vs-pronto): Compara custo total de imóvel na planta (com correção INCC e risco de atraso) versus imóvel pronto equivalente.
+- [Calculadora de Distrato de Imóvel na Planta](https://calculaimovel.com.br/distrato): Calcula o valor a receber de volta ao desfazer compra na planta, com base na Lei 13.786/2018.
+- [Consórcio vs Financiamento Imobiliário](https://calculaimovel.com.br/consorcio): Compara custo total de consórcio e financiamento considerando acesso imediato e custo de oportunidade.
+- [Calculadora de Leilão de Imóvel](https://calculaimovel.com.br/leilao-imovel): Calcula o custo real do arremate incluindo comissão do leiloeiro, ITBI, dívidas e reforma estimada.
+- [Comprar ou Alugar Imóvel?](https://calculaimovel.com.br/comprar-ou-alugar): Compara os dois caminhos considerando valorização, juros do financiamento e custo de oportunidade do capital.
+
+## Calculadoras de Aluguel
+
+- [Calculadora de Reajuste de Aluguel](https://calculaimovel.com.br/reajuste-aluguel): Calcula o novo valor do aluguel pelo IGP-M, IPCA, INPC ou índice personalizado com dados ao vivo do Banco Central.
+- [Quanto Cobrar de Aluguel?](https://calculaimovel.com.br/quanto-cobrar-aluguel): Define o aluguel mínimo para atingir o retorno alvo, comparando com cap rate e Selic ao vivo.
+- [Calculadora de Tributação do Aluguel](https://calculaimovel.com.br/tributacao-aluguel): Calcula o IR mensal (carnê-leão) sobre renda de aluguel com deduções de IPTU, condomínio e seguro. Tabela IRPF 2026.
+- [Calculadora de Rescisão Antecipada de Aluguel](https://calculaimovel.com.br/rescisao-aluguel): Calcula a multa proporcional ao tempo restante do contrato, com isenção por transferência de trabalho (Lei 8.245/91).
+- [Seguro Fiança vs Caução vs Fiador](https://calculaimovel.com.br/seguro-fianca): Compara o custo real das garantias locatícias e descobre a mais vantajosa para locador e inquilino.
+- [Airbnb vs Aluguel Convencional](https://calculaimovel.com.br/airbnb-vs-aluguel): Compara receita de temporada com aluguel fixo, calculando break-even de ocupação e sensibilidade por taxa.
+- [Fluxo de Caixa do Imóvel Alugado](https://calculaimovel.com.br/fluxo-caixa-imovel): Visão anual de receitas, despesas e IR do imóvel alugado com projeção de reajuste, vacância e yield líquido.
+
+## Calculadoras de Impostos Imobiliários
+
+- [Calculadora de Ganho de Capital na Venda de Imóvel](https://calculaimovel.com.br/ganho-capital): Calcula o IR sobre ganho de capital com isenções (imóvel único até R$440k, reinvestimento) e fatores de redução. IR 2026.
+- [Calculadora de Lucro Líquido na Venda de Imóvel](https://calculaimovel.com.br/lucro-venda): Calcula o lucro real após ITBI, corretagem, reformas e IR sobre ganho de capital.
+- [Calculadora de ITCMD](https://calculaimovel.com.br/itcmd): Calcula o imposto sobre herança e doação de imóvel nos 27 estados brasileiros com alíquotas atualizadas.
+- [Doação em Vida vs Inventário](https://calculaimovel.com.br/doacao-vs-inventario): Compara custo de transmitir patrimônio por doação ou inventário (ITCMD, honorários, custas).
+
+## Calculadoras de Investimento Imobiliário
+
+- [Cap Rate Imobiliário](https://calculaimovel.com.br/cap-rate): Calcula o cap rate (retorno) líquido do imóvel alugado descontando vacância, IPTU, condomínio e manutenção. Compara com a Selic ao vivo.
+- [Imóvel vs Renda Fixa](https://calculaimovel.com.br/imovel-vs-renda-fixa): Compara retorno total do imóvel para aluguel com o mesmo capital em CDI, Selic ou Tesouro.
+- [FII vs Imóvel Físico](https://calculaimovel.com.br/fii-vs-imovel): Compara fundos imobiliários (dividend yield) versus imóvel direto com aluguel no mesmo horizonte de investimento.
+- [TIR do Investimento Imobiliário](https://calculaimovel.com.br/tir-imovel): Calcula a Taxa Interna de Retorno real do imóvel considerando financiamento, aluguel, vacância e venda futura.
+- [Calculadora de Permuta de Imóvel](https://calculaimovel.com.br/permuta-imovel): Calcula torna, ITBI, cartório e IR na permuta de imóveis, comparando com venda e compra separadas.
+
+## Calculadoras de Reforma
+
+- [Estimativa de Reforma de Imóvel](https://calculaimovel.com.br/estimativa-reforma): Estima o custo de reforma por cômodo, tipo de obra e padrão de material.
+- [Retorno da Reforma antes da Venda](https://calculaimovel.com.br/retorno-reforma): Calcula o ROI da reforma comparado ao custo de oportunidade de manter o capital investido.
+
+## Calculadoras de Condomínio e Moradia
+
+- [Despesas de Condomínio](https://calculaimovel.com.br/despesas-condominio): Estima despesas mensais do condomínio por padrão de edifício.
+- [Rateio de Condomínio](https://calculaimovel.com.br/rateio-condominio): Calcula a taxa da unidade por critério igualitário, fração ideal, proporcional à área ou misto.
+- [Fundo de Reserva de Condomínio](https://calculaimovel.com.br/fundo-reserva-condominio): Projeta o saldo do fundo de reserva e calcula meses para atingir meta de obra.
+- [Consumo de Energia Elétrica](https://calculaimovel.com.br/consumo-energia): Estima kWh e valor da conta de luz por aparelho com bandeira tarifária.
+- [Consumo de Água](https://calculaimovel.com.br/consumo-agua): Estima m³ e conta mensal por moradores e hábitos de uso.
+- [Consumo de Gás](https://calculaimovel.com.br/consumo-gas): Estima consumo de GLP (botijão P13) e gás natural encanado por aparelho.
+- [Custo de Mudança](https://calculaimovel.com.br/custo-mudanca): Estima o frete por cômodos, distância e tipo de serviço.
+
+## Artigos e Análises do Mercado Imobiliário
+
+- [Selic a 14,50%: Segundo Corte Seguido, Mas Juros do Financiamento Ainda Não Cedem](https://calculaimovel.com.br/noticias/selic-14-50-segundo-corte-financiamento-imoveis-2026)
+- [Selic a 14,75%: O Que Muda no Financiamento Imobiliário](https://calculaimovel.com.br/noticias/selic-14-75-impacto-financiamento-imoveis-2026)
+- [Preços de Imóveis em SP e RJ em Alta em 2026](https://calculaimovel.com.br/noticias/precos-imoveis-sp-rj-alta-2026)
+- [MCMV: Atualização do Teto de Valor do Imóvel em 2026](https://calculaimovel.com.br/noticias/mcmv-teto-valor-imovel-2026-atualizacao)
+- [IGP-M Acumulado 12 Meses e Reajuste de Aluguel em 2026](https://calculaimovel.com.br/noticias/igpm-acumulado-12-meses-reajuste-aluguel-2026)
+- [Retrofit com Varanda: Prédios Antigos Ganham Novo Valor](https://calculaimovel.com.br/noticias/retrofit-varanda-predio-antigo-valorizacao-imovel-2026)
+
+## Metodologia e Fontes
+
+- [Metodologia das Calculadoras](https://calculaimovel.com.br/metodologia): Fórmulas, fontes e premissas de cada calculadora. Dados de índices via API BCB/SGS. Alíquotas e faixas conforme legislação vigente.
+- [Sobre o CalculaImóvel](https://calculaimovel.com.br/sobre)

@@ -13,7 +13,7 @@ export default function FaqSection({ path }: Props) {
       <h2 className="text-xl font-bold text-slate-900 mb-4">Perguntas frequentes</h2>
       <div className="space-y-2">
         {items.map((item, i) => (
-          <details key={i} className="group bg-white border border-slate-100 rounded-xl overflow-hidden">
+          <details key={i} open={i === 0} className="group bg-white border border-slate-100 rounded-xl overflow-hidden">
             <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-sm font-medium text-slate-800 list-none select-none">
               {item.q}
               <svg
