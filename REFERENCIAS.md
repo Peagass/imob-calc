@@ -58,11 +58,33 @@ Ao recomendar qualquer ferramenta, plataforma ou serviço externo (para tráfego
 
 ## Checklist ao adicionar novo conteúdo
 
+### Dados e legislação
 - [ ] Verificar se os valores numéricos são da legislação/tabela vigente no ano atual
-- [ ] Nunca escrever "2024" em títulos SEO, descrições ou textos de UI sem confirmar que é o ano correto
+- [ ] Nunca escrever o ano corrente sem confirmar que é o ano correto
 - [ ] Para artigos de notícias (`content/noticias/`): usar dados com fonte e data explícita
 - [ ] Para FAQs (`lib/faq.ts`): conferir se os valores citados ainda são válidos
 - [ ] Quando a fonte for uma API já integrada (BCB), confiar nos dados em tempo real — não hardcodar
+
+### AEO/GEO — obrigatório em cada nova peça de conteúdo
+
+**Notícia nova (`content/noticias/`):**
+- [ ] Frontmatter completo: `title`, `description`, `date`, `category`, `tags`, `fonte`, `readingTime`, `mentions`
+- [ ] `<Summary>` com fatos-chave no início do corpo (antes do primeiro parágrafo)
+- [ ] Pelo menos 2 links internos para calculadoras relacionadas
+- [ ] `llms.txt` atualizado com a nova URL na seção "Artigos e Análises"
+
+**Guia novo (`content/blog/`):**
+- [ ] Frontmatter completo: inclui `calculadora` e `calculadoraLabel`
+- [ ] Links para a calculadora principal em pelo menos 2 pontos do corpo
+- [ ] `llms.txt` atualizado se for guia de alta relevância (financiamento, impostos, aluguel)
+
+**Calculadora nova (`app/[rota]/`):**
+- [ ] `layout.tsx` com `HowToSchema` (4–5 passos "como calcular X")
+- [ ] `page.tsx` com seção `<section>` de `<h2>` explicativos antes de `<FaqSection>`
+- [ ] `lib/faq.ts` com 5 perguntas, incluindo "O que é [termo]?"
+- [ ] `lib/related.ts` com entradas em `related` e `relatedGuides`
+- [ ] `public/llms.txt` atualizado com a nova rota
+- [ ] `app/sitemap.ts` — avaliar se entra em `highPriorityRoutes`
 
 ---
 
