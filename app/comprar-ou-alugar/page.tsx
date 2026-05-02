@@ -186,6 +186,27 @@ export default function ComprarOuAlugarPage() {
         </div>
       </div>
 
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Como funciona a análise financeira de comprar ou alugar?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            A comparação correta não é entre a parcela do financiamento e o aluguel — é entre dois caminhos patrimoniais completos. No cenário de compra, o patrimônio cresce à medida que o saldo devedor diminui e o imóvel se valoriza. No cenário de aluguel, a entrada que não foi investida no imóvel (mais a diferença mensal entre parcela e aluguel) rende em aplicações financeiras. A calculadora compara os dois patrimônios ao longo do horizonte escolhido, incluindo <a href="/financiamento" className="text-indigo-600 hover:underline">custos do financiamento</a> e custo de oportunidade do capital.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Quando vale mais a pena alugar do que comprar?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Alugar costuma ser mais vantajoso quando: (1) a taxa de juros do financiamento é alta em relação à valorização esperada do imóvel; (2) o rendimento das aplicações financeiras supera o cap rate imobiliário da região; (3) o horizonte de permanência é curto (menos de 5 a 7 anos), pois os custos de compra e venda — ITBI, cartório, corretagem — diluem mal em períodos curtos. Com a Selic em 14,50% a.a. em 2026, o rendimento do Tesouro Selic cria uma barreira alta para o imóvel superar. Compare seu cenário específico com a calculadora acima.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">O que é o ponto de equilíbrio no comparativo comprar vs. alugar?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O ponto de equilíbrio (break-even) é o ano em que o patrimônio acumulado no cenário de compra passa a superar o patrimônio do cenário de aluguel+investimento. Antes desse ponto, quem aluga e investe tende a estar à frente. Após esse ponto, a propriedade do imóvel — com a dívida em fase avançada de amortização — costuma prevalecer. Para quem está montando a reserva para a entrada, a <a href="/poupanca-entrada" className="text-indigo-600 hover:underline">calculadora de poupança para entrada</a> mostra quanto guardar por mês para antecipar esse momento.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/comprar-ou-alugar" />
       <RelatedCalculators path="/comprar-ou-alugar" />
     </div>

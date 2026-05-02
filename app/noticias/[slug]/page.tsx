@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import remarkUnwrapImages from "remark-unwrap-images";
 import Link from "next/link";
 import MdxImage from "@/components/MdxImage";
+import Summary from "@/components/Summary";
 import { getAllNews, getNewsBySlug } from "@/lib/news";
 import { SITE_URL } from "@/lib/seo";
 import { Clock, ArrowLeft, ExternalLink } from "lucide-react";
@@ -141,7 +142,7 @@ export default async function NoticiaPage({
 
       {/* Content */}
       <article className="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-800 prose-li:text-slate-600 prose-h2:text-2xl prose-h3:text-xl prose-h2:mt-10 prose-h3:mt-6">
-        <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm, remarkUnwrapImages] } }} components={{ img: (props) => <MdxImage {...props} /> }} />
+        <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm, remarkUnwrapImages] } }} components={{ img: (props) => <MdxImage {...props} />, Summary }} />
       </article>
 
       {/* Voltar */}

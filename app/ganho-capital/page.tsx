@@ -266,6 +266,27 @@ export default function GanhoCapitalPage() {
         </div>
       </div>
 
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">O que é ganho de capital na venda de imóvel?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Ganho de capital é a diferença positiva entre o valor de venda e o custo de aquisição do imóvel. Reformas e melhorias com nota fiscal aumentam o custo de aquisição e, portanto, reduzem o ganho tributável — por isso é importante guardar todas as notas. Sobre o ganho apurado, a Receita Federal aplica alíquotas progressivas: <strong>15%</strong> até R$ 5 milhões de ganho, <strong>17,5%</strong> de R$ 5M a R$ 10M, <strong>20%</strong> de R$ 10M a R$ 30M e <strong>22,5%</strong> acima de R$ 30M.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Quando a venda de imóvel é isenta de IR?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Existem três situações principais de isenção: (1) <strong>Imóvel único residencial</strong> vendido por até R$ 440.000, sem outra venda nos 5 anos anteriores — isenção total; (2) <strong>Imóvel adquirido antes de 1969</strong> — isenção total independentemente do valor; (3) <strong>Reinvestimento</strong> do valor de venda em outro imóvel residencial em até 180 dias — a proporção reinvestida fica isenta. Existem também os fatores de redução (FR1 e FR2) que diminuem o ganho tributável para imóveis mantidos por longos períodos.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Como e quando pagar o IR sobre ganho de capital?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O pagamento é feito via <strong>DARF</strong> (código 4600) até o último dia útil do mês seguinte à data da venda. O contribuinte deve usar o programa <strong>GCAP</strong> da Receita Federal para apurar o valor exato — a calculadora do CalculaImóvel é educacional e serve como estimativa. Além do ganho de capital, considere calcular o <a href="/lucro-venda" className="text-indigo-600 hover:underline">lucro líquido total da venda</a>, que desconta também os <a href="/custos-compra" className="text-indigo-600 hover:underline">custos originais de compra</a> e a corretagem.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/ganho-capital" />
       <RelatedCalculators path="/ganho-capital" />
     </div>

@@ -162,6 +162,21 @@ export default function FGTSPage() {
         </div>
       </div>
 
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Quando e como usar o FGTS para comprar um imóvel?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O FGTS pode ser usado na compra de imóvel residencial urbano para uso próprio, desde que o trabalhador tenha <strong>no mínimo 3 anos de contribuição</strong> ao FGTS (não precisa ser no mesmo empregador). O saldo pode ser aplicado como entrada para reduzir o valor financiado, para amortização do saldo devedor durante o contrato ou para pagar até 80% de até 12 parcelas. O limite máximo de uso é 80% do valor do imóvel, respeitando o teto do SFH (R$ 1,5 milhão — confirme o valor vigente na Caixa). O trabalhador não pode ter outro imóvel residencial na mesma cidade ou região metropolitana.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">O FGTS rende bem? Vale a pena esperar para usar?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O FGTS rende <strong>3% ao ano + TR</strong> — historicamente abaixo da inflação e muito abaixo do CDI/Selic. Com a Selic em 14,50% a.a. em 2026, cada real no FGTS perdendo poder de compra enquanto o saldo devedor do financiamento cresce a 11-12% a.a. é uma oportunidade de arbitragem clara: use o FGTS para amortizar quanto antes. A única razão para manter o saldo no FGTS seria se o trabalhador estiver próximo de uma demissão sem justa causa (quando o saque fica disponível com multa de 40%) ou se o imóvel pretendido ainda não se encaixar nas regras do SFH. Calcule o <a href="/mcmv" className="text-indigo-600 hover:underline">Minha Casa Minha Vida</a> se sua renda familiar for de até R$ 8.000/mês — as taxas subsidiadas amplificam ainda mais o benefício do uso antecipado do FGTS.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/fgts" />
       <RelatedCalculators path="/fgts" />
     </div>

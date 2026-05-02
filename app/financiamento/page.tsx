@@ -193,6 +193,27 @@ export default function FinanciamentoPage() {
         </div>
       </div>
 
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">O que é financiamento imobiliário?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Financiamento imobiliário é um empréstimo de longo prazo concedido por bancos para a compra de imóvel residencial ou comercial. O imóvel fica alienado fiduciariamente à instituição — o banco é o proprietário legal até a quitação total, conforme a Lei 9.514/1997. O prazo máximo é de 35 anos e o valor financiado pode ser de até 80% do valor do imóvel pelo SFH (imóveis até R$ 2,25 milhões em 2026).
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">SAC ou PRICE: qual sistema escolher?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed mb-2">
+            No <strong>SAC</strong> (Sistema de Amortização Constante), a amortização mensal é fixa e os juros caem progressivamente — a parcela diminui com o tempo e o total de juros pago é menor. Na <strong>PRICE</strong>, a parcela é fixa do início ao fim, mas nos primeiros anos ela é quase inteiramente composta de juros, resultando em amortização lenta do saldo devedor e maior custo total. Para quem consegue arcar com a parcela inicial maior, o SAC é quase sempre mais econômico — use a calculadora acima para ver a diferença exata no seu cenário.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Qual a taxa de juros do financiamento imobiliário hoje?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Em maio de 2026, a Caixa Econômica Federal pratica <strong>11,49% a.a. + TR</strong> para imóveis até R$ 2,25 milhões (SFH) e <strong>12,00% a.a. + TR</strong> acima desse valor (SFI). O Banco Central cortou a Selic para 14,50% a.a. em abril de 2026, mas o repasse ao crédito imobiliário é gradual, com defasagem de cerca de seis meses. Famílias elegíveis ao <a href="/mcmv" className="text-indigo-600 hover:underline">Minha Casa Minha Vida</a> têm acesso a taxas subsidiadas a partir de 4,00% a.a. Se você já tem um financiamento contratado a taxas altas, avalie a <a href="/portabilidade" className="text-indigo-600 hover:underline">portabilidade de crédito</a> para reduzir os juros.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/financiamento" />
       <RelatedCalculators path="/financiamento" />
     </div>

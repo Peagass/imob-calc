@@ -196,6 +196,21 @@ export default function CustosCompraPage() {
         </div>
       </div>
 
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">O que é ITBI e quanto custa?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O ITBI (Imposto de Transmissão de Bens Imóveis) é um imposto municipal obrigatório pago pelo comprador na transferência do imóvel. A alíquota varia por cidade: <strong>São Paulo</strong> cobra 3%, <strong>Rio de Janeiro</strong> cobra 2%, <strong>Belo Horizonte</strong> cobra 3%, <strong>Brasília</strong> cobra 3%. Em média, o ITBI representa entre 2% e 3% do valor do imóvel. Em compras financiadas, o STJ consolidou entendimento que o ITBI incide sobre o valor de venda declarado na escritura, não sobre o valor avaliado pelo banco.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Quais são os demais custos de cartório na compra de imóvel?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Além do ITBI, a compra envolve dois atos obrigatórios em cartório: a <strong>escritura pública</strong> (lavrada no Tabelionato de Notas) e o <strong>registro do imóvel</strong> (feito no Cartório de Registro de Imóveis). Sem o registro, o imóvel legalmente ainda pertence ao vendedor — a propriedade só se transfere com o registro. Os emolumentos seguem tabela estadual e variam de 0,5% a 1% do valor do imóvel cada. Somados ao ITBI, o total costuma ficar entre <strong>4% e 6% do valor do imóvel</strong>. Planeje esse custo separadamente da entrada — ele não é financiável. Para simular o <a href="/financiamento" className="text-indigo-600 hover:underline">custo total do financiamento</a> incluindo esses valores, use a calculadora de financiamento.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/custos-compra" />
       <RelatedCalculators path="/custos-compra" />
     </div>

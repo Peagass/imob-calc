@@ -224,6 +224,29 @@ export default function MCMVPage() {
         </p>
       </div>
 
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">O que é o Minha Casa Minha Vida?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O Minha Casa Minha Vida (MCMV) é o principal programa habitacional do governo federal, criado em 2009 e reestruturado em 2023. Ele oferece financiamento imobiliário com <strong>taxas de juros subsidiadas e subsídios diretos</strong> para famílias de baixa e média renda. O programa é operado principalmente pela Caixa Econômica Federal e pelo Banco do Brasil, com recursos do FGTS e do Orçamento Geral da União. Em 2026, o programa prevê a construção de 2 milhões de unidades habitacionais.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Quais são as faixas de renda do MCMV em 2026?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O programa tem três faixas, com taxas e subsídios diferentes conforme a renda familiar bruta mensal:
+          </p>
+          <ul className="text-sm text-slate-600 leading-relaxed space-y-1.5 list-disc list-inside mt-2">
+            <li><strong>Faixa 1</strong> — renda até R$ 2.640: taxa de 4,00% a.a., subsídio de até R$ 47.500 e entrada mínima de 10% (pode ser zerada com FGTS).</li>
+            <li><strong>Faixa 2</strong> — renda de R$ 2.640 a R$ 4.400: taxa de 4,75% a 7,00% a.a. (varia conforme a renda), subsídio de até R$ 47.500.</li>
+            <li><strong>Faixa 3</strong> — renda de R$ 4.400 a R$ 8.000: taxa de 7,66% a.a., sem subsídio direto, mas com acesso ao FGTS na entrada.</li>
+          </ul>
+          <p className="text-sm text-slate-600 leading-relaxed mt-2">
+            O <a href="/fgts" className="text-indigo-600 hover:underline">FGTS pode ser usado como entrada</a> em todas as faixas para reduzir o valor financiado. Após a simulação, confirme condições na Caixa Econômica Federal, pois subsídios variam conforme localização do imóvel e disponibilidade orçamentária.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/mcmv" />
       <RelatedCalculators path="/mcmv" />
     </div>

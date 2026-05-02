@@ -40,6 +40,21 @@ export default async function ReajusteAluguelPage() {
       </div>
 
       <ReajusteCalc indices={indices} />
+      <section className="mt-10 space-y-8">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">Como funciona o reajuste de aluguel no Brasil?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Pela Lei do Inquilinato (Lei 8.245/91), o aluguel só pode ser reajustado uma vez por ano, na data de aniversário do contrato, pelo índice previsto na cláusula de reajuste. O locador não pode aplicar um índice diferente do contratado — nem reajustar antes do prazo anual. O cálculo usa a variação acumulada do índice nos <strong>12 meses imediatamente anteriores</strong> ao aniversário do contrato, não o índice do mês corrente.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">IGP-M ou IPCA: qual índice usar no contrato de aluguel?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            O <strong>IGP-M</strong> (FGV) foi durante décadas o índice padrão dos contratos de aluguel. Ele é mais volátil — em 2020 chegou a 23% em 12 meses — e pode gerar reajustes muito acima da inflação sentida pelo inquilino. O <strong>IPCA</strong> (IBGE), que mede a inflação ao consumidor, é mais estável e vem sendo adotado em contratos novos como alternativa mais equilibrada para ambas as partes. Contratos novos podem usar qualquer índice oficial. A calculadora acima exibe automaticamente o acumulado mais recente de ambos via API do Banco Central do Brasil (série BCB/SGS), garantindo sempre o valor correto. Para saber como o reajuste afeta o IR sobre o aluguel, veja a <a href="/tributacao-aluguel" className="text-indigo-600 hover:underline">calculadora de tributação de aluguel</a>.
+          </p>
+        </div>
+      </section>
+
       <FaqSection path="/reajuste-aluguel" />
       <RelatedCalculators path="/reajuste-aluguel" />
     </div>
