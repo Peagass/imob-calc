@@ -52,11 +52,6 @@ const siteSchema = {
       url: SITE_URL,
       description: "Calculadoras imobiliárias gratuitas para brasileiros",
       inLanguage: "pt-BR",
-      potentialAction: {
-        "@type": "SearchAction",
-        target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/?q={search_term_string}` },
-        "query-input": "required name=search_term_string",
-      },
     },
     {
       "@type": "Organization",

@@ -70,7 +70,7 @@ export default async function PostPage({
         dateModified: post.date,
         inLanguage: "pt-BR",
         mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/blog/${slug}` },
-        image: { "@type": "ImageObject", url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630 },
+        image: { "@type": "ImageObject", url: `${SITE_URL}/blog/${slug}/opengraph-image`, width: 1200, height: 630 },
         author: { "@type": "Organization", name: "CalculaImóvel", url: SITE_URL },
         publisher: {
           "@type": "Organization",
