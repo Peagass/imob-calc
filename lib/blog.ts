@@ -9,6 +9,7 @@ export interface PostMeta {
   title: string;
   description: string;
   date: string;
+  lastModified?: string;
   category: string;
   tags: string[];
   calculadora?: string;

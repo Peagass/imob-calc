@@ -67,7 +67,7 @@ export default async function PostPage({
         headline: post.title,
         description: post.description,
         datePublished: post.date,
-        dateModified: post.date,
+        dateModified: post.lastModified ?? post.date,
         inLanguage: "pt-BR",
         mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/blog/${slug}` },
         image: { "@type": "ImageObject", url: `${SITE_URL}/blog/${slug}/opengraph-image`, width: 1200, height: 630 },
