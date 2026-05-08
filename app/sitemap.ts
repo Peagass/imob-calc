@@ -1,7 +1,19 @@
 import type { MetadataRoute } from "next";
+import fs from "fs";
+import path from "path";
 import { SITE_URL, pages } from "@/lib/seo";
 import { getAllPosts } from "@/lib/blog";
 import { getAllNews } from "@/lib/news";
+
+function getPageMtime(route: string): Date {
+  try {
+    const dir = route === "/" ? "" : route;
+    const filePath = path.join(process.cwd(), "app", dir, "page.tsx");
+    return fs.statSync(filePath).mtime;
+  } catch {
+    return new Date("2024-06-01");
+  }
+}
 
 // Calculadoras que consomem dados ao vivo do BCB — rastrear com mais frequência
 const bcbRoutes = new Set([
@@ -39,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const calculadoras: MetadataRoute.Sitemap = routes.map((route) => ({
     url: `${SITE_URL}${route === "/" ? "" : route}`,
-    lastModified: now,
+    lastModified: getPageMtime(route),
     changeFrequency: route === "/"
       ? "weekly"
       : institutionalRoutes.has(route)
@@ -69,7 +81,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const noticias = getAllNews();
   const noticiasArticles: MetadataRoute.Sitemap = noticias.map((n) => ({
     url: `${SITE_URL}/noticias/${n.slug}`,
-    lastModified: new Date(n.date),
+    lastModified: new Date(n.lastModified ?? n.date),
     changeFrequency: "yearly",
     priority: 0.7,
   }));

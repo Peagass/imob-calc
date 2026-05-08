@@ -40,7 +40,10 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large" },
   },
-  alternates: { canonical: SITE_URL },
+  alternates: {
+    canonical: SITE_URL,
+    types: { "application/rss+xml": `${SITE_URL}/noticias/feed.xml` },
+  },
 };
 
 const siteSchema = {
