@@ -55,14 +55,19 @@ const grupos = [
     ],
   },
   {
-    label: "Custos",
+    label: "Condomínio",
     links: [
       { href: "/despesas-condominio",      label: "Despesas do Condomínio" },
       { href: "/rateio-condominio",        label: "Rateio por Unidade" },
       { href: "/fundo-reserva-condominio", label: "Fundo de Reserva" },
-      { href: "/consumo-energia",          label: "Consumo de Energia" },
-      { href: "/consumo-agua",             label: "Consumo de Água" },
-      { href: "/consumo-gas",              label: "Consumo de Gás" },
+    ],
+  },
+  {
+    label: "Custos",
+    links: [
+      { href: "/consumo-energia", label: "Consumo de Energia" },
+      { href: "/consumo-agua",    label: "Consumo de Água" },
+      { href: "/consumo-gas",     label: "Consumo de Gás" },
     ],
   },
   {
@@ -91,13 +96,13 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-0.5">
+        <nav className="hidden lg:flex items-center gap-0">
           {grupos.map((grupo) => {
             const ativo = grupo.links.some((l) => l.href === pathname);
             return (
               <div key={grupo.label} className="relative group">
                 <button
-                  className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                  className={`flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
                     ativo ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >
@@ -127,7 +132,7 @@ export default function Header() {
 
           <Link
             href="/blog"
-            className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
               pathname.startsWith("/blog") ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
             }`}
           >
@@ -136,7 +141,7 @@ export default function Header() {
           </Link>
           <Link
             href="/noticias"
-            className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
               pathname.startsWith("/noticias") ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
             }`}
           >

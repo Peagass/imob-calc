@@ -5,12 +5,18 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { calcularAirbnb } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
-import { Info } from "lucide-react";
+import { Info, AlertTriangle, FlaskConical } from "lucide-react";
 import FaqSection from "@/components/FaqSection";
 import RelatedCalculators from "@/components/RelatedCalculators";
 
+const CBS_RATE = 0.088;
+const CBS_REDUCAO_SHORT_STAY = 0.40;
+const CBS_REDUCAO_RESIDENCIAL = 0.70;
+const CBS_REDUTOR_SOCIAL = 600;
+
 
 export default function AirbnbPage() {
+  const [simularCBS, setSimularCBS] = useState(false);
   const [diaria, setDiaria] = useState(350);
   const [ocupacao, setOcupacao] = useState(65);
   const [taxaPlataforma, setTaxaPlataforma] = useState(14);
@@ -22,6 +28,13 @@ export default function AirbnbPage() {
     () => calcularAirbnb({ diaria, ocupacaoPercentual: ocupacao, taxaPlataforma, custosOperacionaisMensais: custosOp, aluguelConvencional, despesasFixasMensais: despesasFixas }),
     [diaria, ocupacao, taxaPlataforma, custosOp, aluguelConvencional, despesasFixas]
   );
+
+  const cbsAirbnb = resultado.receitaBrutaMensal * CBS_RATE * (1 - CBS_REDUCAO_SHORT_STAY);
+  const cbsAluguel = Math.max(0, aluguelConvencional * CBS_RATE * (1 - CBS_REDUCAO_RESIDENCIAL) - CBS_REDUTOR_SOCIAL);
+  const airbnbLiquidoComCBS = resultado.receitaLiquidaMensal - cbsAirbnb;
+  const aluguelLiquidoComCBS = resultado.aluguelLiquidoMensal - cbsAluguel;
+  const diferencaComCBS = airbnbLiquidoComCBS - aluguelLiquidoComCBS;
+  const melhorComCBS = Math.abs(diferencaComCBS) < 50 ? "empate" : diferencaComCBS > 0 ? "airbnb" : "aluguel";
 
   const corMelhor = resultado.melhor === "airbnb" ? "from-rose-500 to-pink-600" : resultado.melhor === "aluguel" ? "from-emerald-600 to-teal-700" : "from-slate-600 to-slate-700";
 
@@ -204,6 +217,87 @@ export default function AirbnbPage() {
             </ul>
           </div>
         </div>
+      </div>
+
+      {/* Toggle CBS 2027 */}
+      <div className="mt-6 bg-violet-50 border border-violet-200 rounded-2xl p-5">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={simularCBS}
+            onChange={(e) => setSimularCBS(e.target.checked)}
+            className="mt-0.5 accent-violet-600 w-4 h-4 shrink-0"
+          />
+          <div>
+            <p className="font-semibold text-violet-900 text-sm">
+              Simular impacto da CBS 2027 — como a comparação muda com o novo regime tributário
+            </p>
+            <p className="text-xs text-violet-700 mt-0.5">
+              A partir de 2027, short stay (&lt;90 dias) passa a seguir regras de hotelaria para a CBS, sem o redutor de R$ 600/mês do aluguel longo.{" "}
+              <a href="/noticias/airbnb-regulamentacao-condominio-tributacao-2026" className="underline">
+                Entenda o Decreto 12.955 →
+              </a>
+            </p>
+          </div>
+        </label>
+
+        {simularCBS && (
+          <div className="mt-5 space-y-4">
+            {/* Novo resultado com CBS */}
+            <div className={`rounded-xl p-5 text-white bg-gradient-to-br ${melhorComCBS === "airbnb" ? "from-rose-500 to-pink-600" : melhorComCBS === "aluguel" ? "from-emerald-600 to-teal-700" : "from-slate-600 to-slate-700"}`}>
+              <p className="text-white/70 text-xs mb-1">Com CBS 2027 — estratégia mais rentável</p>
+              <p className="text-2xl font-bold capitalize">
+                {melhorComCBS === "airbnb" ? "Airbnb ainda compensa" : melhorComCBS === "aluguel" ? "Aluguel convencional passa a compensar mais" : "Empate com CBS"}
+              </p>
+              {melhorComCBS !== "empate" && (
+                <p className="text-white/80 text-sm mt-1">
+                  {formatCurrency(Math.abs(diferencaComCBS))}/mês · {formatCurrency(Math.abs(diferencaComCBS * 12))}/ano de diferença
+                </p>
+              )}
+            </div>
+
+            {/* Comparativo antes/depois CBS */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-white rounded-xl border border-rose-100 p-4">
+                <p className="text-xs text-rose-600 font-semibold mb-2 uppercase tracking-wide">Airbnb com CBS</p>
+                <p className="text-xl font-bold text-slate-900">{formatCurrency(airbnbLiquidoComCBS)}<span className="text-xs text-slate-400 font-normal">/mês</span></p>
+                <div className="mt-2 pt-2 border-t border-rose-100 text-xs text-slate-500 space-y-0.5">
+                  <div className="flex justify-between">
+                    <span>Sem CBS (hoje)</span>
+                    <span>{formatCurrency(resultado.receitaLiquidaMensal)}</span>
+                  </div>
+                  <div className="flex justify-between text-rose-500">
+                    <span>− CBS estimada</span>
+                    <span>−{formatCurrency(cbsAirbnb)}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl border border-emerald-100 p-4">
+                <p className="text-xs text-emerald-600 font-semibold mb-2 uppercase tracking-wide">Aluguel com CBS</p>
+                <p className="text-xl font-bold text-slate-900">{formatCurrency(aluguelLiquidoComCBS)}<span className="text-xs text-slate-400 font-normal">/mês</span></p>
+                <div className="mt-2 pt-2 border-t border-emerald-100 text-xs text-slate-500 space-y-0.5">
+                  <div className="flex justify-between">
+                    <span>Sem CBS (hoje)</span>
+                    <span>{formatCurrency(resultado.aluguelLiquidoMensal)}</span>
+                  </div>
+                  <div className="flex justify-between text-emerald-600">
+                    <span>− CBS estimada</span>
+                    <span>−{formatCurrency(cbsAluguel)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2 bg-amber-50 border border-amber-100 rounded-xl p-3">
+              <FlaskConical className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800">
+                <strong>Simulação experimental.</strong> Alíquota CBS de 8,8% é a referência da LC 214/2025 — sujeita a confirmação para 2027.
+                CBS do aluguel convencional é zero para a maioria dos locadores pessoa física (coberta pelo redutor de R$ 600/mês).
+                Anfitriões com baixa receita ou poucas unidades podem ser dispensados do regime regular da CBS.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <FaqSection path="/airbnb-vs-aluguel" />

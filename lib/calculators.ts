@@ -2552,9 +2552,30 @@ export function calcularRenegociacao(input: RenegociacaoInput): RenegociacaoResu
   const mesesBreakeven = economiaMensalInicial > 0 ? Math.ceil(custosRenegociacao / economiaMensalInicial) : 9999;
 
   const evolucaoAnual: RenegociacaoResult["evolucaoAnual"] = [];
-  for (let ano = 1; ano <= Math.ceil(prazoRestanteMeses / 12); ano++) {
-    const economiaAcumulada = Math.min(economiaMensalInicial * ano * 12, economiaTotal) - custosRenegociacao;
-    evolucaoAnual.push({ ano, economiaAcumulada });
+  {
+    const tmA = taxaAtualAnual / 100 / 12;
+    const tmN = taxaNovaAnual / 100 / 12;
+    const amort = sistema === "SAC" ? saldoDevedor / prazoRestanteMeses : 0;
+    const priceA = sistema === "PRICE" ? pmtPrice(tmA, prazoRestanteMeses, saldoDevedor) : 0;
+    const priceN = sistema === "PRICE" ? pmtPrice(tmN, prazoRestanteMeses, saldoDevedor) : 0;
+    let sA = saldoDevedor;
+    let sN = saldoDevedor;
+    let acumulado = -custosRenegociacao;
+    for (let m = 1; m <= prazoRestanteMeses; m++) {
+      const pA = sistema === "SAC" ? amort + sA * tmA : priceA;
+      const pN = sistema === "SAC" ? amort + sN * tmN : priceN;
+      if (sistema === "SAC") {
+        sA = Math.max(0, sA - amort);
+        sN = Math.max(0, sN - amort);
+      } else {
+        sA = Math.max(0, sA - (priceA - sA * tmA));
+        sN = Math.max(0, sN - (priceN - sN * tmN));
+      }
+      acumulado += pA - pN;
+      if (m % 12 === 0) evolucaoAnual.push({ ano: m / 12, economiaAcumulada: acumulado });
+    }
+    if (prazoRestanteMeses % 12 !== 0)
+      evolucaoAnual.push({ ano: Math.ceil(prazoRestanteMeses / 12), economiaAcumulada: acumulado });
   }
 
   return {

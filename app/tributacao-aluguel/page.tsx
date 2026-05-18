@@ -4,17 +4,28 @@ import { useState, useMemo } from "react";
 import { calcularTributacaoAluguel } from "@/lib/calculators";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import CurrencyInput from "@/components/CurrencyInput";
-import { Info, AlertTriangle } from "lucide-react";
+import { Info, AlertTriangle, FlaskConical } from "lucide-react";
 import FaqSection from "@/components/FaqSection";
 import RelatedCalculators from "@/components/RelatedCalculators";
 
+// Alíquota de referência CBS (LC 214/2025) — sujeita a confirmação para 2027
+const CBS_RATE = 0.088;
+const CBS_REDUCAO_SHORT_STAY = 0.40;   // Decreto 12.955/2026, art. 410
+const CBS_REDUCAO_RESIDENCIAL = 0.70;  // locação residencial longa
+const CBS_REDUTOR_SOCIAL = 600;        // redutor mensal — locação residencial
+
 
 export default function TributacaoAluguelPage() {
+  const [simularCBS, setSimularCBS] = useState(false);
   const [aluguelMensal, setAluguelMensal] = useState(3_000);
   const [condominioLandlord, setCondominioLandlord] = useState(0);
   const [iptuMensal, setIptuMensal] = useState(200);
   const [outrasDeducoes, setOutrasDeducoes] = useState(0);
   const [outrasRendas, setOutrasRendas] = useState(0);
+
+  const cbsShortStay = aluguelMensal * CBS_RATE * (1 - CBS_REDUCAO_SHORT_STAY);
+  const cbsResidencial = Math.max(0, aluguelMensal * CBS_RATE * (1 - CBS_REDUCAO_RESIDENCIAL) - CBS_REDUTOR_SOCIAL);
+  const cbsDiferenca = cbsShortStay - cbsResidencial;
 
   const resultado = useMemo(
     () => calcularTributacaoAluguel({ aluguelMensal, condominioLandlord, iptuMensal, outrasDeducoes, outrasRendas }),
@@ -142,8 +153,87 @@ export default function TributacaoAluguelPage() {
       <div className="mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
         <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
         <p className="text-xs text-blue-800">
-          Cálculo baseado na tabela progressiva do IRPF 2024 para carnê-leão (Instrução Normativa RFB). Confirme sempre os valores vigentes no site da Receita Federal antes de emitir o DARF.
+          Cálculo baseado na tabela progressiva do IRPF 2026 para carnê-leão (Instrução Normativa RFB). Confirme sempre os valores vigentes no site da Receita Federal antes de emitir o DARF.
         </p>
+      </div>
+
+      {/* Toggle CBS 2027 */}
+      <div className="mt-6 bg-violet-50 border border-violet-200 rounded-2xl p-5">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={simularCBS}
+            onChange={(e) => setSimularCBS(e.target.checked)}
+            className="mt-0.5 accent-violet-600 w-4 h-4 shrink-0"
+          />
+          <div>
+            <p className="font-semibold text-violet-900 text-sm">
+              Simular impacto da CBS 2027 — locação de curta temporada (&lt;90 dias)
+            </p>
+            <p className="text-xs text-violet-700 mt-0.5">
+              O Decreto 12.955/2026 define regras de tributação para short stay a partir de 2027. Ative para estimar o impacto.{" "}
+              <a href="/noticias/airbnb-regulamentacao-condominio-tributacao-2026" className="underline">
+                Entenda o que muda →
+              </a>
+            </p>
+          </div>
+        </label>
+
+        {simularCBS && (
+          <div className="mt-5 space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-white rounded-xl border border-violet-100 p-4">
+                <p className="text-xs text-violet-600 font-semibold mb-1 uppercase tracking-wide">CBS — Short stay</p>
+                <p className="text-2xl font-bold text-slate-900">{formatCurrency(cbsShortStay)}<span className="text-sm font-normal text-slate-400">/mês</span></p>
+                <p className="text-xs text-slate-400 mt-1">
+                  {formatCurrency(aluguelMensal)} × 8,8% × 60% (redução 40%)
+                </p>
+              </div>
+              <div className="bg-white rounded-xl border border-violet-100 p-4">
+                <p className="text-xs text-emerald-600 font-semibold mb-1 uppercase tracking-wide">CBS — Aluguel longo prazo</p>
+                <p className="text-2xl font-bold text-slate-900">{formatCurrency(cbsResidencial)}<span className="text-sm font-normal text-slate-400">/mês</span></p>
+                <p className="text-xs text-slate-400 mt-1">
+                  {formatCurrency(aluguelMensal)} × 8,8% × 30% − redutor R$ 600
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-violet-100 rounded-xl p-4 flex justify-between items-center">
+              <div>
+                <p className="text-xs text-violet-700 font-semibold uppercase tracking-wide">CBS extra por escolher short stay</p>
+                <p className="text-xs text-violet-600 mt-0.5">Por mês, além do IR (carnê-leão) já calculado acima</p>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-violet-900">+{formatCurrency(cbsDiferenca)}<span className="text-sm font-normal">/mês</span></p>
+                <p className="text-xs text-violet-700">+{formatCurrency(cbsDiferenca * 12)}/ano</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="bg-white rounded-xl border border-slate-100 p-3">
+                <p className="text-xs text-slate-400 mb-1">IR hoje (carnê-leão)</p>
+                <p className="text-lg font-bold text-slate-800">{formatCurrency(resultado.irMensal)}</p>
+              </div>
+              <div className="bg-white rounded-xl border border-violet-100 p-3">
+                <p className="text-xs text-violet-500 mb-1">+ CBS 2027 (short stay)</p>
+                <p className="text-lg font-bold text-violet-700">{formatCurrency(cbsShortStay)}</p>
+              </div>
+              <div className="bg-violet-600 rounded-xl p-3">
+                <p className="text-xs text-violet-200 mb-1">Total estimado 2027</p>
+                <p className="text-lg font-bold text-white">{formatCurrency(resultado.irMensal + cbsShortStay)}</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2 bg-amber-50 border border-amber-100 rounded-xl p-3">
+              <FlaskConical className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800">
+                <strong>Simulação experimental.</strong> Alíquota CBS de 8,8% é a referência da LC 214/2025 — ainda não confirmada oficialmente para 2027.
+                Aplica-se a contribuintes do regime regular da CBS; anfitriões com baixa receita ou poucas unidades podem ser dispensados.
+                As regras definitivas serão publicadas pela Receita Federal antes de janeiro de 2027.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <FaqSection path="/tributacao-aluguel" />

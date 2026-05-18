@@ -734,6 +734,22 @@ export const faqs: Record<string, FaqItem[]> = {
       q: "Quais os riscos do aluguel por temporada vs aluguel tradicional?",
       a: "Airbnb: sazonalidade (períodos de baixa ocupação), maior depreciação dos móveis, risco de avaliações negativas e danos por hóspedes. Aluguel tradicional: inadimplência, dificuldade de despejo, e limite de reajuste anual. O Airbnb oferece mais flexibilidade, mas menos previsibilidade de renda.",
     },
+    {
+      q: "O que muda na tributação do Airbnb a partir de 2027?",
+      a: "O Decreto nº 12.955/2026 (art. 410) enquadrou locações de até 90 dias como serviço de hotelaria para fins da CBS — o novo tributo federal da reforma tributária. Na prática, o short stay perde a redução de 70% de alíquota aplicável à locação residencial e o redutor social de R$ 600/mês, ficando com apenas 40% de redução. Isso pode elevar a carga tributária em até 3,5 vezes para quem for contribuinte do regime regular da CBS. Em 2026, as regras atuais do carnê-leão ainda valem — a CBS só começa a ser cobrada em 2027.",
+    },
+    {
+      q: "O condomínio pode proibir o Airbnb?",
+      a: "Sim. Em 7 de maio de 2026, o STJ decidiu (REsp 2121055/MG, por 5 votos a 4) que a locação de curta temporada em condomínios residenciais depende de aprovação prévia de 2/3 dos condôminos — calculados sobre o total de unidades, não apenas os presentes na assembleia, conforme o art. 1.351 do Código Civil. Onde não há deliberação com esse quórum, a atividade está juridicamente irregular. Onde a convenção já proibir, a proibição está validada pela decisão.",
+    },
+    {
+      q: "Todo anfitrião do Airbnb vai pagar CBS em 2027?",
+      a: "Não necessariamente. A CBS, no regime regular, aplica-se a contribuintes acima de determinado patamar de receita. Anfitriões com poucos imóveis e receita modesta podem ficar no Simples Nacional ou fora do regime de contribuinte — e, nesses casos, o impacto direto do Decreto 12.955 é menor. As regras definitivas sobre os limites de enquadramento ainda serão regulamentadas pela Receita Federal antes de 2027. A simulação nesta calculadora usa a alíquota de referência de 8,8% (LC 214/2025) para o regime regular — use-a como estimativa de pior cenário.",
+    },
+    {
+      q: "Com as novas regras de 2027, ainda vale a pena manter o Airbnb?",
+      a: "Depende do caso específico. Imóveis com alta taxa de ocupação em regiões turísticas ou com forte demanda corporativa tendem a continuar mais rentáveis que o aluguel convencional, mesmo com a CBS. O ponto de inflexão vai depender: (1) se o condomínio aprovar a atividade com 2/3 dos votos; (2) se a receita colocar o anfitrião no regime regular da CBS; e (3) de quanto a diária consegue compensar o custo tributário adicional. Use a simulação CBS nesta calculadora para ver se o break-even de ocupação se mantém viável no seu caso.",
+    },
   ],
 
   "/fluxo-caixa-imovel": [

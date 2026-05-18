@@ -38,6 +38,9 @@ export default function ReajusteCalc({ indices }: Props) {
 
   const algumErro = Object.values(indices).some((i) => i.erro);
 
+  const indiceNegativo = percentualEfetivo < 0;
+  const sinal = resultado.aumento >= 0 ? "+" : "";
+
   return (
     <div>
       {algumErro && (
@@ -122,11 +125,21 @@ export default function ReajusteCalc({ indices }: Props) {
             <p className="text-4xl font-bold mb-2">{formatCurrency(resultado.novoValor)}</p>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="bg-white/20 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                +{formatCurrency(resultado.aumento)}/mês
+                {sinal}{formatCurrency(resultado.aumento)}/mês
               </span>
-              <span className="text-amber-200 text-sm">({formatPercent(resultado.percentualReal)} de reajuste)</span>
+              <span className="text-amber-200 text-sm">({sinal}{formatPercent(resultado.percentualReal)} de reajuste)</span>
             </div>
           </div>
+
+          {indiceNegativo && (
+            <div className="flex items-start gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-600">
+              <Info className="w-3.5 h-3.5 shrink-0 mt-0.5 text-slate-400" />
+              <span>
+                <strong>Índice negativo:</strong> na prática, proprietários costumam manter o valor atual do aluguel.
+                A Lei do Inquilinato não obriga a redução quando o índice cai abaixo de zero.
+              </span>
+            </div>
+          )}
 
           <div className="bg-white rounded-2xl border border-slate-100 p-5">
             <h3 className="font-semibold text-slate-800 mb-4">Impacto financeiro</h3>
@@ -136,12 +149,16 @@ export default function ReajusteCalc({ indices }: Props) {
                 <span className="font-semibold text-slate-900">{formatCurrency(valorAtual)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-600">Aumento mensal</span>
-                <span className="font-semibold text-amber-600">+{formatCurrency(resultado.aumento)}</span>
+                <span className="text-sm text-slate-600">{indiceNegativo ? "Variação mensal" : "Aumento mensal"}</span>
+                <span className={`font-semibold ${indiceNegativo ? "text-slate-500" : "text-amber-600"}`}>
+                  {sinal}{formatCurrency(resultado.aumento)}
+                </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-600">Aumento anual</span>
-                <span className="font-semibold text-amber-600">+{formatCurrency(resultado.aumento * 12)}</span>
+                <span className="text-sm text-slate-600">{indiceNegativo ? "Variação anual" : "Aumento anual"}</span>
+                <span className={`font-semibold ${indiceNegativo ? "text-slate-500" : "text-amber-600"}`}>
+                  {sinal}{formatCurrency(resultado.aumento * 12)}
+                </span>
               </div>
               <div className="border-t border-slate-100 pt-3 flex justify-between items-center">
                 <span className="text-sm font-semibold text-slate-700">Novo aluguel</span>
@@ -154,25 +171,33 @@ export default function ReajusteCalc({ indices }: Props) {
           <div className="bg-white rounded-2xl border border-slate-100 p-5">
             <h3 className="font-semibold text-slate-800 mb-4">Comparativo de índices</h3>
             <div className="space-y-3">
-              {presets.filter((p) => !p.dado.erro).map((p) => {
-                const novoValorIndice = valorAtual * (1 + p.dado.valor / 100);
-                return (
-                  <div key={p.nome} className="flex items-center gap-3">
-                    <span className={`text-xs font-semibold w-16 shrink-0 ${indice === p.nome ? "text-amber-600" : "text-slate-500"}`}>
-                      {p.nome}
-                    </span>
-                    <div className="flex-1 bg-slate-100 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all ${indice === p.nome ? "bg-amber-400" : "bg-slate-300"}`}
-                        style={{ width: `${Math.min((p.dado.valor / 15) * 100, 100)}%` }}
-                      />
+              {(() => {
+                const validos = presets.filter((p) => !p.dado.erro);
+                const valores = validos.map((p) => valorAtual * (1 + p.dado.valor / 100));
+                const minV = Math.min(...valores);
+                const maxV = Math.max(...valores);
+                const range = maxV - minV || 1;
+                return validos.map((p, i) => {
+                  const novoValorIndice = valores[i];
+                  const barWidth = ((novoValorIndice - minV) / range) * 75 + 25;
+                  return (
+                    <div key={p.nome} className="flex items-center gap-3">
+                      <span className={`text-xs font-semibold w-16 shrink-0 ${indice === p.nome ? "text-amber-600" : "text-slate-500"}`}>
+                        {p.nome}
+                      </span>
+                      <div className="flex-1 bg-slate-100 rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full transition-all ${indice === p.nome ? "bg-amber-400" : "bg-slate-300"}`}
+                          style={{ width: `${barWidth}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-bold text-slate-900 w-24 text-right shrink-0">
+                        {formatCurrency(novoValorIndice)}
+                      </span>
                     </div>
-                    <span className="text-sm font-bold text-slate-900 w-24 text-right shrink-0">
-                      {formatCurrency(novoValorIndice)}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                });
+              })()}
             </div>
           </div>
         </div>

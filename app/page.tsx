@@ -207,8 +207,8 @@ const categorias = [
     ],
   },
   {
-    titulo: "Custos",
-    cor: "green",
+    titulo: "Condomínio",
+    cor: "cyan",
     items: [
       {
         href: "/despesas-condominio",
@@ -229,11 +229,18 @@ const categorias = [
         titulo: "Fundo de Reserva",
         descricao: "Em quantos meses o fundo atingirá a meta da obra planejada? Projete o saldo com rendimento.",
       },
+    ],
+  },
+  {
+    titulo: "Custos",
+    cor: "green",
+    items: [
       {
         href: "/consumo-energia",
         icon: Plug,
         titulo: "Consumo de Energia Elétrica",
         descricao: "Estime o consumo em kWh e o valor da conta por aparelho: AC, chuveiro, geladeira, TV e mais.",
+        destaque: true,
       },
       {
         href: "/consumo-agua",
@@ -301,6 +308,7 @@ const corMap: Record<string, { badge: string; destaqueCard: string; hover: strin
   violet: { badge: "bg-violet-50 text-violet-700",  destaqueCard: "border-violet-200 bg-violet-50/40", hover: "group-hover:text-violet-700" },
   green:  { badge: "bg-green-50 text-green-700",    destaqueCard: "border-green-200 bg-green-50/40",   hover: "group-hover:text-green-700" },
   teal:   { badge: "bg-teal-50 text-teal-700",      destaqueCard: "border-teal-200 bg-teal-50/40",     hover: "group-hover:text-teal-700" },
+  cyan:   { badge: "bg-cyan-50 text-cyan-700",      destaqueCard: "border-cyan-200 bg-cyan-50/40",     hover: "group-hover:text-cyan-700" },
 };
 
 export default function HomePage() {
